@@ -4,6 +4,7 @@
 
 void Initialize(v8::Local<v8::Object> exports)
 {
+  /**
   exports->Set(Nan::New("VR_Init").ToLocalChecked(),
                Nan::New<v8::FunctionTemplate>(VR_Init)->GetFunction());
   exports->Set(Nan::New("VR_Shutdown").ToLocalChecked(),
@@ -22,6 +23,7 @@ void Initialize(v8::Local<v8::Object> exports)
                Nan::New<v8::FunctionTemplate>(VR_GetInitToken)->GetFunction());
 
   IVRSystem::Init(exports);
+  */
 }
 
-NODE_MODULE(openvr, Initialize);
+NODE_MODULE(bgfx, Initialize);
