@@ -1,17 +1,13 @@
 local idl = require("idl")
+local util = require("util")
+local napi = require("napi_gen")
+local to_snake_case = util.to_snake_case
+
 do
   local bgfx_idl, err = loadfile("bgfx.idl")
   print(bgfx_idl, err)
   setfenv(bgfx_idl, idl)
   bgfx_idl()
-end
-
-local function to_snake_case(s)
-  local res = {}
-  for v in s:gmatch "[%u%d]+%l*" do
-    res[#res+1] = v:lower()
-  end
-  return table.concat(res, "_")
 end
 
 local function format_enum_entry(key, value, needs_comma, comment, indent)
@@ -35,5 +31,21 @@ end
 for k, v in pairs(idl.types) do
   if v['enum'] then 
     print(gen_enum(v))
+  end
+end
+
+for k, v in pairs(idl.funcs) do
+  -- print(v.name, v.cname or "?")
+  -- for k3, v3 in pairs(v) do print(k3, v3) end
+  -- print(v.ret.fulltype)
+  -- for i, v2 in ipairs(v.args) do
+  --   print(v2.name, v2.fulltype, v2.default)
+  --   -- for k3, v3 in pairs(v2) do
+  --   --   print(k3, v3)
+  --   -- end
+  --   --print(i, v2)
+  -- end
+  if not v.class then
+    print(napi:gen_function(v))
   end
 end
