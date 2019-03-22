@@ -37,6 +37,7 @@ for k, v in pairs(idl.types) do
   end
 end
 
+local nerr, nhappy = 0, 0
 for k, v in pairs(idl.funcs) do
   -- print(v.name, v.cname or "?")
   -- for k3, v3 in pairs(v) do print(k3, v3) end
@@ -49,6 +50,10 @@ for k, v in pairs(idl.funcs) do
   --   --print(i, v2)
   -- end
   if (not v.class) and (not v.cpponly) then
-    print(napi:gen_function(v))
+    local signature, body, had_errors = napi:gen_function(v)
+    print(body)
+    if had_errors then nerr = nerr + 1 else nhappy = nhappy + 1 end
   end
 end
+print("Convertable: ", nhappy, " / ", nhappy + nerr)
+napi:print_missing_types()

@@ -5,6 +5,7 @@ local to_snake_case = util.to_snake_case
 local NAPIFunction = {}
 function NAPIFunction:init(gen, fdef)
   self.types = gen.types
+  self.missing_types = gen.missing_types
   self.fdef = fdef
   self.stage_frags, self.call_args = {}, {}
   self.return_vals = {}
@@ -24,7 +25,9 @@ function NAPIFunction:gen_call()
   else
     local t = self.types[self.fdef.ret.fulltype]
     table.insert(self.return_vals, 1, {"__ret", t})
-    return ("%s __ret = %s(%s);"):format(self.fdef.ret.fulltype, cname, argstr)
+    if t then
+      return ("%s __ret = %s(%s);"):format(t.ctype, cname, argstr)
+    end
   end
 end
 
@@ -53,7 +56,7 @@ function NAPIFunction:gen()
   if nargs > 0 then
     stage_frags[#stage_frags+1] = {
       ("napi_value argv[%d];"):format(nargs),
-      "size_t argc = 1;",
+      ("size_t argc = %d;"):format(nargs),
       "napi_get_cb_info(env, info, &argc, argv, NULL, NULL);",
       ("if (argc < %d) {"):format(nargs),
       '  napi_throw_error(env, "EINVAL", "Too few arguments");',
@@ -71,6 +74,7 @@ function NAPIFunction:gen()
         self.return_vals[#(self.return_vals)+1] = {argname, t}
       end
     else
+      self.missing_types[arg.fulltype] = (self.missing_types[arg.fulltype] or 0) + 1
       self.had_errors = true
       call_args[#call_args+1] = arg.name
       stage_frags[#stage_frags+1] = ("%s %s = MISSING_TYPE<%s>;"):format(
@@ -87,6 +91,17 @@ function NAPIFunction:gen()
   return signature, table.concat(frags, "\n"), self.had_errors
 end
 
+local function CHECK_STATUS(fcall, etype, emessage, indent)
+  return util.indent({
+    "napi_status status = " .. fcall .. ";",
+    "if(status != napi_ok){",
+    ('  napi_throw_error(env, "%s", "%s");'):format(etype or 'EINVAL', emessage or 'Something broke.'),
+    '  return NULL;',
+    "}"
+  }, indent)
+end
+
+
 local HandleType = {}
 function HandleType:init(tdef)
   self.ctype = "bgfx_" .. to_snake_case(tdef.name):lower() .. "_t"
@@ -97,11 +112,7 @@ function HandleType:stage(argname, argtype, argidx)
     ("%s %s;"):format(self.ctype, argname),
     "{",
     "  int32_t temp = 0;",
-    ("  auto status = napi_get_value_int32(env, argv[%d], &temp);"):format(argidx),
-    "  if(status != napi_ok){",
-    '    napi_throw_error(env, "EINVAL", "Argument Error");',
-    '     return NULL;',
-    "  }",
+    CHECK_STATUS(("napi_get_value_int32(env, argv[%d], &temp)"):format(argidx)),
     ("  %s.idx = (uint16_t)temp;"):format(argname),
     "}"
   }
@@ -109,19 +120,30 @@ function HandleType:stage(argname, argtype, argidx)
 end
 
 function HandleType:unstage(idx, varname)
-  return {}, true
+  if not idx then -- we are the only return value
+    local callstr = "napi_create_int32(env, (int32_t)__ret.idx, &__napi_ret)"
+    return {
+      "napi_value __napi_ret;",
+      "{",
+      CHECK_STATUS(callstr, 'EINVAL', 'Return type error somehow?!'),
+      "}",
+      "return _napi_ret;"
+    }
+  else
+    return ("MISSING_RETURN<%s>"):format(self.ctype), true
+  end
 end
 
 local NumericType = {}
-local NUMERIC_V8_READERS = {
-  int32_t = "napi_get_value_int32",
-  int64_t = "napi_get_value_int64",
-  bool = "napi_get_value_bool",
-  double = "napi_get_value_double"
+local NUMERIC_V8_CONVERSIONS = {
+  int32_t = {"napi_get_value_int32", "napi_create_int32"},
+  int64_t = {"napi_get_value_int64", "napi_create_int64"},
+  bool = {"napi_get_value_bool", "WTF_WHERE_IS_CREATE_BOOL"},
+  double = {"napi_get_value_double", "napi_create_double"}
 }
 
 function NumericType:init(final_type, v8_type)
-  self.rfunc = NUMERIC_V8_READERS[v8_type]
+  self.rfunc, self.wfunc = unpack(NUMERIC_V8_CONVERSIONS[v8_type])
   self.ttype = v8_type
   self.ctype = final_type
 end
@@ -131,25 +153,32 @@ function NumericType:stage(argname, argtype, argidx)
     ("%s %s;"):format(self.ctype, argname),
     "{",
     ("  %s temp = (%s)0;"):format(self.ttype, self.ttype),
-    ("  auto status = %s(env, argv[%d], &temp);"):format(self.rfunc, argidx),
-    "  if(status != napi_ok){",
-    '    napi_throw_error(env, "EINVAL", "Argument Error");',
-    '     return NULL;',
-    "  }",
+    CHECK_STATUS(("%s(env, argv[%d], &temp)"):format(self.rfunc, argidx)),
     ("  %s = (%s)temp;"):format(argname, self.ctype),
     "}"
   }
   return argname, frags
 end
 
+--napi_status napi_create_int32(napi_env env, int32_t value, napi_value* result)
+
 function NumericType:unstage(idx, varname)
-  return {}, true
+  if not idx then -- we are the only return value
+    local callstr = ("%s(env, (%s)__ret, &__napi_ret)"):format(self.wfunc, self.ttype) 
+    return {
+      "napi_value __napi_ret;",
+      CHECK_STATUS(callstr, 'EINVAL', 'Return type error somehow?!', 0),
+      "return _napi_ret;"
+    }
+  else
+    return ("MISSING_RETURN<%s>"):format(self.ctype), true
+  end
 end
 
 local EnumType = {}
 function EnumType:init(tdef)
   self.ctype = "bgfx_" .. to_snake_case(tdef.name):lower() .. "_t"
-  self.rfunc = NUMERIC_V8_READERS.int32_t
+  self.rfunc, self.wfunc = unpack(NUMERIC_V8_CONVERSIONS.int32_t)
   self.ttype = 'int32_t'
 end
 EnumType.stage = NumericType.stage
@@ -159,6 +188,28 @@ local function new(proto, ...)
   local ret = setmetatable({}, {__index = proto})
   ret:init(...)
   return ret
+end
+
+local MemoryCopyType = {}
+function MemoryCopyType:init()
+  -- Nothing to do
+  self.ctype = "const bgfx_memory_t*"
+end
+function MemoryCopyType:stage(argname, argtype, argidx)
+  local tempname = "_ptr_" .. argidx
+  local tempsize = "_size_" .. argidx
+  local callstr = ("napi_get_arraybuffer_info(env, argv[%d], &%s, &%s)"):format(argidx, tempname, tempsize)
+  return argname, {
+    ("uint32_t %s = 0;"):format(tempsize),
+    ("void* %s = NULL;"):format(tempname),
+    "{",
+    CHECK_STATUS(callstr),
+    "}",
+    ("const bgfx_memory_t* %s = bgfx_copy(%s, %s);"):format(argname, tempname, tempsize)
+  }
+end
+function MemoryCopyType:unstage()
+  return "MISSING_RETURN<const Memory*>", true
 end
 
 local NAPIGen = {types = {}}
@@ -178,9 +229,11 @@ for final_type, v8_type in pairs(numeric_types) do
   NAPIGen.types[final_type] = new(NumericType, final_type, v8_type)
 end
 NAPIGen.types["ViewId"] = new(NumericType, "bgfx_view_id_t", "int32_t")
+NAPIGen.types["const Memory*"] = new(MemoryCopyType)
 
 function NAPIGen:add_handle_type(name, t)
   self.types[name] = new(HandleType, t)
+  self.missing_types = {}
 end
 
 function NAPIGen:add_enum_type(name, t)
@@ -194,6 +247,17 @@ end
 function NAPIGen:gen_function(fdef)
   local fgen = new(NAPIFunction, self, fdef)
   return fgen:gen()
+end
+
+function NAPIGen:print_missing_types()
+  local tlist = {}
+  for tname, missing_count in pairs(self.missing_types) do
+    tlist[#tlist + 1] = {tname, missing_count}
+  end
+  table.sort(tlist, function(a, b) return a[2] > b[2] end)
+  for _, p in ipairs(tlist) do
+    print(unpack(p))
+  end
 end
 
 return NAPIGen
