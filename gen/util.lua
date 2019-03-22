@@ -32,18 +32,19 @@ function util.indent(lines, indent)
   return util.prefix(lines, indent)
 end
 
-function util.concat(lists)
-  local ret = {}
-  for _, list in ipairs(lists) do
-    if type(list) == 'table' then
-      local dpos = #ret
-      for idx, v in ipairs(list) do
-        ret[dpos+idx] = v
-      end
+local function _flatten(dest, list)
+  for _, v in ipairs(list) do
+    if type(v) == 'table' then
+      _flatten(dest, v)
     else
-      ret[#ret + 1] = list
+      dest[#dest+1] = v
     end
   end
+end
+
+function util.flatten(lists)
+  local ret = {}
+  _flatten(ret, lists)
   return ret
 end
 

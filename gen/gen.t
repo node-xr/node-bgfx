@@ -30,7 +30,10 @@ end
 -- lets just print out enums for testing
 for k, v in pairs(idl.types) do
   if v['enum'] then 
-    print(gen_enum(v))
+    --print(gen_enum(v))
+    napi:add_enum_type(v.name .. "::Enum", v)
+  elseif v.handle then
+    napi:add_handle_type(v.name, v)
   end
 end
 
@@ -45,7 +48,7 @@ for k, v in pairs(idl.funcs) do
   --   -- end
   --   --print(i, v2)
   -- end
-  if not v.class then
+  if (not v.class) and (not v.cpponly) then
     print(napi:gen_function(v))
   end
 end
