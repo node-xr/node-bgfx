@@ -27,33 +27,36 @@ local function gen_enum(e)
   return table.concat(frags, "\n")
 end
 
+local nerr, nhappy = 0, 0
+
+local dest_cpp = io.open("bindings.cpp", "wt")
+local dest_hpp = io.open("bindings.hpp", "wt")
+local dest_js  = io.open("bindings.js", "wt")
+
 -- lets just print out enums for testing
 for k, v in pairs(idl.types) do
   if v['enum'] then 
-    --print(gen_enum(v))
+    dest_js:write(gen_enum(v))
+    dest_js:write("\n\n")
     napi:add_enum_type(v.name .. "::Enum", v)
   elseif v.handle then
     napi:add_handle_type(v.name, v)
   end
 end
 
-local nerr, nhappy = 0, 0
 for k, v in pairs(idl.funcs) do
-  -- print(v.name, v.cname or "?")
-  -- for k3, v3 in pairs(v) do print(k3, v3) end
-  -- print(v.ret.fulltype)
-  -- for i, v2 in ipairs(v.args) do
-  --   print(v2.name, v2.fulltype, v2.default)
-  --   -- for k3, v3 in pairs(v2) do
-  --   --   print(k3, v3)
-  --   -- end
-  --   --print(i, v2)
-  -- end
   if (not v.class) and (not v.cpponly) then
     local signature, body, had_errors = napi:gen_function(v)
-    print(body)
+    dest_cpp:write(body)
+    dest_cpp:write("\n\n")
+    dest_hpp:write(((had_errors and "//") or "") .. signature .. ";\n")
     if had_errors then nerr = nerr + 1 else nhappy = nhappy + 1 end
   end
 end
+
+dest_cpp:close()
+dest_hpp:close()
+dest_js:close()
+
 print("Convertable: ", nhappy, " / ", nhappy + nerr)
 napi:print_missing_types()

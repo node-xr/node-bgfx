@@ -14,12 +14,12 @@ end
 
 function NAPIFunction:gen_signature()
   local name = self.fdef.cname or to_snake_case(self.fdef.name):lower()
-  return ("napi_value n_%s(napi_env env, napi_callback_info info)"):format(name)
+  return ("napi_value nbgfx_%s(napi_env env, napi_callback_info info)"):format(name)
 end
 
 function NAPIFunction:gen_call()
   local cname = "bgfx_" .. (self.fdef.cname or util.to_snake_case(self.fdef.name))
-  local argstr = table.concat(self.call_args, ",")
+  local argstr = table.concat(self.call_args, ", ")
   if self.fdef.ret.fulltype == "void" then
     return ("%s(%s);"):format(cname, argstr)
   else
