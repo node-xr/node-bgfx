@@ -24,9 +24,9 @@ function NAPIFunction:gen_call()
     return ("%s(%s);"):format(cname, argstr)
   else
     local t = self.types[self.fdef.ret.fulltype]
-    table.insert(self.return_vals, 1, {"__ret", t})
+    table.insert(self.return_vals, 1, {"_ret", t})
     if t then
-      return ("%s __ret = %s(%s);"):format(t.ctype, cname, argstr)
+      return ("%s _ret = %s(%s);"):format(t.ctype, cname, argstr)
     end
   end
 end
@@ -67,7 +67,7 @@ function NAPIFunction:gen()
   for argidx, arg in ipairs(fdef.args) do
     local t = self.types[arg.fulltype]
     if t then
-      local argname, stagecall = t:stage(arg.name, arg.fulltype, argidx-1)
+      local argname, stagecall = t:stage("arg" .. arg.name, arg.fulltype, argidx-1)
       call_args[#call_args+1] = argname
       stage_frags[#stage_frags+1] = stagecall
       if t.mutates then
@@ -91,16 +91,18 @@ function NAPIFunction:gen()
   return signature, table.concat(frags, "\n"), self.had_errors
 end
 
+-- local function CHECK_STATUS(fcall, etype, emessage, indent)
+--   return util.indent({
+--     "napi_status status = " .. fcall .. ";",
+--     "if(status != napi_ok){",
+--     ('  napi_throw_error(env, "%s", "%s");'):format(etype or 'EINVAL', emessage or 'Something broke.'),
+--     '  return NULL;',
+--     "}"
+--   }, indent)
+-- end
 local function CHECK_STATUS(fcall, etype, emessage, indent)
-  return util.indent({
-    "napi_status status = " .. fcall .. ";",
-    "if(status != napi_ok){",
-    ('  napi_throw_error(env, "%s", "%s");'):format(etype or 'EINVAL', emessage or 'Something broke.'),
-    '  return NULL;',
-    "}"
-  }, indent)
+  return util.indent({("ASSERT_OK(%s)"):format(fcall)}, indent)
 end
-
 
 local HandleType = {}
 function HandleType:init(tdef)
@@ -121,9 +123,9 @@ end
 
 function HandleType:unstage(idx, varname)
   if not idx then -- we are the only return value
-    local callstr = "napi_create_int32(env, (int32_t)__ret.idx, &__napi_ret)"
+    local callstr = "napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret)"
     return {
-      "napi_value __napi_ret;",
+      "napi_value _napi_ret;",
       "{",
       CHECK_STATUS(callstr, 'EINVAL', 'Return type error somehow?!'),
       "}",
@@ -164,9 +166,9 @@ end
 
 function NumericType:unstage(idx, varname)
   if not idx then -- we are the only return value
-    local callstr = ("%s(env, (%s)__ret, &__napi_ret)"):format(self.wfunc, self.ttype) 
+    local callstr = ("%s(env, (%s)_ret, &_napi_ret)"):format(self.wfunc, self.ttype) 
     return {
-      "napi_value __napi_ret;",
+      "napi_value _napi_ret;",
       CHECK_STATUS(callstr, 'EINVAL', 'Return type error somehow?!', 0),
       "return _napi_ret;"
     }
@@ -208,8 +210,88 @@ function MemoryCopyType:stage(argname, argtype, argidx)
     ("const bgfx_memory_t* %s = bgfx_copy(%s, %s);"):format(argname, tempname, tempsize)
   }
 end
-function MemoryCopyType:unstage()
+function MemoryCopyType:unstage(idx, varname)
   return "MISSING_RETURN<const Memory*>", true
+end
+
+local VoidPointerType = {}
+function VoidPointerType:init()
+  self.ctype = "void*"
+end
+function VoidPointerType:stage(argname, argtype, argidx)
+  local tempsize = "_size_" .. argidx
+  local callstr = ("napi_get_arraybuffer_info(env, argv[%d], &%s, &%s)"):format(argidx, argname, tempsize)
+  return argname, {
+    ("uint32_t %s = 0;"):format(tempsize),
+    ("void* %s = NULL;"):format(argname),
+    "{",
+    CHECK_STATUS(callstr),
+    "}"
+  }
+end
+function VoidPointerType:unstage(idx, varname)
+  return "MISSING_RETURN<void*>", true
+end
+
+local OpaqueType = {}
+function OpaqueType:init(ctype)
+  self.ctype = ctype
+end
+function OpaqueType:stage(argname, argtype, argidx)
+  local callstr = ("napi_get_value_external(env, argv[%d], &%s)"):format(argidx, argname)
+  return argname, {
+    ("%s %s = NULL;"):format(self.ctype, argname),
+    "{",
+    CHECK_STATUS(callstr),
+    "}"
+  }
+end
+function OpaqueType:unstage(idx, varname)
+  if not idx then -- we are the only return value
+    local callstr = ("%s(env, (%s)_ret, &_napi_ret)"):format(self.wfunc, self.ttype) 
+    return {
+      "napi_value _napi_ret;",
+      CHECK_STATUS(callstr, 'EINVAL', 'Return type error somehow?!', 0),
+      "return _napi_ret;"
+    }
+  else
+    return ("MISSING_RETURN<%s>"):format(self.ctype), true
+  end
+end
+
+local UTF8StringType = {}
+function UTF8StringType:init()
+  self.ctype = "const char*"
+end
+function UTF8StringType:stage(argname, argtype, argidx)
+  local sizevar = ("_temp_size_%d"):format(argidx)
+  local outsize = ("_temp_size_out_%d"):format(argidx)
+  local callstr = ("napi_get_value_string_utf8(env, argv[%d], %s, %s &%s)"):format(argidx, argname, sizevar, outsize)
+  return argname, {
+    ("char* %s = magic_global_string_buffer;"):format(argname),
+    ("size_t %s = 0;"):format(sizevar),
+    ("size_t %s = 0;"):format(outsize),
+    "{",
+    CHECK_STATUS(callstr),
+    "}"
+  }
+end
+-- napi_status napi_create_string_utf8(napi_env env,
+--                                     const char* str,
+--                                     size_t length,
+--                                     napi_value* result)
+function UTF8StringType:unstage(idx, varname)
+  if not idx then -- we are the only return value
+    return {
+      "napi_value _napi_ret;",
+      "{",
+      CHECK_STATUS("napi_create_string_utf8(env, _ret, strlen(_ret), &_napi_ret)"),
+      "}",
+      "return _napi_ret;"
+    }
+  else
+    return ("MISSING_RETURN<%s>"):format(self.ctype), true
+  end
 end
 
 local NAPIGen = {types = {}}
@@ -230,6 +312,12 @@ for final_type, v8_type in pairs(numeric_types) do
 end
 NAPIGen.types["ViewId"] = new(NumericType, "bgfx_view_id_t", "int32_t")
 NAPIGen.types["const Memory*"] = new(MemoryCopyType)
+NAPIGen.types["void*"] = new(VoidPointerType)
+NAPIGen.types["const void*"] = new(VoidPointerType)
+NAPIGen.types["const VertexDecl &"] = new(OpaqueType, "bgfx_vertex_decl_t*")
+NAPIGen.types["const VertexDecl&"] = new(OpaqueType, "bgfx_vertex_decl_t*")
+NAPIGen.types["const PlatformData &"] = new(OpaqueType, "bgfx_platform_data_t*")
+NAPIGen.types["const char*"] = new(UTF8StringType)
 
 function NAPIGen:add_handle_type(name, t)
   self.types[name] = new(HandleType, t)
