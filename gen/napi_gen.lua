@@ -32,6 +32,9 @@ function NAPIFunction:gen_call()
 end
 
 function NAPIFunction:gen_return()
+  if #(self.return_vals) == 0 then
+    return {"return NULL;"}
+  end
   local return_frags = {}
   for idx, info in ipairs(self.return_vals) do
     local nidx = (#self.return_vals > 1) and idx
