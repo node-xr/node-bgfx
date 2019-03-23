@@ -56,12 +56,13 @@ function NAPIFunction:gen()
   if nargs > 0 then
     stage_frags[#stage_frags+1] = {
       ("napi_value argv[%d];"):format(nargs),
-      ("size_t argc = %d;"):format(nargs),
-      "napi_get_cb_info(env, info, &argc, argv, NULL, NULL);",
-      ("if (argc < %d) {"):format(nargs),
-      '  napi_throw_error(env, "EINVAL", "Too few arguments");',
-      "  return NULL;",
-      "}"
+      ("GET_ARGS(%d)"):format(nargs)
+      -- ("size_t argc = %d;"):format(nargs),
+      -- "napi_get_cb_info(env, info, &argc, argv, NULL, NULL);",
+      -- ("if (argc < %d) {"):format(nargs),
+      -- '  napi_throw_error(env, "EINVAL", "Too few arguments");',
+      -- "  return NULL;",
+      -- "}"
     }
   end
   for argidx, arg in ipairs(fdef.args) do
