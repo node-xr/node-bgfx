@@ -11,15 +11,18 @@
     {
       'target_name': 'bgfx',
       'defines': [
-        'VERSION=98',
+        'NAPI_VERSION=3',
       ],
       'sources': [
         'src/bindings.cpp',
         'src/bgfx.cpp'
       ],
       'include_dirs': [
-        "<!(node -e \"require('nan')\")",
+        "<!@(node -p \"require('node-addon-api').include\")",
         '<(module_root_dir)/deps/bgfx/include',
+      ],
+      "dependencies": [
+        "<!@(node -p \"require('node-addon-api').gyp\")"
       ],
       'conditions': [
         ['OS=="linux"', {
