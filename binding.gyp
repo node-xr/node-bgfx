@@ -12,6 +12,7 @@
       'target_name': 'bgfx',
       'defines': [
         'NAPI_VERSION=3',
+        'NAPI_DISABLE_CPP_EXCEPTIONS',
       ],
       'sources': [
         'src/bindings.cpp',

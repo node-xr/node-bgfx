@@ -27,7 +27,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "generate": "generate",
+    "generate": "node ./generate.js",
     "install": "node-gyp rebuild",
     "lint": "eslint .",
     "test": "mocha"
@@ -50,6 +50,7 @@
     "eslint": "^5.15.3",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "fengari": "^0.1.4",
     "mocha": "^6.0.2",
     "node-addon-api": "^1.6.2"
   }

@@ -1,6 +1,5 @@
 #include "bgfx.h"
 
-#include <node_api.h>
 #include <bgfx/c99/bgfx.h>
 
 napi_value create_addon(napi_env env)
