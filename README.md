@@ -1,9 +1,12 @@
 # node-bgfx
+
 BGFX bindings to node.js
 
-####  Quickstart
+#### Quickstart
+
 ```bash
-npm install  # Build native bindings
-npm lint     # Perform ESLint check
-npm test     # Run Mocha + Chai unit test (requires a connected VR headset).
+npm run generate  # Regenerate C++ bindings
+npm install       # Build native bindings
+npm lint          # Perform ESLint check
+npm test          # Run Jest unit tests.
 ```

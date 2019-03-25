@@ -1,6 +1,6 @@
 {
-  "name": "openvr",
-  "version": "0.1.0",
+  "name": "bgfx",
+  "version": "0.89.0",
   "description": "Node bindings to OpenVR through headless-gl",
   "homepage": "https://github.com/node-xr/node-bgfx#readme",
   "license": "MIT",
@@ -27,9 +27,10 @@
   },
   "main": "index.js",
   "scripts": {
+    "generate": "node ./gen/generate.js",
     "install": "node-gyp rebuild",
     "lint": "eslint .",
-    "test": "mocha"
+    "test": "jest"
   },
   "directories": {
     "src": "src",
@@ -37,19 +38,20 @@
     "test": "test"
   },
   "engines": {
-    "node": ">=3.0.0"
+    "node": ">=8.0.0"
   },
   "dependencies": {
-    "bindings": "^1.5.0",
-    "nan": "^2.13.1"
+    "bindings": "^1.5.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "chai": "^4.2.0",
-    "dirty-chai": "^2.0.1",
     "eslint": "^5.15.3",
     "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.16.0",
-    "mocha": "^6.0.2"
+    "eslint-plugin-prettier": "^3.0.1",
+    "fengari": "^0.1.4",
+    "jest": "^24.5.0",
+    "node-addon-api": "^1.6.2",
+    "prettier": "^1.16.4"
   }
 }
