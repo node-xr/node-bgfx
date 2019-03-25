@@ -61,12 +61,6 @@ function NAPIFunction:gen()
     stage_frags[#stage_frags+1] = {
       ("napi_value argv[%d];"):format(nargs),
       ("GET_ARGS(%d)"):format(nargs)
-      -- ("size_t argc = %d;"):format(nargs),
-      -- "napi_get_cb_info(env, info, &argc, argv, NULL, NULL);",
-      -- ("if (argc < %d) {"):format(nargs),
-      -- '  napi_throw_error(env, "EINVAL", "Too few arguments");',
-      -- "  return NULL;",
-      -- "}"
     }
   end
   for argidx, arg in ipairs(fdef.args) do
@@ -96,17 +90,9 @@ function NAPIFunction:gen()
   return signature, table.concat(frags, "\n"), self.had_errors
 end
 
--- local function CHECK_STATUS(fcall, etype, emessage, indent)
---   return util.indent({
---     "napi_status status = " .. fcall .. ";",
---     "if(status != napi_ok){",
---     ('  napi_throw_error(env, "%s", "%s");'):format(etype or 'EINVAL', emessage or 'Something broke.'),
---     '  return NULL;',
---     "}"
---   }, indent)
--- end
 local function CHECK_STATUS(fcall, etype, emessage, indent)
-  return util.indent({("ASSERT_OK(%s)"):format(fcall)}, indent)
+  return util.indent({("ASSERT_OK(%s, \"%s\", \"%s\");"):format(
+    fcall, etype or 'EINVAL', emessage or 'Unknown Error.')}, indent)
 end
 
 local HandleType = {}
@@ -145,7 +131,7 @@ local NumericType = {}
 local NUMERIC_V8_CONVERSIONS = {
   int32_t = {"napi_get_value_int32", "napi_create_int32"},
   int64_t = {"napi_get_value_int64", "napi_create_int64"},
-  bool = {"napi_get_value_bool", "WTF_WHERE_IS_CREATE_BOOL"},
+  bool = {"napi_get_value_bool", "napi_get_boolean"},
   double = {"napi_get_value_double", "napi_create_double"}
 }
 
@@ -207,7 +193,7 @@ function MemoryCopyType:stage(argname, argtype, argidx)
   local tempsize = "_size_" .. argidx
   local callstr = ("napi_get_arraybuffer_info(env, argv[%d], &%s, &%s)"):format(argidx, tempname, tempsize)
   return argname, {
-    ("uint32_t %s = 0;"):format(tempsize),
+    ("size_t %s = 0;"):format(tempsize),
     ("void* %s = NULL;"):format(tempname),
     "{",
     CHECK_STATUS(callstr),
@@ -227,7 +213,7 @@ function VoidPointerType:stage(argname, argtype, argidx)
   local tempsize = "_size_" .. argidx
   local callstr = ("napi_get_arraybuffer_info(env, argv[%d], &%s, &%s)"):format(argidx, argname, tempsize)
   return argname, {
-    ("uint32_t %s = 0;"):format(tempsize),
+    ("size_t %s = 0;"):format(tempsize),
     ("void* %s = NULL;"):format(argname),
     "{",
     CHECK_STATUS(callstr),
@@ -243,7 +229,7 @@ function OpaqueType:init(ctype)
   self.ctype = ctype
 end
 function OpaqueType:stage(argname, argtype, argidx)
-  local callstr = ("napi_get_value_external(env, argv[%d], &%s)"):format(argidx, argname)
+  local callstr = ("napi_get_value_external(env, argv[%d], (void **)&%s)"):format(argidx, argname)
   return argname, {
     ("%s %s = NULL;"):format(self.ctype, argname),
     "{",
@@ -271,11 +257,11 @@ end
 function UTF8StringType:stage(argname, argtype, argidx)
   local sizevar = ("_temp_size_%d"):format(argidx)
   local outsize = ("_temp_size_out_%d"):format(argidx)
-  local callstr = ("napi_get_value_string_utf8(env, argv[%d], %s, %s &%s)"):format(argidx, argname, sizevar, outsize)
+  local callstr = ("napi_get_value_string_utf8(env, argv[%d], %s, %s, &%s)"):format(argidx, argname, sizevar, outsize)
   return argname, {
-    ("char* %s = magic_global_string_buffer;"):format(argname),
-    ("size_t %s = 0;"):format(sizevar),
-    ("size_t %s = 0;"):format(outsize),
+    ("char %s[2048];"):format(argname),
+    ("size_t %s = 2048;"):format(sizevar),
+    ("size_t %s;"):format(outsize),
     "{",
     CHECK_STATUS(callstr),
     "}"
