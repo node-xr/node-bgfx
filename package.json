@@ -27,7 +27,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "generate": "node ./generate.js",
+    "generate": "node ./gen/generate.js",
     "install": "node-gyp rebuild",
     "lint": "eslint .",
     "test": "mocha"
