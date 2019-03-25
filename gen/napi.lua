@@ -111,9 +111,13 @@ function NAPIFunction:gen()
   return self.name, signature, table.concat(frags, "\n"), self.had_errors
 end
 
+local function arg_err_msg(argname, idx)
+  return ("Invalid argument %d (%s)"):format(idx, argname:sub(5,-1))
+end
+
 local function CHECK_STATUS(fcall, etype, emessage, indent)
   return util.indent({("ASSERT_OK(%s, \"%s\", \"%s\");"):format(
-    fcall, etype or 'EINVAL', emessage or 'Unknown Error.')}, indent)
+    fcall, etype or 'EINVAL', emessage or 'Unknown Error.')}, indent or 0)
 end
 
 local HandleType = {}
@@ -122,11 +126,12 @@ function HandleType:init(tdef)
 end
 
 function HandleType:stage(argname, argtype, argidx)
+  local msg = arg_err_msg(argname, argidx)
   local frags = {
     ("%s %s;"):format(self.ctype, argname),
     "{",
     "  int32_t temp = 0;",
-    CHECK_STATUS(("napi_get_value_int32(env, argv[%d], &temp)"):format(argidx)),
+    CHECK_STATUS(("napi_get_value_int32(env, argv[%d], &temp)"):format(argidx), nil, msg, 2),
     ("  %s.idx = (uint16_t)temp;"):format(argname),
     "}"
   }
@@ -163,17 +168,18 @@ end
 
 function NumericType:stage(argname, argtype, argidx)
   local frags
+  local msg = arg_err_msg(argname, argidx)
   if self.ttype == self.ctype then
     frags = {
       ("%s %s;"):format(self.ctype, argname),
-      CHECK_STATUS(("%s(env, argv[%d], &%s)"):format(self.rfunc, argidx, argname), nil, nil, 0)
+      CHECK_STATUS(("%s(env, argv[%d], &%s)"):format(self.rfunc, argidx, argname), nil, msg)
     }
   else
     frags = {
       ("%s %s;"):format(self.ctype, argname),
       "{",
       ("  %s temp = (%s)0;"):format(self.ttype, self.ttype),
-      CHECK_STATUS(("%s(env, argv[%d], &temp)"):format(self.rfunc, argidx)),
+      CHECK_STATUS(("%s(env, argv[%d], &temp)"):format(self.rfunc, argidx), nil, msg, 2),
       ("  %s = (%s)temp;"):format(argname, self.ctype),
       "}"
     }
@@ -217,11 +223,12 @@ end
 function MemoryCopyType:stage(argname, argtype, argidx)
   local tempname = "_ptr_" .. argidx
   local tempsize = "_size_" .. argidx
+  local msg = arg_err_msg(argname, argidx)
   local callstr = ("napi_get_arraybuffer_info(env, argv[%d], &%s, &%s)"):format(argidx, tempname, tempsize)
   return argname, {
     ("size_t %s = 0;"):format(tempsize),
     ("void* %s = nullptr;"):format(tempname),
-    CHECK_STATUS(callstr, nil, nil, 0),
+    CHECK_STATUS(callstr, nil, msg),
     ("const bgfx_memory_t* %s = bgfx_copy(%s, %s);"):format(argname, tempname, tempsize)
   }
 end
@@ -236,10 +243,11 @@ end
 function VoidPointerType:stage(argname, argtype, argidx)
   local tempsize = "_size_" .. argidx
   local callstr = ("napi_get_arraybuffer_info(env, argv[%d], &%s, &%s)"):format(argidx, argname, tempsize)
+  local msg = arg_err_msg(argname, argidx)
   return argname, {
     ("size_t %s = 0;"):format(tempsize),
     ("void* %s = nullptr;"):format(argname),
-    CHECK_STATUS(callstr, nil, nil, 0)
+    CHECK_STATUS(callstr, nil, msg)
   }
 end
 function VoidPointerType:unstage(idx, varname)
@@ -252,9 +260,10 @@ function OpaqueType:init(ctype)
 end
 function OpaqueType:stage(argname, argtype, argidx)
   local callstr = ("napi_get_value_external(env, argv[%d], (void **)&%s)"):format(argidx, argname)
+  local msg = arg_err_msg(argname, argidx)
   return argname, {
     ("%s %s = nullptr;"):format(self.ctype, argname),
-    CHECK_STATUS(callstr, nil, nil, 0),
+    CHECK_STATUS(callstr, nil, msg),
   }
 end
 
@@ -267,7 +276,7 @@ function OpaqueType:unstage(idx, varname)
   if not idx then -- we are the only return value
     return {
       "napi_value _napi_ret;",
-      CHECK_STATUS("napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret)", nil, nil, 0),
+      CHECK_STATUS("napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret)"),
       "return _napi_ret;"
     }
   else
@@ -283,11 +292,12 @@ function UTF8StringType:stage(argname, argtype, argidx)
   local sizevar = ("_temp_size_%d"):format(argidx)
   local outsize = ("_temp_size_out_%d"):format(argidx)
   local callstr = ("napi_get_value_string_utf8(env, argv[%d], %s, %s, &%s)"):format(argidx, argname, sizevar, outsize)
+  local msg = arg_err_msg(argname, argidx)
   return argname, {
     ("char %s[2048];"):format(argname),
     ("size_t %s = 2048;"):format(sizevar),
     ("size_t %s;"):format(outsize),
-    CHECK_STATUS(callstr, nil, nil, 0)
+    CHECK_STATUS(callstr, nil, msg)
   }
 end
 
@@ -295,7 +305,7 @@ function UTF8StringType:unstage(idx, varname)
   if not idx then -- we are the only return value
     return {
       "napi_value _napi_ret;",
-      CHECK_STATUS("napi_create_string_utf8(env, _ret, strlen(_ret), &_napi_ret)", nil, nil, 0),
+      CHECK_STATUS("napi_create_string_utf8(env, _ret, strlen(_ret), &_napi_ret)"),
       "return _napi_ret;"
     }
   else
