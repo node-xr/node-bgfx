@@ -46,9 +46,7 @@ napi_value napi_bgfx_vertex_decl_begin(napi_env env, napi_callback_info info){
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_vertex_decl_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_renderer_type_t arg_rendererType;
   {
     int32_t temp = (int32_t)0;
@@ -56,17 +54,16 @@ napi_value napi_bgfx_vertex_decl_begin(napi_env env, napi_callback_info info){
     arg_rendererType = (bgfx_renderer_type_t)temp;
   }
   bgfx_vertex_decl_t* _ret = bgfx_vertex_decl_begin(arg_self, arg_rendererType);
-  //Returning this is problematic
-  return nullptr;
+  napi_value _napi_ret;
+  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  return _napi_ret;
 }
 
 napi_value napi_bgfx_vertex_decl_add(napi_env env, napi_callback_info info){
   napi_value argv[6];
   GET_ARGS(6)
   bgfx_vertex_decl_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_attrib_t arg_attrib;
   {
     int32_t temp = (int32_t)0;
@@ -86,29 +83,20 @@ napi_value napi_bgfx_vertex_decl_add(napi_env env, napi_callback_info info){
     arg_type = (bgfx_attrib_type_t)temp;
   }
   bool arg_normalized;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_normalized = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[4], &arg_normalized), "EINVAL", "Unknown Error.");
   bool arg_asInt;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[5], &temp), "EINVAL", "Unknown Error.");
-    arg_asInt = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[5], &arg_asInt), "EINVAL", "Unknown Error.");
   bgfx_vertex_decl_t* _ret = bgfx_vertex_decl_add(arg_self, arg_attrib, arg_num, arg_type, arg_normalized, arg_asInt);
-  //Returning this is problematic
-  return nullptr;
+  napi_value _napi_ret;
+  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  return _napi_ret;
 }
 
 //napi_value napi_bgfx_vertex_decl_decode(napi_env env, napi_callback_info info){
 //  napi_value argv[6];
 //  GET_ARGS(6)
 //  bgfx_vertex_decl_t* arg_self = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
 //  bgfx_attrib_t arg_attrib;
 //  {
 //    int32_t temp = (int32_t)0;
@@ -127,9 +115,7 @@ napi_value napi_bgfx_vertex_decl_has(napi_env env, napi_callback_info info){
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_vertex_decl_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_attrib_t arg_attrib;
   {
     int32_t temp = (int32_t)0;
@@ -146,9 +132,7 @@ napi_value napi_bgfx_vertex_decl_skip(napi_env env, napi_callback_info info){
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_vertex_decl_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_num;
   {
     int32_t temp = (int32_t)0;
@@ -156,17 +140,16 @@ napi_value napi_bgfx_vertex_decl_skip(napi_env env, napi_callback_info info){
     arg_num = (uint8_t)temp;
   }
   bgfx_vertex_decl_t* _ret = bgfx_vertex_decl_skip(arg_self, arg_num);
-  //Returning this is problematic
-  return nullptr;
+  napi_value _napi_ret;
+  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  return _napi_ret;
 }
 
 napi_value napi_bgfx_vertex_decl_end(napi_env env, napi_callback_info info){
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_vertex_decl_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_vertex_decl_end(arg_self);
   return nullptr;
 }
@@ -176,11 +159,7 @@ napi_value napi_bgfx_vertex_decl_end(napi_env env, napi_callback_info info){
 //  GET_ARGS(6)
 //  const float[4] _input = MISSING_TYPE<const float[4]>;
 //  bool arg_inputNormalized;
-//  {
-//    bool temp = (bool)0;
-//    ASSERT_OK(napi_get_value_bool(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_inputNormalized = (bool)temp;
-//  }
+//  ASSERT_OK(napi_get_value_bool(env, argv[1], &arg_inputNormalized), "EINVAL", "Unknown Error.");
 //  bgfx_attrib_t arg_attr;
 //  {
 //    int32_t temp = (int32_t)0;
@@ -188,20 +167,12 @@ napi_value napi_bgfx_vertex_decl_end(napi_env env, napi_callback_info info){
 //    arg_attr = (bgfx_attrib_t)temp;
 //  }
 //  bgfx_vertex_decl_t* arg_decl = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[3], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[3], (void **)&arg_decl), "EINVAL", "Unknown Error.");
 //  size_t _size_4 = 0;
 //  void* arg_data = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[4], &arg_data, &_size_4), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[4], &arg_data, &_size_4), "EINVAL", "Unknown Error.");
 //  uint32_t arg_index;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[5], &temp), "EINVAL", "Unknown Error.");
-//    arg_index = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[5], &arg_index), "EINVAL", "Unknown Error.");
 //  bgfx_vertex_pack(_input, arg_inputNormalized, arg_attr, arg_decl, arg_data, arg_index);
 //  return nullptr;
 //}
@@ -217,20 +188,12 @@ napi_value napi_bgfx_vertex_decl_end(napi_env env, napi_callback_info info){
 //    arg_attr = (bgfx_attrib_t)temp;
 //  }
 //  bgfx_vertex_decl_t* arg_decl = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[2], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[2], (void **)&arg_decl), "EINVAL", "Unknown Error.");
 //  size_t _size_3 = 0;
 //  void* arg_data = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_data, &_size_3), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_data, &_size_3), "EINVAL", "Unknown Error.");
 //  uint32_t arg_index;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-//    arg_index = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_index), "EINVAL", "Unknown Error.");
 //  bgfx_vertex_unpack(_output, arg_attr, arg_decl, arg_data, arg_index);
 //  return nullptr;
 //}
@@ -239,29 +202,17 @@ napi_value napi_bgfx_vertex_convert(napi_env env, napi_callback_info info){
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_vertex_decl_t* arg_dstDecl = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_dstDecl), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_dstDecl), "EINVAL", "Unknown Error.");
   size_t _size_1 = 0;
   void* arg_dstData = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_dstData, &_size_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_dstData, &_size_1), "EINVAL", "Unknown Error.");
   bgfx_vertex_decl_t* arg_srcDecl = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[2], (void **)&arg_srcDecl), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[2], (void **)&arg_srcDecl), "EINVAL", "Unknown Error.");
   size_t _size_3 = 0;
   void* arg_srcData = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_srcData, &_size_3), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_srcData, &_size_3), "EINVAL", "Unknown Error.");
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_num), "EINVAL", "Unknown Error.");
   bgfx_vertex_convert(arg_dstDecl, arg_dstData, arg_srcDecl, arg_srcData, arg_num);
   return nullptr;
 }
@@ -271,14 +222,10 @@ napi_value napi_bgfx_vertex_convert(napi_env env, napi_callback_info info){
 //  GET_ARGS(5)
 //  uint16_t* _output = MISSING_TYPE<uint16_t*>;
 //  bgfx_vertex_decl_t* arg_decl = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
 //  size_t _size_2 = 0;
 //  void* arg_data = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &arg_data, &_size_2), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &arg_data, &_size_2), "EINVAL", "Unknown Error.");
 //  uint16_t arg_num;
 //  {
 //    int32_t temp = (int32_t)0;
@@ -308,32 +255,16 @@ napi_value napi_bgfx_topology_convert(napi_env env, napi_callback_info info){
   }
   size_t _size_1 = 0;
   void* arg_dst = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_dst, &_size_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_dst, &_size_1), "EINVAL", "Unknown Error.");
   uint32_t arg_dstSize;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_dstSize = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_dstSize), "EINVAL", "Unknown Error.");
   size_t _size_3 = 0;
   void* arg_indices = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_indices, &_size_3), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_indices, &_size_3), "EINVAL", "Unknown Error.");
   uint32_t arg_numIndices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_numIndices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_numIndices), "EINVAL", "Unknown Error.");
   bool arg_index32;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[5], &temp), "EINVAL", "Unknown Error.");
-    arg_index32 = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[5], &arg_index32), "EINVAL", "Unknown Error.");
   uint32_t _ret = bgfx_topology_convert(arg_conversion, arg_dst, arg_dstSize, arg_indices, arg_numIndices, arg_index32);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_uint32(env, (uint32_t)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -351,45 +282,23 @@ napi_value napi_bgfx_topology_convert(napi_env env, napi_callback_info info){
 //  }
 //  size_t _size_1 = 0;
 //  void* arg_dst = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_dst, &_size_1), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_dst, &_size_1), "EINVAL", "Unknown Error.");
 //  uint32_t arg_dstSize;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_dstSize = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_dstSize), "EINVAL", "Unknown Error.");
 //  const float[3] _dir = MISSING_TYPE<const float[3]>;
 //  const float[3] _pos = MISSING_TYPE<const float[3]>;
 //  size_t _size_5 = 0;
 //  void* arg_vertices = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[5], &arg_vertices, &_size_5), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[5], &arg_vertices, &_size_5), "EINVAL", "Unknown Error.");
 //  uint32_t arg_stride;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[6], &temp), "EINVAL", "Unknown Error.");
-//    arg_stride = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[6], &arg_stride), "EINVAL", "Unknown Error.");
 //  size_t _size_7 = 0;
 //  void* arg_indices = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[7], &arg_indices, &_size_7), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[7], &arg_indices, &_size_7), "EINVAL", "Unknown Error.");
 //  uint32_t arg_numIndices;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[8], &temp), "EINVAL", "Unknown Error.");
-//    arg_numIndices = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[8], &arg_numIndices), "EINVAL", "Unknown Error.");
 //  bool arg_index32;
-//  {
-//    bool temp = (bool)0;
-//    ASSERT_OK(napi_get_value_bool(env, argv[9], &temp), "EINVAL", "Unknown Error.");
-//    arg_index32 = (bool)temp;
-//  }
+//  ASSERT_OK(napi_get_value_bool(env, argv[9], &arg_index32), "EINVAL", "Unknown Error.");
 //  bgfx_topology_sort_tri_list(arg_sort, arg_dst, arg_dstSize, _dir, _pos, arg_vertices, arg_stride, arg_indices, arg_numIndices, arg_index32);
 //  return nullptr;
 //}
@@ -421,9 +330,7 @@ napi_value napi_bgfx_get_renderer_name(napi_env env, napi_callback_info info){
   }
   const char* _ret = bgfx_get_renderer_name(arg_type);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_string_utf8(env, _ret, strlen(_ret), &_napi_ret), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_create_string_utf8(env, _ret, strlen(_ret), &_napi_ret), "EINVAL", "Unknown Error.");
   return _napi_ret;
 }
 
@@ -454,23 +361,11 @@ napi_value napi_bgfx_reset(napi_env env, napi_callback_info info){
   napi_value argv[4];
   GET_ARGS(4)
   uint32_t arg_width;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_width = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_width), "EINVAL", "Unknown Error.");
   uint32_t arg_height;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_height = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_height), "EINVAL", "Unknown Error.");
   uint32_t arg_flags;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_flags = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_flags), "EINVAL", "Unknown Error.");
   bgfx_texture_format_t arg_format;
   {
     int32_t temp = (int32_t)0;
@@ -485,11 +380,7 @@ napi_value napi_bgfx_frame(napi_env env, napi_callback_info info){
   napi_value argv[1];
   GET_ARGS(1)
   bool arg_capture;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_capture = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[0], &arg_capture), "EINVAL", "Unknown Error.");
   uint32_t _ret = bgfx_frame(arg_capture);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_uint32(env, (uint32_t)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -513,11 +404,7 @@ napi_value napi_bgfx_get_renderer_type(napi_env env, napi_callback_info info){
 //  napi_value argv[1];
 //  GET_ARGS(1)
 //  uint32_t arg_size;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-//    arg_size = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_size), "EINVAL", "Unknown Error.");
 //  const bgfx_memory_t* _ret = bgfx_alloc(arg_size);
 //  MISSING_RETURN<const Memory*>
 //}
@@ -527,15 +414,9 @@ napi_value napi_bgfx_get_renderer_type(napi_env env, napi_callback_info info){
 //  GET_ARGS(2)
 //  size_t _size_0 = 0;
 //  void* arg_data = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_data, &_size_0), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_data, &_size_0), "EINVAL", "Unknown Error.");
 //  uint32_t arg_size;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_size = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_size), "EINVAL", "Unknown Error.");
 //  const bgfx_memory_t* _ret = bgfx_copy(arg_data, arg_size);
 //  MISSING_RETURN<const Memory*>
 //}
@@ -545,15 +426,9 @@ napi_value napi_bgfx_get_renderer_type(napi_env env, napi_callback_info info){
 //  GET_ARGS(2)
 //  size_t _size_0 = 0;
 //  void* arg_data = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_data, &_size_0), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_data, &_size_0), "EINVAL", "Unknown Error.");
 //  uint32_t arg_size;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_size = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_size), "EINVAL", "Unknown Error.");
 //  const bgfx_memory_t* _ret = bgfx_make_ref(arg_data, arg_size);
 //  MISSING_RETURN<const Memory*>
 //}
@@ -563,21 +438,13 @@ napi_value napi_bgfx_get_renderer_type(napi_env env, napi_callback_info info){
 //  GET_ARGS(4)
 //  size_t _size_0 = 0;
 //  void* arg_data = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_data, &_size_0), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_data, &_size_0), "EINVAL", "Unknown Error.");
 //  uint32_t arg_size;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_size = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_size), "EINVAL", "Unknown Error.");
 //  ReleaseFn _releaseFn = MISSING_TYPE<ReleaseFn>;
 //  size_t _size_3 = 0;
 //  void* arg_userData = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_userData, &_size_3), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_userData, &_size_3), "EINVAL", "Unknown Error.");
 //  const bgfx_memory_t* _ret = bgfx_make_ref_release(arg_data, arg_size, _releaseFn, arg_userData);
 //  MISSING_RETURN<const Memory*>
 //}
@@ -586,11 +453,7 @@ napi_value napi_bgfx_set_debug(napi_env env, napi_callback_info info){
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_debug;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_debug = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_debug), "EINVAL", "Unknown Error.");
   bgfx_set_debug(arg_debug);
   return nullptr;
 }
@@ -605,11 +468,7 @@ napi_value napi_bgfx_dbg_text_clear(napi_env env, napi_callback_info info){
     arg_attr = (uint8_t)temp;
   }
   bool arg_small;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_small = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[1], &arg_small), "EINVAL", "Unknown Error.");
   bgfx_dbg_text_clear(arg_attr, arg_small);
   return nullptr;
 }
@@ -638,9 +497,7 @@ napi_value napi_bgfx_dbg_text_printf(napi_env env, napi_callback_info info){
   char arg_format[2048];
   size_t _temp_size_3 = 2048;
   size_t _temp_size_out_3;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[3], arg_format, _temp_size_3, &_temp_size_out_3), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[3], arg_format, _temp_size_3, &_temp_size_out_3), "EINVAL", "Unknown Error.");
   bgfx_dbg_text_printf(arg_x, arg_y, arg_attr, arg_format);
   return nullptr;
 }
@@ -669,9 +526,7 @@ napi_value napi_bgfx_dbg_text_printf(napi_env env, napi_callback_info info){
 //  char arg_format[2048];
 //  size_t _temp_size_3 = 2048;
 //  size_t _temp_size_out_3;
-//  {
-//    ASSERT_OK(napi_get_value_string_utf8(env, argv[3], arg_format, _temp_size_3, &_temp_size_out_3), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_string_utf8(env, argv[3], arg_format, _temp_size_3, &_temp_size_out_3), "EINVAL", "Unknown Error.");
 //  va_list _argList = MISSING_TYPE<va_list>;
 //  bgfx_dbg_text_vprintf(arg_x, arg_y, arg_attr, arg_format, _argList);
 //  return nullptr;
@@ -706,9 +561,7 @@ napi_value napi_bgfx_dbg_text_image(napi_env env, napi_callback_info info){
   }
   size_t _size_4 = 0;
   void* arg_data = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[4], &arg_data, &_size_4), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[4], &arg_data, &_size_4), "EINVAL", "Unknown Error.");
   uint16_t arg_pitch;
   {
     int32_t temp = (int32_t)0;
@@ -724,9 +577,7 @@ napi_value napi_bgfx_create_index_buffer(napi_env env, napi_callback_info info){
   GET_ARGS(2)
   size_t _size_0 = 0;
   void* _ptr_0 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
   uint16_t arg_flags;
   {
@@ -736,9 +587,7 @@ napi_value napi_bgfx_create_index_buffer(napi_env env, napi_callback_info info){
   }
   bgfx_index_buffer_handle_t _ret = bgfx_create_index_buffer(arg_mem, arg_flags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -754,15 +603,9 @@ napi_value napi_bgfx_set_index_buffer_name(napi_env env, napi_callback_info info
   char arg_name[2048];
   size_t _temp_size_1 = 2048;
   size_t _temp_size_out_1;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
   int32_t arg_len;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_len = (int32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_int32(env, argv[2], &arg_len), "EINVAL", "Unknown Error.");
   bgfx_set_index_buffer_name(arg_handle, arg_name, arg_len);
   return nullptr;
 }
@@ -785,14 +628,10 @@ napi_value napi_bgfx_create_vertex_buffer(napi_env env, napi_callback_info info)
   GET_ARGS(3)
   size_t _size_0 = 0;
   void* _ptr_0 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
   bgfx_vertex_decl_t* arg_decl = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
   uint16_t arg_flags;
   {
     int32_t temp = (int32_t)0;
@@ -801,9 +640,7 @@ napi_value napi_bgfx_create_vertex_buffer(napi_env env, napi_callback_info info)
   }
   bgfx_vertex_buffer_handle_t _ret = bgfx_create_vertex_buffer(arg_mem, arg_decl, arg_flags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -819,15 +656,9 @@ napi_value napi_bgfx_set_vertex_buffer_name(napi_env env, napi_callback_info inf
   char arg_name[2048];
   size_t _temp_size_1 = 2048;
   size_t _temp_size_out_1;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
   int32_t arg_len;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_len = (int32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_int32(env, argv[2], &arg_len), "EINVAL", "Unknown Error.");
   bgfx_set_vertex_buffer_name(arg_handle, arg_name, arg_len);
   return nullptr;
 }
@@ -849,11 +680,7 @@ napi_value napi_bgfx_create_dynamic_index_buffer(napi_env env, napi_callback_inf
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_num), "EINVAL", "Unknown Error.");
   uint16_t arg_flags;
   {
     int32_t temp = (int32_t)0;
@@ -862,9 +689,7 @@ napi_value napi_bgfx_create_dynamic_index_buffer(napi_env env, napi_callback_inf
   }
   bgfx_dynamic_index_buffer_handle_t _ret = bgfx_create_dynamic_index_buffer(arg_num, arg_flags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -873,9 +698,7 @@ napi_value napi_bgfx_create_dynamic_index_buffer_mem(napi_env env, napi_callback
   GET_ARGS(2)
   size_t _size_0 = 0;
   void* _ptr_0 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
   uint16_t arg_flags;
   {
@@ -885,9 +708,7 @@ napi_value napi_bgfx_create_dynamic_index_buffer_mem(napi_env env, napi_callback
   }
   bgfx_dynamic_index_buffer_handle_t _ret = bgfx_create_dynamic_index_buffer_mem(arg_mem, arg_flags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -901,16 +722,10 @@ napi_value napi_bgfx_update_dynamic_index_buffer(napi_env env, napi_callback_inf
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startIndex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_startIndex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_startIndex), "EINVAL", "Unknown Error.");
   size_t _size_2 = 0;
   void* _ptr_2 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &_ptr_2, &_size_2), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &_ptr_2, &_size_2), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_2, _size_2);
   bgfx_update_dynamic_index_buffer(arg_handle, arg_startIndex, arg_mem);
   return nullptr;
@@ -933,15 +748,9 @@ napi_value napi_bgfx_create_dynamic_vertex_buffer(napi_env env, napi_callback_in
   napi_value argv[3];
   GET_ARGS(3)
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_num), "EINVAL", "Unknown Error.");
   bgfx_vertex_decl_t* arg_decl = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
   uint16_t arg_flags;
   {
     int32_t temp = (int32_t)0;
@@ -950,9 +759,7 @@ napi_value napi_bgfx_create_dynamic_vertex_buffer(napi_env env, napi_callback_in
   }
   bgfx_dynamic_vertex_buffer_handle_t _ret = bgfx_create_dynamic_vertex_buffer(arg_num, arg_decl, arg_flags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -961,14 +768,10 @@ napi_value napi_bgfx_create_dynamic_vertex_buffer_mem(napi_env env, napi_callbac
   GET_ARGS(3)
   size_t _size_0 = 0;
   void* _ptr_0 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
   bgfx_vertex_decl_t* arg_decl = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
   uint16_t arg_flags;
   {
     int32_t temp = (int32_t)0;
@@ -977,9 +780,7 @@ napi_value napi_bgfx_create_dynamic_vertex_buffer_mem(napi_env env, napi_callbac
   }
   bgfx_dynamic_vertex_buffer_handle_t _ret = bgfx_create_dynamic_vertex_buffer_mem(arg_mem, arg_decl, arg_flags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -993,16 +794,10 @@ napi_value napi_bgfx_update_dynamic_vertex_buffer(napi_env env, napi_callback_in
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_startVertex), "EINVAL", "Unknown Error.");
   size_t _size_2 = 0;
   void* _ptr_2 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &_ptr_2, &_size_2), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &_ptr_2, &_size_2), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_2, _size_2);
   bgfx_update_dynamic_vertex_buffer(arg_handle, arg_startVertex, arg_mem);
   return nullptr;
@@ -1025,11 +820,7 @@ napi_value napi_bgfx_get_avail_transient_index_buffer(napi_env env, napi_callbac
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_num), "EINVAL", "Unknown Error.");
   uint32_t _ret = bgfx_get_avail_transient_index_buffer(arg_num);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_uint32(env, (uint32_t)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -1040,15 +831,9 @@ napi_value napi_bgfx_get_avail_transient_vertex_buffer(napi_env env, napi_callba
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_num), "EINVAL", "Unknown Error.");
   bgfx_vertex_decl_t* arg_decl = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
   uint32_t _ret = bgfx_get_avail_transient_vertex_buffer(arg_num, arg_decl);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_uint32(env, (uint32_t)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -1059,11 +844,7 @@ napi_value napi_bgfx_get_avail_instance_data_buffer(napi_env env, napi_callback_
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_num), "EINVAL", "Unknown Error.");
   uint16_t arg_stride;
   {
     int32_t temp = (int32_t)0;
@@ -1081,11 +862,7 @@ napi_value napi_bgfx_get_avail_instance_data_buffer(napi_env env, napi_callback_
 //  GET_ARGS(2)
 //  TransientIndexBuffer* _tib = MISSING_TYPE<TransientIndexBuffer*>;
 //  uint32_t arg_num;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_num = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_num), "EINVAL", "Unknown Error.");
 //  bgfx_alloc_transient_index_buffer(_tib, arg_num);
 //  return nullptr;
 //}
@@ -1095,15 +872,9 @@ napi_value napi_bgfx_get_avail_instance_data_buffer(napi_env env, napi_callback_
 //  GET_ARGS(3)
 //  TransientVertexBuffer* _tvb = MISSING_TYPE<TransientVertexBuffer*>;
 //  uint32_t arg_num;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_num = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_num), "EINVAL", "Unknown Error.");
 //  bgfx_vertex_decl_t* arg_decl = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[2], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[2], (void **)&arg_decl), "EINVAL", "Unknown Error.");
 //  bgfx_alloc_transient_vertex_buffer(_tvb, arg_num, arg_decl);
 //  return nullptr;
 //}
@@ -1113,22 +884,12 @@ napi_value napi_bgfx_get_avail_instance_data_buffer(napi_env env, napi_callback_
 //  GET_ARGS(5)
 //  TransientVertexBuffer* _tvb = MISSING_TYPE<TransientVertexBuffer*>;
 //  bgfx_vertex_decl_t* arg_decl = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Unknown Error.");
 //  uint32_t arg_numVertices;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_numVertices = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_numVertices), "EINVAL", "Unknown Error.");
 //  TransientIndexBuffer* _tib = MISSING_TYPE<TransientIndexBuffer*>;
 //  uint32_t arg_numIndices;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-//    arg_numIndices = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_numIndices), "EINVAL", "Unknown Error.");
 //  bool _ret = bgfx_alloc_transient_buffers(_tvb, arg_decl, arg_numVertices, _tib, arg_numIndices);
 //  napi_value _napi_ret;
 //  ASSERT_OK(napi_get_boolean(env, (bool)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -1140,11 +901,7 @@ napi_value napi_bgfx_get_avail_instance_data_buffer(napi_env env, napi_callback_
 //  GET_ARGS(3)
 //  InstanceDataBuffer* _idb = MISSING_TYPE<InstanceDataBuffer*>;
 //  uint32_t arg_num;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_num = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_num), "EINVAL", "Unknown Error.");
 //  uint16_t arg_stride;
 //  {
 //    int32_t temp = (int32_t)0;
@@ -1159,16 +916,10 @@ napi_value napi_bgfx_create_indirect_buffer(napi_env env, napi_callback_info inf
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_num), "EINVAL", "Unknown Error.");
   bgfx_indirect_buffer_handle_t _ret = bgfx_create_indirect_buffer(arg_num);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1190,15 +941,11 @@ napi_value napi_bgfx_create_shader(napi_env env, napi_callback_info info){
   GET_ARGS(1)
   size_t _size_0 = 0;
   void* _ptr_0 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
   bgfx_shader_handle_t _ret = bgfx_create_shader(arg_mem);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1236,15 +983,9 @@ napi_value napi_bgfx_set_shader_name(napi_env env, napi_callback_info info){
   char arg_name[2048];
   size_t _temp_size_1 = 2048;
   size_t _temp_size_out_1;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
   int32_t arg_len;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_len = (int32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_int32(env, argv[2], &arg_len), "EINVAL", "Unknown Error.");
   bgfx_set_shader_name(arg_handle, arg_name, arg_len);
   return nullptr;
 }
@@ -1278,16 +1019,10 @@ napi_value napi_bgfx_create_program(napi_env env, napi_callback_info info){
     arg_fsh.idx = (uint16_t)temp;
   }
   bool arg_destroyShaders;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_destroyShaders = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[2], &arg_destroyShaders), "EINVAL", "Unknown Error.");
   bgfx_program_handle_t _ret = bgfx_create_program(arg_vsh, arg_fsh, arg_destroyShaders);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1301,16 +1036,10 @@ napi_value napi_bgfx_create_compute_program(napi_env env, napi_callback_info inf
     arg_csh.idx = (uint16_t)temp;
   }
   bool arg_destroyShaders;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_destroyShaders = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[1], &arg_destroyShaders), "EINVAL", "Unknown Error.");
   bgfx_program_handle_t _ret = bgfx_create_compute_program(arg_csh, arg_destroyShaders);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1337,11 +1066,7 @@ napi_value napi_bgfx_is_texture_valid(napi_env env, napi_callback_info info){
     arg_depth = (uint16_t)temp;
   }
   bool arg_cubeMap;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_cubeMap = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[1], &arg_cubeMap), "EINVAL", "Unknown Error.");
   uint16_t arg_numLayers;
   {
     int32_t temp = (int32_t)0;
@@ -1389,17 +1114,9 @@ napi_value napi_bgfx_is_texture_valid(napi_env env, napi_callback_info info){
 //    arg_depth = (uint16_t)temp;
 //  }
 //  bool arg_cubeMap;
-//  {
-//    bool temp = (bool)0;
-//    ASSERT_OK(napi_get_value_bool(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-//    arg_cubeMap = (bool)temp;
-//  }
+//  ASSERT_OK(napi_get_value_bool(env, argv[4], &arg_cubeMap), "EINVAL", "Unknown Error.");
 //  bool arg_hasMips;
-//  {
-//    bool temp = (bool)0;
-//    ASSERT_OK(napi_get_value_bool(env, argv[5], &temp), "EINVAL", "Unknown Error.");
-//    arg_hasMips = (bool)temp;
-//  }
+//  ASSERT_OK(napi_get_value_bool(env, argv[5], &arg_hasMips), "EINVAL", "Unknown Error.");
 //  uint16_t arg_numLayers;
 //  {
 //    int32_t temp = (int32_t)0;
@@ -1421,9 +1138,7 @@ napi_value napi_bgfx_is_texture_valid(napi_env env, napi_callback_info info){
 //  GET_ARGS(4)
 //  size_t _size_0 = 0;
 //  void* _ptr_0 = nullptr;
-//  {
-//    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Unknown Error.");
 //  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
 //  uint64_t arg_flags;
 //  {
@@ -1440,9 +1155,7 @@ napi_value napi_bgfx_is_texture_valid(napi_env env, napi_callback_info info){
 //  TextureInfo* _info = MISSING_TYPE<TextureInfo*>;
 //  bgfx_texture_handle_t _ret = bgfx_create_texture(arg_mem, arg_flags, arg_skip, _info);
 //  napi_value _napi_ret;
-//  {
-//    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-//  }
+//  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
 //  return _napi_ret;
 //}
 
@@ -1462,11 +1175,7 @@ napi_value napi_bgfx_create_texture_2d(napi_env env, napi_callback_info info){
     arg_height = (uint16_t)temp;
   }
   bool arg_hasMips;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_hasMips = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[2], &arg_hasMips), "EINVAL", "Unknown Error.");
   uint16_t arg_numLayers;
   {
     int32_t temp = (int32_t)0;
@@ -1487,15 +1196,11 @@ napi_value napi_bgfx_create_texture_2d(napi_env env, napi_callback_info info){
   }
   size_t _size_6 = 0;
   void* _ptr_6 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[6], &_ptr_6, &_size_6), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[6], &_ptr_6, &_size_6), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_6, _size_6);
   bgfx_texture_handle_t _ret = bgfx_create_texture_2d(arg_width, arg_height, arg_hasMips, arg_numLayers, arg_format, arg_flags, arg_mem);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1509,11 +1214,7 @@ napi_value napi_bgfx_create_texture_2d_scaled(napi_env env, napi_callback_info i
     arg_ratio = (bgfx_backbuffer_ratio_t)temp;
   }
   bool arg_hasMips;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_hasMips = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[1], &arg_hasMips), "EINVAL", "Unknown Error.");
   uint16_t arg_numLayers;
   {
     int32_t temp = (int32_t)0;
@@ -1534,9 +1235,7 @@ napi_value napi_bgfx_create_texture_2d_scaled(napi_env env, napi_callback_info i
   }
   bgfx_texture_handle_t _ret = bgfx_create_texture_2d_scaled(arg_ratio, arg_hasMips, arg_numLayers, arg_format, arg_flags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1562,11 +1261,7 @@ napi_value napi_bgfx_create_texture_3d(napi_env env, napi_callback_info info){
     arg_depth = (uint16_t)temp;
   }
   bool arg_hasMips;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_hasMips = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[3], &arg_hasMips), "EINVAL", "Unknown Error.");
   bgfx_texture_format_t arg_format;
   {
     int32_t temp = (int32_t)0;
@@ -1581,15 +1276,11 @@ napi_value napi_bgfx_create_texture_3d(napi_env env, napi_callback_info info){
   }
   size_t _size_6 = 0;
   void* _ptr_6 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[6], &_ptr_6, &_size_6), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[6], &_ptr_6, &_size_6), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_6, _size_6);
   bgfx_texture_handle_t _ret = bgfx_create_texture_3d(arg_width, arg_height, arg_depth, arg_hasMips, arg_format, arg_flags, arg_mem);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1603,11 +1294,7 @@ napi_value napi_bgfx_create_texture_cube(napi_env env, napi_callback_info info){
     arg_size = (uint16_t)temp;
   }
   bool arg_hasMips;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_hasMips = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[1], &arg_hasMips), "EINVAL", "Unknown Error.");
   uint16_t arg_numLayers;
   {
     int32_t temp = (int32_t)0;
@@ -1628,15 +1315,11 @@ napi_value napi_bgfx_create_texture_cube(napi_env env, napi_callback_info info){
   }
   size_t _size_5 = 0;
   void* _ptr_5 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[5], &_ptr_5, &_size_5), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[5], &_ptr_5, &_size_5), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_5, _size_5);
   bgfx_texture_handle_t _ret = bgfx_create_texture_cube(arg_size, arg_hasMips, arg_numLayers, arg_format, arg_flags, arg_mem);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1687,9 +1370,7 @@ napi_value napi_bgfx_update_texture_2d(napi_env env, napi_callback_info info){
   }
   size_t _size_7 = 0;
   void* _ptr_7 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[7], &_ptr_7, &_size_7), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[7], &_ptr_7, &_size_7), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_7, _size_7);
   uint16_t arg_pitch;
   {
@@ -1754,9 +1435,7 @@ napi_value napi_bgfx_update_texture_3d(napi_env env, napi_callback_info info){
   }
   size_t _size_8 = 0;
   void* _ptr_8 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[8], &_ptr_8, &_size_8), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[8], &_ptr_8, &_size_8), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_8, _size_8);
   bgfx_update_texture_3d(arg_handle, arg_mip, arg_x, arg_y, arg_z, arg_width, arg_height, arg_depth, arg_mem);
   return nullptr;
@@ -1815,9 +1494,7 @@ napi_value napi_bgfx_update_texture_cube(napi_env env, napi_callback_info info){
   }
   size_t _size_8 = 0;
   void* _ptr_8 = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[8], &_ptr_8, &_size_8), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[8], &_ptr_8, &_size_8), "EINVAL", "Unknown Error.");
   const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_8, _size_8);
   uint16_t arg_pitch;
   {
@@ -1840,9 +1517,7 @@ napi_value napi_bgfx_read_texture(napi_env env, napi_callback_info info){
   }
   size_t _size_1 = 0;
   void* arg_data = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_data, &_size_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_data, &_size_1), "EINVAL", "Unknown Error.");
   uint8_t arg_mip;
   {
     int32_t temp = (int32_t)0;
@@ -1867,15 +1542,9 @@ napi_value napi_bgfx_set_texture_name(napi_env env, napi_callback_info info){
   char arg_name[2048];
   size_t _temp_size_1 = 2048;
   size_t _temp_size_out_1;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
   int32_t arg_len;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_len = (int32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_int32(env, argv[2], &arg_len), "EINVAL", "Unknown Error.");
   bgfx_set_texture_name(arg_handle, arg_name, arg_len);
   return nullptr;
 }
@@ -1935,9 +1604,7 @@ napi_value napi_bgfx_create_frame_buffer(napi_env env, napi_callback_info info){
   }
   bgfx_frame_buffer_handle_t _ret = bgfx_create_frame_buffer(arg_width, arg_height, arg_format, arg_textureFlags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1964,9 +1631,7 @@ napi_value napi_bgfx_create_frame_buffer_scaled(napi_env env, napi_callback_info
   }
   bgfx_frame_buffer_handle_t _ret = bgfx_create_frame_buffer_scaled(arg_ratio, arg_format, arg_textureFlags);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -1981,16 +1646,10 @@ napi_value napi_bgfx_create_frame_buffer_scaled(napi_env env, napi_callback_info
 //  }
 //  const TextureHandle* _handles = MISSING_TYPE<const TextureHandle*>;
 //  bool arg_destroyTexture;
-//  {
-//    bool temp = (bool)0;
-//    ASSERT_OK(napi_get_value_bool(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_destroyTexture = (bool)temp;
-//  }
+//  ASSERT_OK(napi_get_value_bool(env, argv[2], &arg_destroyTexture), "EINVAL", "Unknown Error.");
 //  bgfx_frame_buffer_handle_t _ret = bgfx_create_frame_buffer_from_handles(arg_num, _handles, arg_destroyTexture);
 //  napi_value _napi_ret;
-//  {
-//    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-//  }
+//  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
 //  return _napi_ret;
 //}
 
@@ -2005,16 +1664,10 @@ napi_value napi_bgfx_create_frame_buffer_scaled(napi_env env, napi_callback_info
 //  }
 //  const Attachment* _attachment = MISSING_TYPE<const Attachment*>;
 //  bool arg_destroyTexture;
-//  {
-//    bool temp = (bool)0;
-//    ASSERT_OK(napi_get_value_bool(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_destroyTexture = (bool)temp;
-//  }
+//  ASSERT_OK(napi_get_value_bool(env, argv[2], &arg_destroyTexture), "EINVAL", "Unknown Error.");
 //  bgfx_frame_buffer_handle_t _ret = bgfx_create_frame_buffer_from_attachment(arg_num, _attachment, arg_destroyTexture);
 //  napi_value _napi_ret;
-//  {
-//    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-//  }
+//  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
 //  return _napi_ret;
 //}
 
@@ -2023,9 +1676,7 @@ napi_value napi_bgfx_create_frame_buffer_from_nwh(napi_env env, napi_callback_in
   GET_ARGS(5)
   size_t _size_0 = 0;
   void* arg_nwh = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_nwh, &_size_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_nwh, &_size_0), "EINVAL", "Unknown Error.");
   uint16_t arg_width;
   {
     int32_t temp = (int32_t)0;
@@ -2052,9 +1703,7 @@ napi_value napi_bgfx_create_frame_buffer_from_nwh(napi_env env, napi_callback_in
   }
   bgfx_frame_buffer_handle_t _ret = bgfx_create_frame_buffer_from_nwh(arg_nwh, arg_width, arg_height, arg_format, arg_depthFormat);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -2070,15 +1719,9 @@ napi_value napi_bgfx_set_frame_buffer_name(napi_env env, napi_callback_info info
   char arg_name[2048];
   size_t _temp_size_1 = 2048;
   size_t _temp_size_out_1;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
   int32_t arg_len;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_len = (int32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_int32(env, argv[2], &arg_len), "EINVAL", "Unknown Error.");
   bgfx_set_frame_buffer_name(arg_handle, arg_name, arg_len);
   return nullptr;
 }
@@ -2100,9 +1743,7 @@ napi_value napi_bgfx_get_texture(napi_env env, napi_callback_info info){
   }
   bgfx_texture_handle_t _ret = bgfx_get_texture(arg_handle, arg_attachment);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -2125,9 +1766,7 @@ napi_value napi_bgfx_create_uniform(napi_env env, napi_callback_info info){
   char arg_name[2048];
   size_t _temp_size_0 = 2048;
   size_t _temp_size_out_0;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[0], arg_name, _temp_size_0, &_temp_size_out_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[0], arg_name, _temp_size_0, &_temp_size_out_0), "EINVAL", "Unknown Error.");
   bgfx_uniform_type_t arg_type;
   {
     int32_t temp = (int32_t)0;
@@ -2142,9 +1781,7 @@ napi_value napi_bgfx_create_uniform(napi_env env, napi_callback_info info){
   }
   bgfx_uniform_handle_t _ret = bgfx_create_uniform(arg_name, arg_type, arg_num);
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -2178,9 +1815,7 @@ napi_value napi_bgfx_destroy_uniform(napi_env env, napi_callback_info info){
 napi_value napi_bgfx_create_occlusion_query(napi_env env, napi_callback_info info){
   bgfx_occlusion_query_handle_t _ret = bgfx_create_occlusion_query();
   napi_value _napi_ret;
-  {
-    ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  }
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
@@ -2237,11 +1872,7 @@ napi_value napi_bgfx_set_palette_color_rgba8(napi_env env, napi_callback_info in
     arg_index = (uint8_t)temp;
   }
   uint32_t arg_rgba;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_rgba = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_rgba), "EINVAL", "Unknown Error.");
   bgfx_set_palette_color_rgba8(arg_index, arg_rgba);
   return nullptr;
 }
@@ -2258,9 +1889,7 @@ napi_value napi_bgfx_set_view_name(napi_env env, napi_callback_info info){
   char arg_name[2048];
   size_t _temp_size_1 = 2048;
   size_t _temp_size_out_1;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_name, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
   bgfx_set_view_name(arg_id, arg_name);
   return nullptr;
 }
@@ -2386,11 +2015,7 @@ napi_value napi_bgfx_set_view_clear(napi_env env, napi_callback_info info){
     arg_flags = (uint16_t)temp;
   }
   uint32_t arg_rgba;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_rgba = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_rgba), "EINVAL", "Unknown Error.");
   float arg_depth;
   {
     double temp = (double)0;
@@ -2535,14 +2160,10 @@ napi_value napi_bgfx_set_view_transform(napi_env env, napi_callback_info info){
   }
   size_t _size_1 = 0;
   void* arg_view = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_view, &_size_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_view, &_size_1), "EINVAL", "Unknown Error.");
   size_t _size_2 = 0;
   void* arg_proj = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &arg_proj, &_size_2), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &arg_proj, &_size_2), "EINVAL", "Unknown Error.");
   bgfx_set_view_transform(arg_id, arg_view, arg_proj);
   return nullptr;
 }
@@ -2567,38 +2188,35 @@ napi_value napi_bgfx_set_view_transform(napi_env env, napi_callback_info info){
 //  return nullptr;
 //}
 
-//napi_value napi_bgfx_encoder_begin(napi_env env, napi_callback_info info){
-//  napi_value argv[1];
-//  GET_ARGS(1)
-//  bool arg_forThread;
-//  {
-//    bool temp = (bool)0;
-//    ASSERT_OK(napi_get_value_bool(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-//    arg_forThread = (bool)temp;
-//  }
-//}
+napi_value napi_bgfx_encoder_begin(napi_env env, napi_callback_info info){
+  napi_value argv[1];
+  GET_ARGS(1)
+  bool arg_forThread;
+  ASSERT_OK(napi_get_value_bool(env, argv[0], &arg_forThread), "EINVAL", "Unknown Error.");
+  bgfx_encoder_t* _ret = bgfx_encoder_begin(arg_forThread);
+  napi_value _napi_ret;
+  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  return _napi_ret;
+}
 
-//napi_value napi_bgfx_encoder_end(napi_env env, napi_callback_info info){
-//  napi_value argv[1];
-//  GET_ARGS(1)
-//  Encoder* _encoder = MISSING_TYPE<Encoder*>;
-//  bgfx_encoder_end(_encoder);
-//  return nullptr;
-//}
+napi_value napi_bgfx_encoder_end(napi_env env, napi_callback_info info){
+  napi_value argv[1];
+  GET_ARGS(1)
+  bgfx_encoder_t* arg_encoder = nullptr;
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_encoder), "EINVAL", "Unknown Error.");
+  bgfx_encoder_end(arg_encoder);
+  return nullptr;
+}
 
 napi_value napi_bgfx_encoder_set_marker(napi_env env, napi_callback_info info){
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   char arg_marker[2048];
   size_t _temp_size_1 = 2048;
   size_t _temp_size_out_1;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_marker, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_marker, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_marker(arg_self, arg_marker);
   return nullptr;
 }
@@ -2607,9 +2225,7 @@ napi_value napi_bgfx_encoder_set_state(napi_env env, napi_callback_info info){
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint64_t arg_state;
   {
     int64_t temp = (int64_t)0;
@@ -2617,11 +2233,7 @@ napi_value napi_bgfx_encoder_set_state(napi_env env, napi_callback_info info){
     arg_state = (uint64_t)temp;
   }
   uint32_t arg_rgba;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_rgba = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_rgba), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_state(arg_self, arg_state, arg_rgba);
   return nullptr;
 }
@@ -2630,9 +2242,7 @@ napi_value napi_bgfx_encoder_set_condition(napi_env env, napi_callback_info info
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_occlusion_query_handle_t arg_handle;
   {
     int32_t temp = 0;
@@ -2640,11 +2250,7 @@ napi_value napi_bgfx_encoder_set_condition(napi_env env, napi_callback_info info
     arg_handle.idx = (uint16_t)temp;
   }
   bool arg_visible;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_visible = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[2], &arg_visible), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_condition(arg_self, arg_handle, arg_visible);
   return nullptr;
 }
@@ -2653,21 +2259,11 @@ napi_value napi_bgfx_encoder_set_stencil(napi_env env, napi_callback_info info){
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint32_t arg_fstencil;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_fstencil = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_fstencil), "EINVAL", "Unknown Error.");
   uint32_t arg_bstencil;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_bstencil = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_bstencil), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_stencil(arg_self, arg_fstencil, arg_bstencil);
   return nullptr;
 }
@@ -2676,9 +2272,7 @@ napi_value napi_bgfx_encoder_set_scissor(napi_env env, napi_callback_info info){
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint16_t arg_x;
   {
     int32_t temp = (int32_t)0;
@@ -2713,9 +2307,7 @@ napi_value napi_bgfx_encoder_set_scissor_cached(napi_env env, napi_callback_info
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint16_t arg_cache;
   {
     int32_t temp = (int32_t)0;
@@ -2730,14 +2322,10 @@ napi_value napi_bgfx_encoder_set_transform(napi_env env, napi_callback_info info
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   size_t _size_1 = 0;
   void* arg_mtx = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_mtx, &_size_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_mtx, &_size_1), "EINVAL", "Unknown Error.");
   uint16_t arg_num;
   {
     int32_t temp = (int32_t)0;
@@ -2754,15 +2342,9 @@ napi_value napi_bgfx_encoder_set_transform_cached(napi_env env, napi_callback_in
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint32_t arg_cache;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_cache = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_cache), "EINVAL", "Unknown Error.");
   uint16_t arg_num;
   {
     int32_t temp = (int32_t)0;
@@ -2777,9 +2359,7 @@ napi_value napi_bgfx_encoder_set_transform_cached(napi_env env, napi_callback_in
 //  napi_value argv[3];
 //  GET_ARGS(3)
 //  bgfx_encoder_t* arg_self = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
 //  Transform* _transform = MISSING_TYPE<Transform*>;
 //  uint16_t arg_num;
 //  {
@@ -2797,9 +2377,7 @@ napi_value napi_bgfx_encoder_set_uniform(napi_env env, napi_callback_info info){
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_uniform_handle_t arg_handle;
   {
     int32_t temp = 0;
@@ -2808,9 +2386,7 @@ napi_value napi_bgfx_encoder_set_uniform(napi_env env, napi_callback_info info){
   }
   size_t _size_2 = 0;
   void* arg_value = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &arg_value, &_size_2), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &arg_value, &_size_2), "EINVAL", "Unknown Error.");
   uint16_t arg_num;
   {
     int32_t temp = (int32_t)0;
@@ -2825,9 +2401,7 @@ napi_value napi_bgfx_encoder_set_index_buffer(napi_env env, napi_callback_info i
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_index_buffer_handle_t arg_handle;
   {
     int32_t temp = 0;
@@ -2835,17 +2409,9 @@ napi_value napi_bgfx_encoder_set_index_buffer(napi_env env, napi_callback_info i
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_firstIndex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_firstIndex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_firstIndex), "EINVAL", "Unknown Error.");
   uint32_t arg_numIndices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_numIndices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_numIndices), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_index_buffer(arg_self, arg_handle, arg_firstIndex, arg_numIndices);
   return nullptr;
 }
@@ -2854,9 +2420,7 @@ napi_value napi_bgfx_encoder_set_dynamic_index_buffer(napi_env env, napi_callbac
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_dynamic_index_buffer_handle_t arg_handle;
   {
     int32_t temp = 0;
@@ -2864,17 +2428,9 @@ napi_value napi_bgfx_encoder_set_dynamic_index_buffer(napi_env env, napi_callbac
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_firstIndex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_firstIndex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_firstIndex), "EINVAL", "Unknown Error.");
   uint32_t arg_numIndices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_numIndices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_numIndices), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_dynamic_index_buffer(arg_self, arg_handle, arg_firstIndex, arg_numIndices);
   return nullptr;
 }
@@ -2883,22 +2439,12 @@ napi_value napi_bgfx_encoder_set_dynamic_index_buffer(napi_env env, napi_callbac
 //  napi_value argv[4];
 //  GET_ARGS(4)
 //  bgfx_encoder_t* arg_self = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
 //  const TransientIndexBuffer* _tib = MISSING_TYPE<const TransientIndexBuffer*>;
 //  uint32_t arg_firstIndex;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_firstIndex = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_firstIndex), "EINVAL", "Unknown Error.");
 //  uint32_t arg_numIndices;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-//    arg_numIndices = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_numIndices), "EINVAL", "Unknown Error.");
 //  bgfx_encoder_set_transient_index_buffer(arg_self, _tib, arg_firstIndex, arg_numIndices);
 //  return nullptr;
 //}
@@ -2907,9 +2453,7 @@ napi_value napi_bgfx_encoder_set_vertex_buffer(napi_env env, napi_callback_info 
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stream;
   {
     int32_t temp = (int32_t)0;
@@ -2923,17 +2467,9 @@ napi_value napi_bgfx_encoder_set_vertex_buffer(napi_env env, napi_callback_info 
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_startVertex), "EINVAL", "Unknown Error.");
   uint32_t arg_numVertices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_numVertices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_numVertices), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_vertex_buffer(arg_self, arg_stream, arg_handle, arg_startVertex, arg_numVertices);
   return nullptr;
 }
@@ -2942,9 +2478,7 @@ napi_value napi_bgfx_encoder_set_dynamic_vertex_buffer(napi_env env, napi_callba
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stream;
   {
     int32_t temp = (int32_t)0;
@@ -2958,17 +2492,9 @@ napi_value napi_bgfx_encoder_set_dynamic_vertex_buffer(napi_env env, napi_callba
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_startVertex), "EINVAL", "Unknown Error.");
   uint32_t arg_numVertices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_numVertices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_numVertices), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_dynamic_vertex_buffer(arg_self, arg_stream, arg_handle, arg_startVertex, arg_numVertices);
   return nullptr;
 }
@@ -2977,9 +2503,7 @@ napi_value napi_bgfx_encoder_set_dynamic_vertex_buffer(napi_env env, napi_callba
 //  napi_value argv[5];
 //  GET_ARGS(5)
 //  bgfx_encoder_t* arg_self = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
 //  uint8_t arg_stream;
 //  {
 //    int32_t temp = (int32_t)0;
@@ -2988,17 +2512,9 @@ napi_value napi_bgfx_encoder_set_dynamic_vertex_buffer(napi_env env, napi_callba
 //  }
 //  const TransientVertexBuffer* _tvb = MISSING_TYPE<const TransientVertexBuffer*>;
 //  uint32_t arg_startVertex;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-//    arg_startVertex = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_startVertex), "EINVAL", "Unknown Error.");
 //  uint32_t arg_numVertices;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-//    arg_numVertices = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_numVertices), "EINVAL", "Unknown Error.");
 //  bgfx_encoder_set_transient_vertex_buffer(arg_self, arg_stream, _tvb, arg_startVertex, arg_numVertices);
 //  return nullptr;
 //}
@@ -3007,15 +2523,9 @@ napi_value napi_bgfx_encoder_set_vertex_count(napi_env env, napi_callback_info i
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint32_t arg_numVertices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_numVertices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_numVertices), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_vertex_count(arg_self, arg_numVertices);
   return nullptr;
 }
@@ -3024,22 +2534,12 @@ napi_value napi_bgfx_encoder_set_vertex_count(napi_env env, napi_callback_info i
 //  napi_value argv[4];
 //  GET_ARGS(4)
 //  bgfx_encoder_t* arg_self = nullptr;
-//  {
-//    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-//  }
+//  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
 //  const InstanceDataBuffer* _idb = MISSING_TYPE<const InstanceDataBuffer*>;
 //  uint32_t arg_start;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_start = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_start), "EINVAL", "Unknown Error.");
 //  uint32_t arg_num;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-//    arg_num = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_num), "EINVAL", "Unknown Error.");
 //  bgfx_encoder_set_instance_data_buffer(arg_self, _idb, arg_start, arg_num);
 //  return nullptr;
 //}
@@ -3048,9 +2548,7 @@ napi_value napi_bgfx_encoder_set_instance_data_from_vertex_buffer(napi_env env, 
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_vertex_buffer_handle_t arg_handle;
   {
     int32_t temp = 0;
@@ -3058,17 +2556,9 @@ napi_value napi_bgfx_encoder_set_instance_data_from_vertex_buffer(napi_env env, 
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_startVertex), "EINVAL", "Unknown Error.");
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_num), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_instance_data_from_vertex_buffer(arg_self, arg_handle, arg_startVertex, arg_num);
   return nullptr;
 }
@@ -3077,9 +2567,7 @@ napi_value napi_bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer(napi_e
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_dynamic_vertex_buffer_handle_t arg_handle;
   {
     int32_t temp = 0;
@@ -3087,17 +2575,9 @@ napi_value napi_bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer(napi_e
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_startVertex), "EINVAL", "Unknown Error.");
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_num), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer(arg_self, arg_handle, arg_startVertex, arg_num);
   return nullptr;
 }
@@ -3106,15 +2586,9 @@ napi_value napi_bgfx_encoder_set_instance_count(napi_env env, napi_callback_info
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint32_t arg_numInstances;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_numInstances = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_numInstances), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_instance_count(arg_self, arg_numInstances);
   return nullptr;
 }
@@ -3123,9 +2597,7 @@ napi_value napi_bgfx_encoder_set_texture(napi_env env, napi_callback_info info){
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stage;
   {
     int32_t temp = (int32_t)0;
@@ -3145,11 +2617,7 @@ napi_value napi_bgfx_encoder_set_texture(napi_env env, napi_callback_info info){
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_flags;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_flags = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_flags), "EINVAL", "Unknown Error.");
   bgfx_encoder_set_texture(arg_self, arg_stage, arg_sampler, arg_handle, arg_flags);
   return nullptr;
 }
@@ -3158,9 +2626,7 @@ napi_value napi_bgfx_encoder_touch(napi_env env, napi_callback_info info){
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_view_id_t arg_id;
   {
     int32_t temp = (int32_t)0;
@@ -3175,9 +2641,7 @@ napi_value napi_bgfx_encoder_submit(napi_env env, napi_callback_info info){
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_view_id_t arg_id;
   {
     int32_t temp = (int32_t)0;
@@ -3191,17 +2655,9 @@ napi_value napi_bgfx_encoder_submit(napi_env env, napi_callback_info info){
     arg_program.idx = (uint16_t)temp;
   }
   uint32_t arg_depth;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_depth = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_depth), "EINVAL", "Unknown Error.");
   bool arg_preserveState;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_preserveState = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[4], &arg_preserveState), "EINVAL", "Unknown Error.");
   bgfx_encoder_submit(arg_self, arg_id, arg_program, arg_depth, arg_preserveState);
   return nullptr;
 }
@@ -3210,9 +2666,7 @@ napi_value napi_bgfx_encoder_submit_occlusion_query(napi_env env, napi_callback_
   napi_value argv[6];
   GET_ARGS(6)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_view_id_t arg_id;
   {
     int32_t temp = (int32_t)0;
@@ -3232,17 +2686,9 @@ napi_value napi_bgfx_encoder_submit_occlusion_query(napi_env env, napi_callback_
     arg_occlusionQuery.idx = (uint16_t)temp;
   }
   uint32_t arg_depth;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_depth = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_depth), "EINVAL", "Unknown Error.");
   bool arg_preserveState;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[5], &temp), "EINVAL", "Unknown Error.");
-    arg_preserveState = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[5], &arg_preserveState), "EINVAL", "Unknown Error.");
   bgfx_encoder_submit_occlusion_query(arg_self, arg_id, arg_program, arg_occlusionQuery, arg_depth, arg_preserveState);
   return nullptr;
 }
@@ -3251,9 +2697,7 @@ napi_value napi_bgfx_encoder_submit_indirect(napi_env env, napi_callback_info in
   napi_value argv[8];
   GET_ARGS(8)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_view_id_t arg_id;
   {
     int32_t temp = (int32_t)0;
@@ -3285,17 +2729,9 @@ napi_value napi_bgfx_encoder_submit_indirect(napi_env env, napi_callback_info in
     arg_num = (uint16_t)temp;
   }
   uint32_t arg_depth;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[6], &temp), "EINVAL", "Unknown Error.");
-    arg_depth = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[6], &arg_depth), "EINVAL", "Unknown Error.");
   bool arg_preserveState;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[7], &temp), "EINVAL", "Unknown Error.");
-    arg_preserveState = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[7], &arg_preserveState), "EINVAL", "Unknown Error.");
   bgfx_encoder_submit_indirect(arg_self, arg_id, arg_program, arg_indirectHandle, arg_start, arg_num, arg_depth, arg_preserveState);
   return nullptr;
 }
@@ -3304,9 +2740,7 @@ napi_value napi_bgfx_encoder_set_compute_index_buffer(napi_env env, napi_callbac
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stage;
   {
     int32_t temp = (int32_t)0;
@@ -3333,9 +2767,7 @@ napi_value napi_bgfx_encoder_set_compute_vertex_buffer(napi_env env, napi_callba
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stage;
   {
     int32_t temp = (int32_t)0;
@@ -3362,9 +2794,7 @@ napi_value napi_bgfx_encoder_set_compute_dynamic_index_buffer(napi_env env, napi
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stage;
   {
     int32_t temp = (int32_t)0;
@@ -3391,9 +2821,7 @@ napi_value napi_bgfx_encoder_set_compute_dynamic_vertex_buffer(napi_env env, nap
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stage;
   {
     int32_t temp = (int32_t)0;
@@ -3420,9 +2848,7 @@ napi_value napi_bgfx_encoder_set_compute_indirect_buffer(napi_env env, napi_call
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stage;
   {
     int32_t temp = (int32_t)0;
@@ -3449,9 +2875,7 @@ napi_value napi_bgfx_encoder_set_image(napi_env env, napi_callback_info info){
   napi_value argv[6];
   GET_ARGS(6)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   uint8_t arg_stage;
   {
     int32_t temp = (int32_t)0;
@@ -3490,9 +2914,7 @@ napi_value napi_bgfx_encoder_dispatch(napi_env env, napi_callback_info info){
   napi_value argv[6];
   GET_ARGS(6)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_view_id_t arg_id;
   {
     int32_t temp = (int32_t)0;
@@ -3506,23 +2928,11 @@ napi_value napi_bgfx_encoder_dispatch(napi_env env, napi_callback_info info){
     arg_program.idx = (uint16_t)temp;
   }
   uint32_t arg_numX;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_numX = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_numX), "EINVAL", "Unknown Error.");
   uint32_t arg_numY;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_numY = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_numY), "EINVAL", "Unknown Error.");
   uint32_t arg_numZ;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[5], &temp), "EINVAL", "Unknown Error.");
-    arg_numZ = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[5], &arg_numZ), "EINVAL", "Unknown Error.");
   bgfx_encoder_dispatch(arg_self, arg_id, arg_program, arg_numX, arg_numY, arg_numZ);
   return nullptr;
 }
@@ -3531,9 +2941,7 @@ napi_value napi_bgfx_encoder_dispatch_indirect(napi_env env, napi_callback_info 
   napi_value argv[6];
   GET_ARGS(6)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_view_id_t arg_id;
   {
     int32_t temp = (int32_t)0;
@@ -3572,9 +2980,7 @@ napi_value napi_bgfx_encoder_discard(napi_env env, napi_callback_info info){
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_encoder_discard(arg_self);
   return nullptr;
 }
@@ -3583,9 +2989,7 @@ napi_value napi_bgfx_encoder_blit(napi_env env, napi_callback_info info){
   napi_value argv[15];
   GET_ARGS(15)
   bgfx_encoder_t* arg_self = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Unknown Error.");
   bgfx_view_id_t arg_id;
   {
     int32_t temp = (int32_t)0;
@@ -3686,9 +3090,7 @@ napi_value napi_bgfx_request_screen_shot(napi_env env, napi_callback_info info){
   char arg_filePath[2048];
   size_t _temp_size_1 = 2048;
   size_t _temp_size_out_1;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_filePath, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[1], arg_filePath, _temp_size_1, &_temp_size_out_1), "EINVAL", "Unknown Error.");
   bgfx_request_screen_shot(arg_handle, arg_filePath);
   return nullptr;
 }
@@ -3697,11 +3099,7 @@ napi_value napi_bgfx_render_frame(napi_env env, napi_callback_info info){
   napi_value argv[1];
   GET_ARGS(1)
   int32_t arg_msecs;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_msecs = (int32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_int32(env, argv[0], &arg_msecs), "EINVAL", "Unknown Error.");
   bgfx_render_frame_t _ret = bgfx_render_frame(arg_msecs);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_int32(env, (int32_t)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -3712,9 +3110,7 @@ napi_value napi_bgfx_set_platform_data(napi_env env, napi_callback_info info){
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_platform_data_t* arg_data = nullptr;
-  {
-    ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_data), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_data), "EINVAL", "Unknown Error.");
   bgfx_set_platform_data(arg_data);
   return nullptr;
 }
@@ -3781,9 +3177,7 @@ napi_value napi_bgfx_set_marker(napi_env env, napi_callback_info info){
   char arg_marker[2048];
   size_t _temp_size_0 = 2048;
   size_t _temp_size_out_0;
-  {
-    ASSERT_OK(napi_get_value_string_utf8(env, argv[0], arg_marker, _temp_size_0, &_temp_size_out_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[0], arg_marker, _temp_size_0, &_temp_size_out_0), "EINVAL", "Unknown Error.");
   bgfx_set_marker(arg_marker);
   return nullptr;
 }
@@ -3798,11 +3192,7 @@ napi_value napi_bgfx_set_state(napi_env env, napi_callback_info info){
     arg_state = (uint64_t)temp;
   }
   uint32_t arg_rgba;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_rgba = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_rgba), "EINVAL", "Unknown Error.");
   bgfx_set_state(arg_state, arg_rgba);
   return nullptr;
 }
@@ -3817,11 +3207,7 @@ napi_value napi_bgfx_set_condition(napi_env env, napi_callback_info info){
     arg_handle.idx = (uint16_t)temp;
   }
   bool arg_visible;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_visible = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[1], &arg_visible), "EINVAL", "Unknown Error.");
   bgfx_set_condition(arg_handle, arg_visible);
   return nullptr;
 }
@@ -3830,17 +3216,9 @@ napi_value napi_bgfx_set_stencil(napi_env env, napi_callback_info info){
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_fstencil;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_fstencil = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_fstencil), "EINVAL", "Unknown Error.");
   uint32_t arg_bstencil;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_bstencil = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_bstencil), "EINVAL", "Unknown Error.");
   bgfx_set_stencil(arg_fstencil, arg_bstencil);
   return nullptr;
 }
@@ -3896,9 +3274,7 @@ napi_value napi_bgfx_set_transform(napi_env env, napi_callback_info info){
   GET_ARGS(2)
   size_t _size_0 = 0;
   void* arg_mtx = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_mtx, &_size_0), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_mtx, &_size_0), "EINVAL", "Unknown Error.");
   uint16_t arg_num;
   {
     int32_t temp = (int32_t)0;
@@ -3915,11 +3291,7 @@ napi_value napi_bgfx_set_transform_cached(napi_env env, napi_callback_info info)
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_cache;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_cache = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_cache), "EINVAL", "Unknown Error.");
   uint16_t arg_num;
   {
     int32_t temp = (int32_t)0;
@@ -3957,9 +3329,7 @@ napi_value napi_bgfx_set_uniform(napi_env env, napi_callback_info info){
   }
   size_t _size_1 = 0;
   void* arg_value = nullptr;
-  {
-    ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_value, &_size_1), "EINVAL", "Unknown Error.");
-  }
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_value, &_size_1), "EINVAL", "Unknown Error.");
   uint16_t arg_num;
   {
     int32_t temp = (int32_t)0;
@@ -3980,17 +3350,9 @@ napi_value napi_bgfx_set_index_buffer(napi_env env, napi_callback_info info){
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_firstIndex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_firstIndex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_firstIndex), "EINVAL", "Unknown Error.");
   uint32_t arg_numIndices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_numIndices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_numIndices), "EINVAL", "Unknown Error.");
   bgfx_set_index_buffer(arg_handle, arg_firstIndex, arg_numIndices);
   return nullptr;
 }
@@ -4005,17 +3367,9 @@ napi_value napi_bgfx_set_dynamic_index_buffer(napi_env env, napi_callback_info i
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_firstIndex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_firstIndex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_firstIndex), "EINVAL", "Unknown Error.");
   uint32_t arg_numIndices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_numIndices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_numIndices), "EINVAL", "Unknown Error.");
   bgfx_set_dynamic_index_buffer(arg_handle, arg_firstIndex, arg_numIndices);
   return nullptr;
 }
@@ -4025,17 +3379,9 @@ napi_value napi_bgfx_set_dynamic_index_buffer(napi_env env, napi_callback_info i
 //  GET_ARGS(3)
 //  const TransientIndexBuffer* _tib = MISSING_TYPE<const TransientIndexBuffer*>;
 //  uint32_t arg_firstIndex;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_firstIndex = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_firstIndex), "EINVAL", "Unknown Error.");
 //  uint32_t arg_numIndices;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_numIndices = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_numIndices), "EINVAL", "Unknown Error.");
 //  bgfx_set_transient_index_buffer(_tib, arg_firstIndex, arg_numIndices);
 //  return nullptr;
 //}
@@ -4056,17 +3402,9 @@ napi_value napi_bgfx_set_vertex_buffer(napi_env env, napi_callback_info info){
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_startVertex), "EINVAL", "Unknown Error.");
   uint32_t arg_numVertices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_numVertices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_numVertices), "EINVAL", "Unknown Error.");
   bgfx_set_vertex_buffer(arg_stream, arg_handle, arg_startVertex, arg_numVertices);
   return nullptr;
 }
@@ -4087,17 +3425,9 @@ napi_value napi_bgfx_set_dynamic_vertex_buffer(napi_env env, napi_callback_info 
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_startVertex), "EINVAL", "Unknown Error.");
   uint32_t arg_numVertices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_numVertices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_numVertices), "EINVAL", "Unknown Error.");
   bgfx_set_dynamic_vertex_buffer(arg_stream, arg_handle, arg_startVertex, arg_numVertices);
   return nullptr;
 }
@@ -4113,17 +3443,9 @@ napi_value napi_bgfx_set_dynamic_vertex_buffer(napi_env env, napi_callback_info 
 //  }
 //  const TransientVertexBuffer* _tvb = MISSING_TYPE<const TransientVertexBuffer*>;
 //  uint32_t arg_startVertex;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_startVertex = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_startVertex), "EINVAL", "Unknown Error.");
 //  uint32_t arg_numVertices;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-//    arg_numVertices = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_numVertices), "EINVAL", "Unknown Error.");
 //  bgfx_set_transient_vertex_buffer(arg_stream, _tvb, arg_startVertex, arg_numVertices);
 //  return nullptr;
 //}
@@ -4132,11 +3454,7 @@ napi_value napi_bgfx_set_vertex_count(napi_env env, napi_callback_info info){
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_numVertices;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_numVertices = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_numVertices), "EINVAL", "Unknown Error.");
   bgfx_set_vertex_count(arg_numVertices);
   return nullptr;
 }
@@ -4146,17 +3464,9 @@ napi_value napi_bgfx_set_vertex_count(napi_env env, napi_callback_info info){
 //  GET_ARGS(3)
 //  const InstanceDataBuffer* _idb = MISSING_TYPE<const InstanceDataBuffer*>;
 //  uint32_t arg_start;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-//    arg_start = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_start), "EINVAL", "Unknown Error.");
 //  uint32_t arg_num;
-//  {
-//    uint32_t temp = (uint32_t)0;
-//    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-//    arg_num = (uint32_t)temp;
-//  }
+//  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_num), "EINVAL", "Unknown Error.");
 //  bgfx_set_instance_data_buffer(_idb, arg_start, arg_num);
 //  return nullptr;
 //}
@@ -4171,17 +3481,9 @@ napi_value napi_bgfx_set_instance_data_from_vertex_buffer(napi_env env, napi_cal
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_startVertex), "EINVAL", "Unknown Error.");
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_num), "EINVAL", "Unknown Error.");
   bgfx_set_instance_data_from_vertex_buffer(arg_handle, arg_startVertex, arg_num);
   return nullptr;
 }
@@ -4196,17 +3498,9 @@ napi_value napi_bgfx_set_instance_data_from_dynamic_vertex_buffer(napi_env env, 
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_startVertex;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[1], &temp), "EINVAL", "Unknown Error.");
-    arg_startVertex = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_startVertex), "EINVAL", "Unknown Error.");
   uint32_t arg_num;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_num = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_num), "EINVAL", "Unknown Error.");
   bgfx_set_instance_data_from_dynamic_vertex_buffer(arg_handle, arg_startVertex, arg_num);
   return nullptr;
 }
@@ -4215,11 +3509,7 @@ napi_value napi_bgfx_set_instance_count(napi_env env, napi_callback_info info){
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_numInstances;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[0], &temp), "EINVAL", "Unknown Error.");
-    arg_numInstances = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_numInstances), "EINVAL", "Unknown Error.");
   bgfx_set_instance_count(arg_numInstances);
   return nullptr;
 }
@@ -4246,11 +3536,7 @@ napi_value napi_bgfx_set_texture(napi_env env, napi_callback_info info){
     arg_handle.idx = (uint16_t)temp;
   }
   uint32_t arg_flags;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_flags = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_flags), "EINVAL", "Unknown Error.");
   bgfx_set_texture(arg_stage, arg_sampler, arg_handle, arg_flags);
   return nullptr;
 }
@@ -4284,17 +3570,9 @@ napi_value napi_bgfx_submit(napi_env env, napi_callback_info info){
     arg_program.idx = (uint16_t)temp;
   }
   uint32_t arg_depth;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_depth = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_depth), "EINVAL", "Unknown Error.");
   bool arg_preserveState;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_preserveState = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[3], &arg_preserveState), "EINVAL", "Unknown Error.");
   bgfx_submit(arg_id, arg_program, arg_depth, arg_preserveState);
   return nullptr;
 }
@@ -4321,17 +3599,9 @@ napi_value napi_bgfx_submit_occlusion_query(napi_env env, napi_callback_info inf
     arg_occlusionQuery.idx = (uint16_t)temp;
   }
   uint32_t arg_depth;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_depth = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_depth), "EINVAL", "Unknown Error.");
   bool arg_preserveState;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_preserveState = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[4], &arg_preserveState), "EINVAL", "Unknown Error.");
   bgfx_submit_occlusion_query(arg_id, arg_program, arg_occlusionQuery, arg_depth, arg_preserveState);
   return nullptr;
 }
@@ -4370,17 +3640,9 @@ napi_value napi_bgfx_submit_indirect(napi_env env, napi_callback_info info){
     arg_num = (uint16_t)temp;
   }
   uint32_t arg_depth;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[5], &temp), "EINVAL", "Unknown Error.");
-    arg_depth = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[5], &arg_depth), "EINVAL", "Unknown Error.");
   bool arg_preserveState;
-  {
-    bool temp = (bool)0;
-    ASSERT_OK(napi_get_value_bool(env, argv[6], &temp), "EINVAL", "Unknown Error.");
-    arg_preserveState = (bool)temp;
-  }
+  ASSERT_OK(napi_get_value_bool(env, argv[6], &arg_preserveState), "EINVAL", "Unknown Error.");
   bgfx_submit_indirect(arg_id, arg_program, arg_indirectHandle, arg_start, arg_num, arg_depth, arg_preserveState);
   return nullptr;
 }
@@ -4563,23 +3825,11 @@ napi_value napi_bgfx_dispatch(napi_env env, napi_callback_info info){
     arg_program.idx = (uint16_t)temp;
   }
   uint32_t arg_numX;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[2], &temp), "EINVAL", "Unknown Error.");
-    arg_numX = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_numX), "EINVAL", "Unknown Error.");
   uint32_t arg_numY;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[3], &temp), "EINVAL", "Unknown Error.");
-    arg_numY = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_numY), "EINVAL", "Unknown Error.");
   uint32_t arg_numZ;
-  {
-    uint32_t temp = (uint32_t)0;
-    ASSERT_OK(napi_get_value_uint32(env, argv[4], &temp), "EINVAL", "Unknown Error.");
-    arg_numZ = (uint32_t)temp;
-  }
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_numZ), "EINVAL", "Unknown Error.");
   bgfx_dispatch(arg_id, arg_program, arg_numX, arg_numY, arg_numZ);
   return nullptr;
 }
@@ -4794,6 +4044,8 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "napi_bgfx_set_view_mode", napi_bgfx_set_view_mode);
   export_function(env, exports, "napi_bgfx_set_view_frame_buffer", napi_bgfx_set_view_frame_buffer);
   export_function(env, exports, "napi_bgfx_set_view_transform", napi_bgfx_set_view_transform);
+  export_function(env, exports, "napi_bgfx_encoder_begin", napi_bgfx_encoder_begin);
+  export_function(env, exports, "napi_bgfx_encoder_end", napi_bgfx_encoder_end);
   export_function(env, exports, "napi_bgfx_encoder_set_marker", napi_bgfx_encoder_set_marker);
   export_function(env, exports, "napi_bgfx_encoder_set_state", napi_bgfx_encoder_set_state);
   export_function(env, exports, "napi_bgfx_encoder_set_condition", napi_bgfx_encoder_set_condition);
