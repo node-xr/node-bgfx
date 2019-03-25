@@ -130,6 +130,7 @@ end
 local NumericType = {}
 local NUMERIC_V8_CONVERSIONS = {
   int32_t = {"napi_get_value_int32", "napi_create_int32"},
+  uint32_t = {"napi_get_value_uint32", "napi_create_uint32"},
   int64_t = {"napi_get_value_int64", "napi_create_int64"},
   bool = {"napi_get_value_bool", "napi_get_boolean"},
   double = {"napi_get_value_double", "napi_create_double"}
@@ -295,7 +296,7 @@ local numeric_types = {
   int64_t = 'int64_t',
   uint8_t = 'int32_t',
   uint16_t = 'int32_t',
-  uint32_t = 'int32_t',
+  uint32_t = 'uint32_t',
   uint64_t = 'int64_t'
 }
 for final_type, v8_type in pairs(numeric_types) do
