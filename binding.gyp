@@ -23,9 +23,7 @@
         "<!@(node -p \"require('node-addon-api').include\")",
         '<(module_root_dir)/deps/bgfx/include',
       ],
-      "dependencies": [
-        "<!@(node -p \"require('node-addon-api').gyp\")"
-      ],
+      "dependencies": [],
       'conditions': [
         ['OS=="linux"', {
           'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/linux64'],
@@ -51,7 +49,7 @@
         }],
         ['OS=="win"', {
           'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/win64'],
-          'libraries': ['libbgfx-shared-libRelease.lib'],
+          'libraries': ['bgfx-shared-libRelease.lib'],
           'defines' : ['WIN32_LEAN_AND_MEAN', 'VC_EXTRALEAN', 'NOMINMAX'],
           'msvs_settings' : {
             'VCCLCompilerTool' : {
@@ -65,7 +63,7 @@
           [
             {
               'destination': '<(module_root_dir)/build/Release',
-              'files': ['<(module_root_dir)/deps/bgfx/bin/win64/libbgfx-shared-libRelease.dll']
+              'files': ['<(module_root_dir)/deps/bgfx/bin/win64/bgfx-shared-libRelease.dll']
             }
           ],
         }],
