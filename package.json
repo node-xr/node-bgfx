@@ -1,7 +1,7 @@
 {
   "name": "bgfx",
   "version": "0.89.0",
-  "description": "Node bindings to OpenVR through headless-gl",
+  "description": "Node bindings to BGFX",
   "homepage": "https://github.com/node-xr/node-bgfx#readme",
   "license": "MIT",
   "keywords": [
