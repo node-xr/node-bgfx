@@ -43,8 +43,7 @@ end
 local n_success, n_err  = 0, 0
 local export_body, cpp_body, hpp_body = {}, {}, {}
 for k, v in pairs(idl.funcs) do
-  if v.class then print(v.class) end
-  if (not v.class) and (not v.cpponly) then
+  if not v.cpponly then
     local name, signature, body, had_errors = napi:gen_function(v)
 
     cpp_body[#cpp_body + 1] = {body, ""}

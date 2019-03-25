@@ -23,8 +23,7 @@ function NAPIFunction:init(gen, fdef)
 end
 
 function NAPIFunction:get_unprefixed_capi_name()
-  if self.fdef.cname then return self.fdef.cname end
-  local name = to_snake_case(self.fdef.name):lower()
+  local name = self.fdef.cname or to_snake_case(self.fdef.name):lower()
   if self.fdef.class then
     name = to_snake_case(self.fdef.class) .. "_" .. name
   end
@@ -257,11 +256,10 @@ function OpaqueType:stage(argname, argtype, argidx)
 end
 function OpaqueType:unstage(idx, varname)
   if not idx then -- we are the only return value
-    local callstr = ("%s(env, (%s)_ret, &_napi_ret)"):format(self.wfunc, self.ttype) 
+    print(self.ctype .. " tried to return (returned null instead)")
     return {
-      "napi_value _napi_ret;",
-      CHECK_STATUS(callstr, 'EINVAL', 'Return type error somehow?!', 0),
-      "return _napi_ret;"
+      "//Returning this is problematic",
+      "return nullptr;"
     }
   else
     return ("MISSING_RETURN<%s>"):format(self.ctype), true
@@ -325,6 +323,8 @@ NAPIGen.types["void*"] = new(VoidPointerType)
 NAPIGen.types["const void*"] = new(VoidPointerType)
 NAPIGen.types["const VertexDecl &"] = new(OpaqueType, "bgfx_vertex_decl_t*")
 NAPIGen.types["const VertexDecl&"] = new(OpaqueType, "bgfx_vertex_decl_t*")
+NAPIGen.types["VertexDecl&"] = new(OpaqueType, "bgfx_vertex_decl_t*")
+NAPIGen.types["Encoder&"] = new(OpaqueType, "bgfx_encoder_t*")
 NAPIGen.types["const PlatformData &"] = new(OpaqueType, "bgfx_platform_data_t*")
 NAPIGen.types["const char*"] = new(UTF8StringType)
 
