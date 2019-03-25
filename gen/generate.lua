@@ -1,6 +1,6 @@
-local idl = require("idl")
-local util = require("util")
-local napi = require("napi_gen")
+local idl = require("./deps/bgfx/scripts/idl")
+local util = require("./gen/util")
+local napi = require("./gen/napi")
 local to_snake_case = util.to_snake_case
 
 do

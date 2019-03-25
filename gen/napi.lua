@@ -1,5 +1,5 @@
 -- napi_gen.t
-local util = require("util")
+local util = require("./gen/util")
 local to_snake_case = util.to_snake_case
 
 local NAPIFunction = {}
