@@ -1,7 +1,7 @@
-const constants = require("./bgfx");
-const bgfx = require("bindings")("bgfx");
+const bgfx = require('bindings')('bgfx');
+const constants = require('./bgfx');
 
-// TODO: add some customization here.
+// Include the generated constants into the main export.
 Object.assign(bgfx, constants);
 
 module.exports = bgfx;
