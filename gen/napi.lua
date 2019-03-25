@@ -1,25 +1,43 @@
--- napi_gen.t
+-- napi.lua
 local util = require("./gen/util")
 local to_snake_case = util.to_snake_case
 local unpack = table.unpack
+
+local BINDING_PREFIX = "napi_bgfx_"
 
 local NAPIFunction = {}
 function NAPIFunction:init(gen, fdef)
   self.types = gen.types
   self.missing_types = gen.missing_types
   self.fdef = fdef
+  self.src_args = {}
+  if fdef.class then
+    self.src_args[1] = {name = "_self", fulltype = fdef.class .. "&"}
+  end
+  for _, arg in ipairs(fdef.args) do 
+    self.src_args[#self.src_args + 1] = arg 
+  end
   self.stage_frags, self.call_args = {}, {}
   self.return_vals = {}
   self.had_errors = false
 end
 
+function NAPIFunction:get_unprefixed_capi_name()
+  if self.fdef.cname then return self.fdef.cname end
+  local name = to_snake_case(self.fdef.name):lower()
+  if self.fdef.class then
+    name = to_snake_case(self.fdef.class) .. "_" .. name
+  end
+  return name
+end
+
 function NAPIFunction:gen_signature()
-  self.name = "nbgfx_" .. (self.fdef.cname or to_snake_case(self.fdef.name):lower())
+  self.name = BINDING_PREFIX .. self:get_unprefixed_capi_name()
   return ("napi_value %s(napi_env env, napi_callback_info info)"):format(self.name)
 end
 
 function NAPIFunction:gen_call()
-  local cname = "bgfx_" .. (self.fdef.cname or util.to_snake_case(self.fdef.name))
+  local cname = "bgfx_" .. self:get_unprefixed_capi_name()
   local argstr = table.concat(self.call_args, ", ")
   if self.fdef.ret.fulltype == "void" then
     return ("%s(%s);"):format(cname, argstr)
@@ -34,7 +52,7 @@ end
 
 function NAPIFunction:gen_return()
   if #(self.return_vals) == 0 then
-    return {"return NULL;"}
+    return {"return nullptr;"}
   end
   local return_frags = {}
   for idx, info in ipairs(self.return_vals) do
@@ -55,15 +73,14 @@ function NAPIFunction:gen()
   local signature = self:gen_signature()
   local stage_frags = self.stage_frags
   local call_args = self.call_args
-  local fdef = self.fdef
-  local nargs = #(fdef.args)
+  local nargs = #(self.src_args)
   if nargs > 0 then
     stage_frags[#stage_frags+1] = {
       ("napi_value argv[%d];"):format(nargs),
       ("GET_ARGS(%d)"):format(nargs)
     }
   end
-  for argidx, arg in ipairs(fdef.args) do
+  for argidx, arg in ipairs(self.src_args) do
     local t = self.types[arg.fulltype]
     if t then
       local argname, stagecall = t:stage("arg" .. arg.name, arg.fulltype, argidx-1)
@@ -195,7 +212,7 @@ function MemoryCopyType:stage(argname, argtype, argidx)
   local callstr = ("napi_get_arraybuffer_info(env, argv[%d], &%s, &%s)"):format(argidx, tempname, tempsize)
   return argname, {
     ("size_t %s = 0;"):format(tempsize),
-    ("void* %s = NULL;"):format(tempname),
+    ("void* %s = nullptr;"):format(tempname),
     "{",
     CHECK_STATUS(callstr),
     "}",
@@ -215,7 +232,7 @@ function VoidPointerType:stage(argname, argtype, argidx)
   local callstr = ("napi_get_arraybuffer_info(env, argv[%d], &%s, &%s)"):format(argidx, argname, tempsize)
   return argname, {
     ("size_t %s = 0;"):format(tempsize),
-    ("void* %s = NULL;"):format(argname),
+    ("void* %s = nullptr;"):format(argname),
     "{",
     CHECK_STATUS(callstr),
     "}"
@@ -232,7 +249,7 @@ end
 function OpaqueType:stage(argname, argtype, argidx)
   local callstr = ("napi_get_value_external(env, argv[%d], (void **)&%s)"):format(argidx, argname)
   return argname, {
-    ("%s %s = NULL;"):format(self.ctype, argname),
+    ("%s %s = nullptr;"):format(self.ctype, argname),
     "{",
     CHECK_STATUS(callstr),
     "}"
