@@ -1,7 +1,7 @@
-#include "util.hpp";
+#include "util.hpp"
 #include <string>
 
-void export_function(napi_env env, napi_value &exports, const char *name, napi_callback fn)
+void export_function(napi_env env, napi_value exports, const char *name, napi_callback fn)
 {
   napi_status status = napi_ok;
   napi_value exported_fn = nullptr;
