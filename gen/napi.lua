@@ -14,8 +14,8 @@ function NAPIFunction:init(gen, fdef)
 end
 
 function NAPIFunction:gen_signature()
-  local name = self.fdef.cname or to_snake_case(self.fdef.name):lower()
-  return ("napi_value nbgfx_%s(napi_env env, napi_callback_info info)"):format(name)
+  self.name = "nbgfx_" .. (self.fdef.cname or to_snake_case(self.fdef.name):lower())
+  return ("napi_value %s(napi_env env, napi_callback_info info)"):format(self.name)
 end
 
 function NAPIFunction:gen_call()
@@ -87,7 +87,7 @@ function NAPIFunction:gen()
   local body = util.flatten{stage_frags, call_frags, return_frags}
   local frags = util.flatten{signature .. "{", util.indent(body), "}"}
   if self.had_errors then frags = util.comment_out(frags) end
-  return signature, table.concat(frags, "\n"), self.had_errors
+  return self.name, signature, table.concat(frags, "\n"), self.had_errors
 end
 
 local function CHECK_STATUS(fcall, etype, emessage, indent)

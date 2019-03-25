@@ -1,4 +1,5 @@
 #pragma once
+#include <node_api.h>
 
 #define ASSERT_OK(_x, _err, _msg)        \
   {                                      \
@@ -20,3 +21,5 @@
       return NULL;                                          \
     }                                                       \
   }
+
+void export_function(napi_env env, napi_value exports, const char *name, napi_callback fn);

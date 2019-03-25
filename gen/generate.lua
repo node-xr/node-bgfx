@@ -52,6 +52,13 @@ local dest_js  = [[
 
 ]]
 
+local create_bgfx = [[
+napi_value create_bgfx(napi_env env)
+{
+  napi_value exports;
+  ASSERT_OK(napi_create_object(env, &exports), "EINVAL", "Failed to create exports.");
+]]
+
 -- lets just print out enums for testing
 for k, v in pairs(idl.types) do
   if v['enum'] then 
@@ -65,13 +72,28 @@ end
 
 for k, v in pairs(idl.funcs) do
   if (not v.class) and (not v.cpponly) then
-    local signature, body, had_errors = napi:gen_function(v)
+    local name, signature, body, had_errors = napi:gen_function(v)
+
     dest_cpp = dest_cpp .. body
     dest_cpp = dest_cpp .. "\n\n"
+
     dest_hpp = dest_hpp .. ((had_errors and "//") or "") .. signature .. ";\n"
-    if had_errors then n_err = n_err + 1 else n_success = n_success + 1 end
+
+    if had_errors then
+      n_err = n_err + 1
+    else
+      create_bgfx = create_bgfx .. ('  export_function(env, exports, "%s", %s);\n'):format(name, name)
+      n_success = n_success + 1
+    end
   end
 end
+
+-- Add the 'create_bgfx' function to the binding cpp file.
+create_bgfx = create_bgfx .. [[
+  return exports;
+}
+]]
+dest_cpp = dest_cpp .. create_bgfx
 
 print("Converted: ", n_success, " / ", n_success + n_err)
 napi:print_missing_types()
