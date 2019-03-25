@@ -1,6 +1,7 @@
 -- napi_gen.t
 local util = require("./gen/util")
 local to_snake_case = util.to_snake_case
+local unpack = table.unpack
 
 local NAPIFunction = {}
 function NAPIFunction:init(gen, fdef)

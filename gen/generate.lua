@@ -3,10 +3,10 @@ local util = require("./gen/util")
 local napi = require("./gen/napi")
 local to_snake_case = util.to_snake_case
 
+-- Load the BGFX interface description file.
 do
-  local bgfx_idl, err = loadfile("bgfx.idl")
+  local bgfx_idl, err = loadfile("./deps/bgfx/scripts/bgfx.idl", "t", idl)
   print(bgfx_idl, err)
-  setfenv(bgfx_idl, idl)
   bgfx_idl()
 end
 
@@ -27,17 +27,17 @@ local function gen_enum(e)
   return table.concat(frags, "\n")
 end
 
-local nerr, nhappy = 0, 0
+local n_success, n_err  = 0, 0
 
-local dest_cpp = io.open("bindings.cpp", "wt")
-local dest_hpp = io.open("bindings.hpp", "wt")
-local dest_js  = io.open("bindings.js", "wt")
+local dest_cpp = ''
+local dest_hpp = ''
+local dest_js  = ''
 
 -- lets just print out enums for testing
 for k, v in pairs(idl.types) do
   if v['enum'] then 
-    dest_js:write(gen_enum(v))
-    dest_js:write("\n\n")
+    dest_js = dest_js .. gen_enum(v)
+    dest_js = dest_js .. "\n\n"
     napi:add_enum_type(v.name .. "::Enum", v)
   elseif v.handle then
     napi:add_handle_type(v.name, v)
@@ -47,16 +47,14 @@ end
 for k, v in pairs(idl.funcs) do
   if (not v.class) and (not v.cpponly) then
     local signature, body, had_errors = napi:gen_function(v)
-    dest_cpp:write(body)
-    dest_cpp:write("\n\n")
-    dest_hpp:write(((had_errors and "//") or "") .. signature .. ";\n")
-    if had_errors then nerr = nerr + 1 else nhappy = nhappy + 1 end
+    dest_cpp = dest_cpp .. body
+    dest_cpp = dest_cpp .. "\n\n"
+    dest_hpp = dest_hpp .. ((had_errors and "//") or "") .. signature .. ";\n"
+    if had_errors then n_err = n_err + 1 else n_success = n_success + 1 end
   end
 end
 
-dest_cpp:close()
-dest_hpp:close()
-dest_js:close()
-
-print("Convertable: ", nhappy, " / ", nhappy + nerr)
+print("Converted: ", n_success, " / ", n_success + n_err)
 napi:print_missing_types()
+
+return dest_cpp, dest_hpp, dest_js
