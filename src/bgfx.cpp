@@ -1091,73 +1091,75 @@ napi_value napi_bgfx_is_texture_valid(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-//napi_value napi_bgfx_calc_texture_size(napi_env env, napi_callback_info info){
-//  napi_value argv[8];
-//  GET_ARGS(8)
-//  TextureInfo & _info = MISSING_TYPE<TextureInfo &>;
-//  uint16_t arg_width;
-//  {
-//    int32_t temp = (int32_t)0;
-//    ASSERT_OK(napi_get_value_int32(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (width)");
-//    arg_width = (uint16_t)temp;
-//  }
-//  uint16_t arg_height;
-//  {
-//    int32_t temp = (int32_t)0;
-//    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Invalid argument 2 (height)");
-//    arg_height = (uint16_t)temp;
-//  }
-//  uint16_t arg_depth;
-//  {
-//    int32_t temp = (int32_t)0;
-//    ASSERT_OK(napi_get_value_int32(env, argv[3], &temp), "EINVAL", "Invalid argument 3 (depth)");
-//    arg_depth = (uint16_t)temp;
-//  }
-//  bool arg_cubeMap;
-//  ASSERT_OK(napi_get_value_bool(env, argv[4], &arg_cubeMap), "EINVAL", "Invalid argument 4 (cubeMap)");
-//  bool arg_hasMips;
-//  ASSERT_OK(napi_get_value_bool(env, argv[5], &arg_hasMips), "EINVAL", "Invalid argument 5 (hasMips)");
-//  uint16_t arg_numLayers;
-//  {
-//    int32_t temp = (int32_t)0;
-//    ASSERT_OK(napi_get_value_int32(env, argv[6], &temp), "EINVAL", "Invalid argument 6 (numLayers)");
-//    arg_numLayers = (uint16_t)temp;
-//  }
-//  bgfx_texture_format_t arg_format;
-//  {
-//    int32_t temp = (int32_t)0;
-//    ASSERT_OK(napi_get_value_int32(env, argv[7], &temp), "EINVAL", "Invalid argument 7 (format)");
-//    arg_format = (bgfx_texture_format_t)temp;
-//  }
-//  bgfx_calc_texture_size(_info, arg_width, arg_height, arg_depth, arg_cubeMap, arg_hasMips, arg_numLayers, arg_format);
-//  return nullptr;
-//}
+napi_value napi_bgfx_calc_texture_size(napi_env env, napi_callback_info info){
+  napi_value argv[8];
+  GET_ARGS(8)
+  bgfx_texture_info_t* arg_info = nullptr;
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_info), "EINVAL", "Invalid argument 0 (info)");
+  uint16_t arg_width;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (width)");
+    arg_width = (uint16_t)temp;
+  }
+  uint16_t arg_height;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Invalid argument 2 (height)");
+    arg_height = (uint16_t)temp;
+  }
+  uint16_t arg_depth;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[3], &temp), "EINVAL", "Invalid argument 3 (depth)");
+    arg_depth = (uint16_t)temp;
+  }
+  bool arg_cubeMap;
+  ASSERT_OK(napi_get_value_bool(env, argv[4], &arg_cubeMap), "EINVAL", "Invalid argument 4 (cubeMap)");
+  bool arg_hasMips;
+  ASSERT_OK(napi_get_value_bool(env, argv[5], &arg_hasMips), "EINVAL", "Invalid argument 5 (hasMips)");
+  uint16_t arg_numLayers;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[6], &temp), "EINVAL", "Invalid argument 6 (numLayers)");
+    arg_numLayers = (uint16_t)temp;
+  }
+  bgfx_texture_format_t arg_format;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[7], &temp), "EINVAL", "Invalid argument 7 (format)");
+    arg_format = (bgfx_texture_format_t)temp;
+  }
+  bgfx_calc_texture_size(arg_info, arg_width, arg_height, arg_depth, arg_cubeMap, arg_hasMips, arg_numLayers, arg_format);
+  return nullptr;
+}
 
-//napi_value napi_bgfx_create_texture(napi_env env, napi_callback_info info){
-//  napi_value argv[4];
-//  GET_ARGS(4)
-//  size_t _size_0 = 0;
-//  void* _ptr_0 = nullptr;
-//  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Invalid argument 0 (mem)");
-//  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
-//  uint64_t arg_flags;
-//  {
-//    int64_t temp = (int64_t)0;
-//    ASSERT_OK(napi_get_value_int64(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (flags)");
-//    arg_flags = (uint64_t)temp;
-//  }
-//  uint8_t arg_skip;
-//  {
-//    int32_t temp = (int32_t)0;
-//    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Invalid argument 2 (skip)");
-//    arg_skip = (uint8_t)temp;
-//  }
-//  TextureInfo* _info = MISSING_TYPE<TextureInfo*>;
-//  bgfx_texture_handle_t _ret = bgfx_create_texture(arg_mem, arg_flags, arg_skip, _info);
-//  napi_value _napi_ret;
-//  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
-//  return _napi_ret;
-//}
+napi_value napi_bgfx_create_texture(napi_env env, napi_callback_info info){
+  napi_value argv[4];
+  GET_ARGS(4)
+  size_t _size_0 = 0;
+  void* _ptr_0 = nullptr;
+  ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Invalid argument 0 (mem)");
+  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
+  uint64_t arg_flags;
+  {
+    int64_t temp = (int64_t)0;
+    ASSERT_OK(napi_get_value_int64(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (flags)");
+    arg_flags = (uint64_t)temp;
+  }
+  uint8_t arg_skip;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Invalid argument 2 (skip)");
+    arg_skip = (uint8_t)temp;
+  }
+  bgfx_texture_info_t* arg_info = nullptr;
+  ASSERT_OK(napi_get_value_external(env, argv[3], (void **)&arg_info), "EINVAL", "Invalid argument 3 (info)");
+  bgfx_texture_handle_t _ret = bgfx_create_texture(arg_mem, arg_flags, arg_skip, arg_info);
+  napi_value _napi_ret;
+  ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
+  return _napi_ret;
+}
 
 napi_value napi_bgfx_create_texture_2d(napi_env env, napi_callback_info info){
   napi_value argv[7];
@@ -4014,6 +4016,8 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "napi_bgfx_create_compute_program", napi_bgfx_create_compute_program);
   export_function(env, exports, "napi_bgfx_destroy_program", napi_bgfx_destroy_program);
   export_function(env, exports, "napi_bgfx_is_texture_valid", napi_bgfx_is_texture_valid);
+  export_function(env, exports, "napi_bgfx_calc_texture_size", napi_bgfx_calc_texture_size);
+  export_function(env, exports, "napi_bgfx_create_texture", napi_bgfx_create_texture);
   export_function(env, exports, "napi_bgfx_create_texture_2d", napi_bgfx_create_texture_2d);
   export_function(env, exports, "napi_bgfx_create_texture_2d_scaled", napi_bgfx_create_texture_2d_scaled);
   export_function(env, exports, "napi_bgfx_create_texture_3d", napi_bgfx_create_texture_3d);

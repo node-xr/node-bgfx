@@ -339,6 +339,8 @@ NAPIGen.types["VertexDecl&"] = new(OpaqueType, "bgfx_vertex_decl_t*")
 NAPIGen.types["Encoder&"] = new(OpaqueType, "bgfx_encoder_t*")
 NAPIGen.types["Encoder*"] = new(OpaqueType, "bgfx_encoder_t*")
 NAPIGen.types["const PlatformData &"] = new(OpaqueType, "bgfx_platform_data_t*")
+NAPIGen.types["TextureInfo*"] = new(OpaqueType, "bgfx_texture_info_t*")
+NAPIGen.types["TextureInfo &"] = new(OpaqueType, "bgfx_texture_info_t*")
 NAPIGen.types["const char*"] = new(UTF8StringType)
 
 function NAPIGen:add_handle_type(name, t)
