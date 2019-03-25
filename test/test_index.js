@@ -6,5 +6,6 @@ const bgfx = require("../index");
 chai.use(dirtyChai);
 
 describe("bgfx", () => {
+  expect(bgfx).toBeDefined();
   // TODO: add unit tests per function.
 });

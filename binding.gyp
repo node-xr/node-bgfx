@@ -16,7 +16,8 @@
       ],
       'sources': [
         'src/bindings.cpp',
-        'src/bgfx.cpp'
+        'src/bgfx.cpp',
+        'src/util.cpp',
       ],
       'include_dirs': [
         "<!@(node -p \"require('node-addon-api').include\")",

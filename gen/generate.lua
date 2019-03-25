@@ -17,7 +17,7 @@ local function format_enum_entry(key, value, needs_comma, comment, indent)
 end
 
 local function gen_enum(e)
-  local frags = {"export const " .. to_snake_case(e.name):upper() .. " = {"}
+  local frags = {"exports." .. to_snake_case(e.name):upper() .. " = {"}
   for i, v in ipairs(e['enum']) do
     local keyname = to_snake_case(v.name):upper()
     local needs_comma = (i ~= #e['enum'])
