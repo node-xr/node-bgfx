@@ -395,9 +395,13 @@ napi_value napi_bgfx_get_renderer_type(napi_env env, napi_callback_info info){
 }
 
 //napi_value napi_bgfx_get_caps(napi_env env, napi_callback_info info){
+//  bgfx_get_caps();
+//  MISSING_RETURN;
 //}
 
 //napi_value napi_bgfx_get_stats(napi_env env, napi_callback_info info){
+//  bgfx_get_stats();
+//  MISSING_RETURN;
 //}
 
 //napi_value napi_bgfx_alloc(napi_env env, napi_callback_info info){
@@ -3118,6 +3122,8 @@ napi_value napi_bgfx_set_platform_data(napi_env env, napi_callback_info info){
 }
 
 //napi_value napi_bgfx_get_internal_data(napi_env env, napi_callback_info info){
+//  bgfx_get_internal_data();
+//  MISSING_RETURN;
 //}
 
 //napi_value napi_bgfx_override_internal_texture_ptr(napi_env env, napi_callback_info info){
@@ -3130,6 +3136,8 @@ napi_value napi_bgfx_set_platform_data(napi_env env, napi_callback_info info){
 //    arg_handle.idx = (uint16_t)temp;
 //  }
 //  uintptr_t _ptr = MISSING_TYPE<uintptr_t>;
+//  bgfx_override_internal_texture_ptr(arg_handle, _ptr);
+//  MISSING_RETURN;
 //}
 
 //napi_value napi_bgfx_override_internal_texture(napi_env env, napi_callback_info info){
@@ -3171,6 +3179,8 @@ napi_value napi_bgfx_set_platform_data(napi_env env, napi_callback_info info){
 //    ASSERT_OK(napi_get_value_int64(env, argv[5], &temp), "EINVAL", "Invalid argument 5 (flags)");
 //    arg_flags = (uint64_t)temp;
 //  }
+//  bgfx_override_internal_texture(arg_handle, arg_width, arg_height, arg_numMips, arg_format, arg_flags);
+//  MISSING_RETURN;
 //}
 
 napi_value napi_bgfx_set_marker(napi_env env, napi_callback_info info){
@@ -3969,6 +3979,48 @@ napi_value napi_bgfx_blit(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
+napi_value napi_bgfx_alloc_vertex_decl(napi_env env, napi_callback_info info){
+  bgfx_vertex_decl_t* _ret = new bgfx_vertex_decl_t;
+  napi_value _napi_ret;
+  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  return _napi_ret;
+}
+
+napi_value napi_bgfx_release_vertex_decl(napi_env env, napi_callback_info info){
+  napi_value argv[1];
+  GET_ARGS(1)
+  bgfx_vertex_decl_t* arg_decl = nullptr;
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_decl), "EINVAL", "Invalid argument 0 (decl)");
+  delete arg_decl;
+  return nullptr;
+}
+
+napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info){
+  napi_value argv[5];
+  GET_ARGS(5)
+  void* arg_ndt = nullptr;
+  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_ndt), "EINVAL", "Invalid argument 0 (ndt)");
+  void* arg_nwh = nullptr;
+  ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_nwh), "EINVAL", "Invalid argument 1 (nwh)");
+  uint32_t arg_width;
+  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_width), "EINVAL", "Invalid argument 2 (width)");
+  uint32_t arg_height;
+  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_height), "EINVAL", "Invalid argument 3 (height)");
+  uint32_t arg_reset;
+  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_reset), "EINVAL", "Invalid argument 4 (reset)");
+  bgfx_init_t init;
+  bgfx_init_ctor(&init);
+  init.platformData.ndt = arg_ndt;
+  init.platformData.nwh = arg_nwh;
+  init.resolution.width = arg_width;
+  init.resolution.height = arg_height;
+  init.resolution.reset = arg_reset;
+  bool _ret = bgfx_init(&init);
+  napi_value _napi_ret;
+  ASSERT_OK(napi_get_boolean(env, (bool)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
+  return _napi_ret;
+}
+
 napi_value create_bgfx(napi_env env)
 {
   napi_value exports;
@@ -4117,5 +4169,8 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "napi_bgfx_dispatch_indirect", napi_bgfx_dispatch_indirect);
   export_function(env, exports, "napi_bgfx_discard", napi_bgfx_discard);
   export_function(env, exports, "napi_bgfx_blit", napi_bgfx_blit);
+  export_function(env, exports, "napi_bgfx_alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
+  export_function(env, exports, "napi_bgfx_release_vertex_decl", napi_bgfx_release_vertex_decl);
+  export_function(env, exports, "napi_bgfx_init_minimal", napi_bgfx_init_minimal);
   return exports;
 }

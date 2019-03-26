@@ -1,6 +1,7 @@
 local idl = require("./deps/bgfx/scripts/idl")
 local util = require("./gen/util")
 local napi = require("./gen/napi")
+local misc = require("./gen/miscfuncs")
 local to_snake_case = util.to_snake_case
 
 -- Load the BGFX interface description file.
@@ -42,6 +43,7 @@ end
 -- Iterate through the list of functions and create bindings.
 local n_success, n_err  = 0, 0
 local export_body, cpp_body, hpp_body = {}, {}, {}
+misc.add(idl.funcs)
 for k, v in pairs(idl.funcs) do
   if not v.cpponly then
     local name, signature, body, had_errors = napi:gen_function(v)

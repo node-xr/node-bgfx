@@ -187,3 +187,6 @@ napi_value napi_bgfx_dispatch(napi_env env, napi_callback_info info);
 napi_value napi_bgfx_dispatch_indirect(napi_env env, napi_callback_info info);
 napi_value napi_bgfx_discard(napi_env env, napi_callback_info info);
 napi_value napi_bgfx_blit(napi_env env, napi_callback_info info);
+napi_value napi_bgfx_alloc_vertex_decl(napi_env env, napi_callback_info info);
+napi_value napi_bgfx_release_vertex_decl(napi_env env, napi_callback_info info);
+napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info);

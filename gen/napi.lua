@@ -41,16 +41,20 @@ function NAPIFunction:gen_signature()
 end
 
 function NAPIFunction:gen_call()
+  local t = nil
+  if self.fdef.ret.fulltype ~= "void" then
+    t = self.types[self.fdef.ret.fulltype]
+    table.insert(self.return_vals, 1, {"_ret", t})
+  end
+  if self.fdef.body then 
+    return self.fdef.body 
+  end
   local cname = self:get_full_capi_name()
   local argstr = table.concat(self.call_args, ", ")
-  if self.fdef.ret.fulltype == "void" then
-    return ("%s(%s);"):format(cname, argstr)
+  if t then
+    return ("%s _ret = %s(%s);"):format(t.ctype, cname, argstr)
   else
-    local t = self.types[self.fdef.ret.fulltype]
-    table.insert(self.return_vals, 1, {"_ret", t})
-    if t then
-      return ("%s _ret = %s(%s);"):format(t.ctype, cname, argstr)
-    end
+    return ("%s(%s);"):format(cname, argstr)
   end
 end
 
@@ -267,11 +271,6 @@ function OpaqueType:stage(argname, argtype, argidx)
   }
 end
 
--- napi_status napi_create_external(napi_env env,
---                                  void* data,
---                                  napi_finalize finalize_cb,
---                                  void* finalize_hint,
---                                  napi_value* result)
 function OpaqueType:unstage(idx, varname)
   if not idx then -- we are the only return value
     return {
@@ -336,12 +335,14 @@ NAPIGen.types["const void*"] = new(VoidPointerType)
 NAPIGen.types["const VertexDecl &"] = new(OpaqueType, "bgfx_vertex_decl_t*")
 NAPIGen.types["const VertexDecl&"] = new(OpaqueType, "bgfx_vertex_decl_t*")
 NAPIGen.types["VertexDecl&"] = new(OpaqueType, "bgfx_vertex_decl_t*")
+NAPIGen.types["VertexDecl*"] = new(OpaqueType, "bgfx_vertex_decl_t*")
 NAPIGen.types["Encoder&"] = new(OpaqueType, "bgfx_encoder_t*")
 NAPIGen.types["Encoder*"] = new(OpaqueType, "bgfx_encoder_t*")
 NAPIGen.types["const PlatformData &"] = new(OpaqueType, "bgfx_platform_data_t*")
 NAPIGen.types["TextureInfo*"] = new(OpaqueType, "bgfx_texture_info_t*")
 NAPIGen.types["TextureInfo &"] = new(OpaqueType, "bgfx_texture_info_t*")
 NAPIGen.types["const char*"] = new(UTF8StringType)
+NAPIGen.types["External*"] = new(OpaqueType, "void*")
 
 function NAPIGen:add_handle_type(name, t)
   self.types[name] = new(HandleType, t)
