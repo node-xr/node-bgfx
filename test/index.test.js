@@ -16,6 +16,11 @@ describe('bgfx', () => {
     });
   });
 
+  it('does not round 64-bit constants', () => {
+    expect(bgfx.STATE_MSAA).toEqual(0x0100000000000000n);
+    expect(`${bgfx.STATE_MSAA}`).toEqual('72057594037927936');
+  });
+
   describe('functions', () => {
     let window;
     let info;
