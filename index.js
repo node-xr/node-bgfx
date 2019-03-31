@@ -1,13 +1,11 @@
 const bgfx = require('bindings')('bgfx');
 const constants = require('./constants');
 const enums = require('./enums');
-const VertexDeclaration = require('./VertexDeclaration');
+const vertex = require('./vertex');
 
-// Include generated constants into the main export.
+// Include helpers in the main export.
 Object.assign(bgfx, constants);
 Object.assign(bgfx, enums);
-
-// Add helper classes.
-bgfx.VertexDeclaration = VertexDeclaration;
+Object.assign(bgfx, vertex);
 
 module.exports = bgfx;
