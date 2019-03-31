@@ -106,14 +106,14 @@ describe('VertexBuffer', () => {
       const buffer = decl.allocate(100);
       const clone = buffer.clone();
 
-      const bufferView1 = new Int32Array(buffer.mem);
-      const bufferView2 = new Int32Array(buffer.mem);
-      const cloneView = new Int32Array(clone.mem);
+      const { POSITION: pos1 } = buffer.array[0];
+      const { POSITION: pos2 } = buffer.array[0];
+      const { POSITION: clonePos } = clone.array[0];
 
-      bufferView1[0] = 0xff00;
+      pos1.set([23, 24, 25]);
 
-      expect(bufferView2[0]).toEqual(0xff00);
-      expect(cloneView[0]).toEqual(0);
+      expect(pos2).toEqual(new Float32Array([23, 24, 25]));
+      expect(clonePos).toEqual(new Float32Array([0, 0, 0]));
     });
   });
 });

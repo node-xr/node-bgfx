@@ -29,16 +29,6 @@ describe('VertexDeclaration', () => {
   });
 
   describe('#fromData', () => {
-    it('handles enum spec', () => {
-      fail();
-    });
-
-    it('handles string spec', () => {
-      fail();
-    });
-
-    it('handles multiple defaults', () => {
-      fail();
-    });
+    // TODO: fill this in.
   });
 });
