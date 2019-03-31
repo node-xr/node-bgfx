@@ -57,4 +57,16 @@ bgfx_init_t init;
   bool _ret = bgfx_init(&init);]]
 }
 
+ad_hoc_function{
+  name = "dbg_text_print",
+  args = {
+	  {"_x", "uint16_t"},
+	  {"_y", "uint16_t"},
+    {"_attr", "uint8_t"},
+    {"_text", "const char*"},
+  },
+  return_type = "void",
+  body = 'bgfx_dbg_text_printf(arg_x, arg_y, arg_attr, "%s", arg_text);'
+}
+
 return {add = add, funcs = funcs}

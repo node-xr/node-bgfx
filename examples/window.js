@@ -13,12 +13,14 @@ const main = async () => {
   );
   const info = SDL.GetWindowWMInfo(window);
 
-  if (!bgfx.init_minimal(info.display, info.window, 640, 480, 0x00000080))
+  if (!bgfx.init_minimal(info.display, info.window, 640, 480, bgfx.RESET_VSYNC))
     throw new Error('Failed to initialize BGFX');
+  bgfx.set_debug(bgfx.DEBUG_TEXT);
 
   for (let i = 0; i < 255; ++i) {
     const color = (i << 24) + ((255 - i) << 16) + (i << 8) + 0xff;
 
+    bgfx.dbg_text_print(1, 1, 0x8f, `BGFX API ${bgfx.API_VERSION}`);
     bgfx.set_view_rect_ratio(0, 0, 0, bgfx.BACKBUFFER_RATIO.EQUAL);
     bgfx.set_view_clear(0x0, 0x0001 | 0x0002, color, 0.0, 0);
     bgfx.touch(0x0);

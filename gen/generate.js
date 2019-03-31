@@ -27,4 +27,4 @@ const bindingsHpp = lua.lua_tojsstring(L, -2);
 fs.writeFileSync(path.join(__dirname, '../src/bgfx.hpp'), bindingsHpp);
 
 const bindingsJs = lua.lua_tojsstring(L, -1);
-fs.writeFileSync(path.join(__dirname, '../bgfx.js'), bindingsJs);
+fs.writeFileSync(path.join(__dirname, '../enum.js'), bindingsJs);

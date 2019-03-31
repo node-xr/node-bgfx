@@ -4021,6 +4021,35 @@ napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
+napi_value napi_bgfx_dbg_text_print(napi_env env, napi_callback_info info){
+  napi_value argv[4];
+  GET_ARGS(4)
+  uint16_t arg_x;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[0], &temp), "EINVAL", "Invalid argument 0 (x)");
+    arg_x = (uint16_t)temp;
+  }
+  uint16_t arg_y;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (y)");
+    arg_y = (uint16_t)temp;
+  }
+  uint8_t arg_attr;
+  {
+    int32_t temp = (int32_t)0;
+    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Invalid argument 2 (attr)");
+    arg_attr = (uint8_t)temp;
+  }
+  char arg_text[2048];
+  size_t _temp_size_3 = 2048;
+  size_t _temp_size_out_3;
+  ASSERT_OK(napi_get_value_string_utf8(env, argv[3], arg_text, _temp_size_3, &_temp_size_out_3), "EINVAL", "Invalid argument 3 (text)");
+  bgfx_dbg_text_printf(arg_x, arg_y, arg_attr, "%s", arg_text);
+  return nullptr;
+}
+
 napi_value create_bgfx(napi_env env)
 {
   napi_value exports;
@@ -4172,5 +4201,6 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
   export_function(env, exports, "release_vertex_decl", napi_bgfx_release_vertex_decl);
   export_function(env, exports, "init_minimal", napi_bgfx_init_minimal);
+  export_function(env, exports, "dbg_text_print", napi_bgfx_dbg_text_print);
   return exports;
 }
