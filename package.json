@@ -52,6 +52,7 @@
     "fengari": "^0.1.4",
     "jest": "^24.5.0",
     "node-addon-api": "^1.6.2",
+    "node-sdl2": "^2.1.2",
     "prettier": "^1.16.4",
     "sdl2": "github:node-xr/node-sdl2"
   }

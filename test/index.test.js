@@ -1,5 +1,5 @@
 const bgfx = require('../index');
-const sdl = require('sdl2');
+const SDL = require('sdl2');
 
 describe('bgfx', () => {
   it('imports successfully', () => {
@@ -17,27 +17,28 @@ describe('bgfx', () => {
   });
 
   describe('functions', () => {
-    const { SDL_INIT_VIDEO, SDL_Init, SDL_Quit } = sdl;
-    const { SDL_WINDOW_SHOWN, SDL_CreateWindow, SDL_GetWindowWMInfo } = sdl;
     let window;
     let info;
 
     beforeAll(() => {
-      SDL_Init(SDL_INIT_VIDEO);
-      window = SDL_CreateWindow('Test', 0, 0, 640, 480, SDL_WINDOW_SHOWN);
-      info = SDL_GetWindowWMInfo(window);
+      SDL.Init(SDL.INIT_VIDEO);
+      window = SDL.CreateWindow('Test', 0, 0, 640, 480, SDL.WINDOW_SHOWN);
+      info = SDL.GetWindowWMInfo(window);
     });
 
     afterAll(() => {
-      SDL_DestroyWindow(window);
-      SDL_Quit();
+      SDL.DestroyWindow(window);
+      SDL.Quit();
     });
 
     it('#init', () => {
-      const { bgfx_init_minimal } = bgfx;
       // TODO: get window properties directly.
       // TODO: define enums properly.
-      bgfx_init_minimal(info.display, info.window, 640, 480, 0x00000080);
+      expect(
+        bgfx.init_minimal(info.display, info.window, 640, 480, 0x00000080)
+      ).toEqual(true);
+
+      bgfx.shutdown();
     });
   });
 
