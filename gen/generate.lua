@@ -46,7 +46,7 @@ local export_body, cpp_body, hpp_body = {}, {}, {}
 misc.add(idl.funcs)
 for k, v in pairs(idl.funcs) do
   if not v.cpponly then
-    local name, signature, body, had_errors = napi:gen_function(v)
+    local name, capi_name, signature, body, had_errors = napi:gen_function(v)
 
     cpp_body[#cpp_body + 1] = {body, ""}
     hpp_body[#hpp_body + 1] = ((had_errors and "//") or "") .. signature .. ";"
@@ -54,7 +54,7 @@ for k, v in pairs(idl.funcs) do
     if had_errors then
       n_err = n_err + 1
     else
-      export_body[#export_body + 1] = ('export_function(env, exports, "%s", %s);'):format(name, name)
+      export_body[#export_body + 1] = ('export_function(env, exports, "%s", %s);'):format(capi_name, name)
       n_success = n_success + 1
     end
   end

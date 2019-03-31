@@ -112,7 +112,7 @@ function NAPIFunction:gen()
   local body = util.flatten{stage_frags, call_frags, return_frags}
   local frags = util.flatten{signature .. "{", util.indent(body), "}"}
   if self.had_errors then frags = util.comment_out(frags) end
-  return self.name, signature, table.concat(frags, "\n"), self.had_errors
+  return self.name, self:get_full_capi_name(), signature, table.concat(frags, "\n"), self.had_errors
 end
 
 local function arg_err_msg(argname, idx)
