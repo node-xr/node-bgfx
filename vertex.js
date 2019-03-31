@@ -72,6 +72,7 @@ class VertexBuffer {
         this.flags
       );
 
+      // We can do a few extra steps after uploading a static buffer.
       if (!this.isDynamic) {
         // Set a buffer name if provided.
         if (this.name)
@@ -105,9 +106,12 @@ class VertexBuffer {
   }
 
   clone() {
-    const other = new VertexBuffer(this._decl, this.size, this.isDynamic);
-    this.mem = this.mem; // TODO: this is not right.
-    return other;
+    return new VertexBuffer(
+      this._decl,
+      this.size,
+      { isDynamic: this.isDynamic, flags: this.flags, name: this.name },
+      this.mem.slice(0)
+    );
   }
 }
 

@@ -80,4 +80,40 @@ describe('VertexBuffer', () => {
       }).toThrow();
     });
   });
+
+  describe('#clone', () => {
+    it('works with static buffers', () => {
+      const buffer = decl.allocate(100, { name: 'foo' });
+      const clone = buffer.clone();
+      expect(clone).toMatchObject({
+        isDynamic: false,
+        name: 'foo',
+        size: buffer.size
+      });
+    });
+
+    it('works with dynamic buffers', () => {
+      const buffer = decl.allocate(100, { isDynamic: true, name: 'foo' });
+      const clone = buffer.clone();
+      expect(clone).toMatchObject({
+        isDynamic: true,
+        name: 'foo',
+        size: buffer.size
+      });
+    });
+
+    it('makes a copy of the buffer', () => {
+      const buffer = decl.allocate(100);
+      const clone = buffer.clone();
+
+      const bufferView1 = new Int32Array(buffer.mem);
+      const bufferView2 = new Int32Array(buffer.mem);
+      const cloneView = new Int32Array(clone.mem);
+
+      bufferView1[0] = 0xff00;
+
+      expect(bufferView2[0]).toEqual(0xff00);
+      expect(cloneView[0]).toEqual(0);
+    });
+  });
 });
