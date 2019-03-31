@@ -48,4 +48,8 @@ function util.flatten(lists)
   return ret
 end
 
+function util.conflatten(lists)
+  return table.concat(util.flatten(lists), "\n")
+end
+
 return util
