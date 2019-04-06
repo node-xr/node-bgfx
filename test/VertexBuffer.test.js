@@ -1,13 +1,13 @@
-const bgfx = require('../index');
+const bgfx = require('../lib/index');
+const { VertexDeclaration } = require('../lib/vertex');
 const helpers = require('./vertex.helpers');
-const { VertexDeclaration } = require('../vertex');
 
 describe('VertexBuffer', () => {
   let decl;
   let mem;
 
   beforeAll(() => {
-    decl = new VertexDeclaration(helpers.specEnum);
+    decl = new VertexDeclaration(helpers.spec);
     mem = new ArrayBuffer(16 * 100);
   });
 
@@ -57,7 +57,7 @@ describe('VertexBuffer', () => {
 
     it('works with flagged buffers', () => {
       const buffer = decl.wrap(100, mem, {
-        flags: bgfx.BUFFER_COMPUTE_WRITE
+        flags: bgfx.BUFFER_COMPUTE_WRITE,
       });
       expect(buffer).toBeDefined();
     });
@@ -88,7 +88,7 @@ describe('VertexBuffer', () => {
       expect(clone).toMatchObject({
         isDynamic: false,
         name: 'foo',
-        size: buffer.size
+        size: buffer.size,
       });
     });
 
@@ -98,7 +98,7 @@ describe('VertexBuffer', () => {
       expect(clone).toMatchObject({
         isDynamic: true,
         name: 'foo',
-        size: buffer.size
+        size: buffer.size,
       });
     });
 

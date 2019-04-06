@@ -1,15 +1,10 @@
+const { VertexDeclaration } = require('../lib/vertex');
 const helpers = require('./vertex.helpers');
-const { VertexDeclaration } = require('../vertex');
 
 describe('VertexDeclaration', () => {
   describe('#constructor', () => {
-    it('handles enum spec', () => {
-      const decl = new VertexDeclaration(helpers.specEnum);
-      expect(decl).toBeDefined();
-    });
-
-    it('handles string spec', () => {
-      const decl = new VertexDeclaration(helpers.specStr);
+    it('handles valid spec', () => {
+      const decl = new VertexDeclaration(helpers.spec);
       expect(decl).toBeDefined();
     });
 

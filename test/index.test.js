@@ -1,4 +1,4 @@
-const bgfx = require('../index');
+const bgfx = require('../lib/index');
 const SDL = require('sdl2');
 
 describe('bgfx', () => {
@@ -12,7 +12,7 @@ describe('bgfx', () => {
       INVALID_SHADER: 1,
       UNABLE_TO_INITIALIZE: 2,
       UNABLE_TO_CREATE_TEXTURE: 3,
-      DEVICE_LOST: 4
+      DEVICE_LOST: 4,
     });
   });
 
@@ -40,7 +40,7 @@ describe('bgfx', () => {
       // TODO: get window properties directly.
       // TODO: define enums properly.
       expect(
-        bgfx.init_minimal(info.display, info.window, 640, 480, 0x00000080)
+        bgfx.init_minimal(info.display, info.window, 640, 480, 0x00000080),
       ).toEqual(true);
 
       bgfx.shutdown();

@@ -25,12 +25,12 @@
   "bugs": {
     "url": "https://github.com/node-xr/node-bgfx/issues"
   },
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "generate": "node ./gen/generate.js",
     "install": "node-gyp rebuild",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest --bail"
   },
   "directories": {
     "src": "src",
