@@ -25,12 +25,12 @@
   "bugs": {
     "url": "https://github.com/node-xr/node-bgfx/issues"
   },
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "generate": "node ./gen/generate.js",
     "install": "node-gyp rebuild",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest --bail"
   },
   "directories": {
     "src": "src",
@@ -38,12 +38,14 @@
     "test": "test"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "dependencies": {
     "bindings": "^1.5.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-syntax-bigint": "^7.2.0",
     "eslint": "^5.15.3",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",

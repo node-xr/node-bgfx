@@ -3979,20 +3979,16 @@ napi_value napi_bgfx_blit(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
+void napi_bgfx_finalize_vertex_decl(napi_env env, void* finalize_data, void* finalize_hint) {
+  bgfx_vertex_decl_t* _decl = (bgfx_vertex_decl_t*)finalize_data;
+  delete _decl;
+}
+
 napi_value napi_bgfx_alloc_vertex_decl(napi_env env, napi_callback_info info){
   bgfx_vertex_decl_t* _ret = new bgfx_vertex_decl_t;
   napi_value _napi_ret;
-  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  ASSERT_OK(napi_create_external(env, (void*)_ret, napi_bgfx_finalize_vertex_decl, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
   return _napi_ret;
-}
-
-napi_value napi_bgfx_release_vertex_decl(napi_env env, napi_callback_info info){
-  napi_value argv[1];
-  GET_ARGS(1)
-  bgfx_vertex_decl_t* arg_decl = nullptr;
-  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_decl), "EINVAL", "Invalid argument 0 (decl)");
-  delete arg_decl;
-  return nullptr;
 }
 
 napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info){

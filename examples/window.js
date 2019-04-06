@@ -17,10 +17,12 @@ const main = async () => {
     throw new Error('Failed to initialize BGFX');
   bgfx.set_debug(bgfx.DEBUG_TEXT);
 
-  for (let i = 0; i < 255; ++i) {
+  let i = 0;
+  while (!SDL.QuitRequested()) {
+    i = (i + 1) % 256;
     const color = (i << 24) + ((255 - i) << 16) + (i << 8) + 0xff;
 
-    bgfx.dbg_text_print(1, 1, 0x8f, `BGFX API ${bgfx.API_VERSION}`);
+    bgfx.dbg_text_print(1, 1, 0x8f, `API ${bgfx.API_VERSION} - frame ${i}`);
     bgfx.set_view_rect_ratio(0, 0, 0, bgfx.BACKBUFFER_RATIO.EQUAL);
     bgfx.set_view_clear(0x0, 0x0001 | 0x0002, color, 0.0, 0);
     bgfx.touch(0x0);
