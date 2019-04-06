@@ -1,5 +1,5 @@
 const bgfx = require('../lib/index');
-const { VertexDeclaration } = require('../lib/vertex');
+const { VertexDeclaration, VertexBuffer } = require('../lib/vertex');
 const helpers = require('./vertex.helpers');
 
 describe('VertexBuffer', () => {
@@ -41,42 +41,30 @@ describe('VertexBuffer', () => {
 
   describe('#wrap', () => {
     it('works with static buffers', () => {
-      const buffer = decl.wrap(100, mem);
+      const buffer = decl.wrap(mem);
       expect(buffer).toBeDefined();
     });
 
     it('works with dynamic buffers', () => {
-      const buffer = decl.wrap(100, mem, { isDynamic: true });
+      const buffer = decl.wrap(mem, { isDynamic: true });
       expect(buffer).toBeDefined();
     });
 
     it('works with named buffers', () => {
-      const buffer = decl.wrap(100, mem, { name: 'foo' });
+      const buffer = decl.wrap(mem, { name: 'foo' });
       expect(buffer).toBeDefined();
     });
 
     it('works with flagged buffers', () => {
-      const buffer = decl.wrap(100, mem, {
+      const buffer = decl.wrap(mem, {
         flags: bgfx.BUFFER_COMPUTE_WRITE,
       });
       expect(buffer).toBeDefined();
     });
 
-    it('rejects mismatched buffers', () => {
-      expect(() => {
-        decl.wrap(-100, memIncorrect);
-      }).toThrow();
-    });
-
-    it('rejects invalid sizes', () => {
-      expect(() => {
-        decl.wrap(-100, mem);
-      }).toThrow();
-    });
-
     it('rejects missing buffers', () => {
       expect(() => {
-        decl.wrap(100, null);
+        decl.wrap(null);
       }).toThrow();
     });
   });
@@ -86,9 +74,10 @@ describe('VertexBuffer', () => {
       const buffer = decl.allocate(100, { name: 'foo' });
       const clone = buffer.clone();
       expect(clone).toMatchObject({
-        isDynamic: false,
-        name: 'foo',
         length: buffer.length,
+        options: {
+          name: 'foo',
+        },
       });
     });
 
@@ -96,9 +85,11 @@ describe('VertexBuffer', () => {
       const buffer = decl.allocate(100, { isDynamic: true, name: 'foo' });
       const clone = buffer.clone();
       expect(clone).toMatchObject({
-        isDynamic: true,
-        name: 'foo',
         length: buffer.length,
+        options: {
+          isDynamic: true,
+          name: 'foo',
+        },
       });
     });
 
@@ -114,6 +105,23 @@ describe('VertexBuffer', () => {
 
       expect(pos2).toEqual(new Float32Array([23, 24, 25]));
       expect(clonePos).toEqual(new Float32Array([0, 0, 0]));
+    });
+  });
+
+  describe('#from', () => {
+    it('loads data from an object', () => {
+      const buffer = VertexBuffer.from(helpers.buffer);
+      expect(buffer).toBeDefined();
+      expect(buffer.array[0]).toBeDefined();
+
+      for (let i = 0; i < helpers.buffer.POSITION.length; ++i) {
+        expect(buffer.array[i].POSITION).toEqual(
+          new Float32Array(helpers.buffer.POSITION[i]),
+        );
+        expect(buffer.array[i].COLOR_0).toEqual(
+          new Float32Array(helpers.buffer.COLOR_0[i]),
+        );
+      }
     });
   });
 });
