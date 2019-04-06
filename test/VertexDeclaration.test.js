@@ -22,8 +22,4 @@ describe('VertexDeclaration', () => {
       }).toThrow();
     });
   });
-
-  describe('#fromData', () => {
-    // TODO: fill this in.
-  });
 });
