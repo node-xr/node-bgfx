@@ -88,7 +88,7 @@ describe('VertexBuffer', () => {
       expect(clone).toMatchObject({
         isDynamic: false,
         name: 'foo',
-        size: buffer.size,
+        length: buffer.length,
       });
     });
 
@@ -98,7 +98,7 @@ describe('VertexBuffer', () => {
       expect(clone).toMatchObject({
         isDynamic: true,
         name: 'foo',
-        size: buffer.size,
+        length: buffer.length,
       });
     });
 
