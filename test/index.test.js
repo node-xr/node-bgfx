@@ -1,5 +1,5 @@
-const bgfx = require('../lib/index');
 const SDL = require('sdl2');
+const bgfx = require('../lib/index');
 
 describe('bgfx', () => {
   it('imports successfully', () => {

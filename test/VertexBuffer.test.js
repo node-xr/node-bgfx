@@ -1,3 +1,4 @@
+const SDL = require('sdl2');
 const bgfx = require('../lib/index');
 const { VertexDeclaration, VertexBuffer } = require('../lib/vertex');
 const helpers = require('./vertex.helpers');
@@ -122,6 +123,36 @@ describe('VertexBuffer', () => {
           new Float32Array(helpers.buffer.COLOR_0[i]),
         );
       }
+    });
+  });
+
+  describe('#upload', () => {
+    let window;
+    let info;
+
+    beforeAll(() => {
+      SDL.Init(SDL.INIT_VIDEO);
+      window = SDL.CreateWindow('Test', 0, 0, 640, 480, SDL.WINDOW_SHOWN);
+      info = SDL.GetWindowWMInfo(window);
+      bgfx.init_minimal(info.display, info.window, 640, 480, 0x00000080);
+    });
+
+    afterAll(() => {
+      bgfx.shutdown();
+      SDL.DestroyWindow(window);
+      SDL.Quit();
+    });
+
+    it('works with static buffers', () => {
+      const buffer = VertexBuffer.from(helpers.buffer);
+      const handle = buffer.upload();
+      expect(handle).toBeTruthy();
+    });
+
+    it('works with dynamic buffers', () => {
+      const buffer = VertexBuffer.from(helpers.buffer, { isDynamic: true });
+      const handle = buffer.upload();
+      expect(handle).toBeTruthy();
     });
   });
 });

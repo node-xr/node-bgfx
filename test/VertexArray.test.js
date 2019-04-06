@@ -191,9 +191,9 @@ describe('VertexArray', () => {
       const arr = new VertexArray(helpers.spec, 100);
       const clone = arr.clone();
 
-      const arrView1 = new Int32Array(arr.data);
-      const arrView2 = new Int32Array(arr.data);
-      const cloneView = new Int32Array(clone.data);
+      const arrView1 = new Int32Array(arr._data);
+      const arrView2 = new Int32Array(arr._data);
+      const cloneView = new Int32Array(clone._data);
 
       arrView1[0] = 0xff00;
 
