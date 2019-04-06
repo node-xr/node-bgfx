@@ -146,13 +146,15 @@ describe('VertexBuffer', () => {
     it('works with static buffers', () => {
       const buffer = VertexBuffer.from(helpers.buffer);
       const handle = buffer.upload();
-      expect(handle).toBeTruthy();
+      expect(handle).toBeDefined();
+      expect(handle).not.toEqual(bgfx.INVALID_HANDLE);
     });
 
     it('works with dynamic buffers', () => {
       const buffer = VertexBuffer.from(helpers.buffer, { isDynamic: true });
       const handle = buffer.upload();
-      expect(handle).toBeTruthy();
+      expect(handle).toBeDefined();
+      expect(handle).not.toEqual(bgfx.INVALID_HANDLE);
     });
   });
 });
