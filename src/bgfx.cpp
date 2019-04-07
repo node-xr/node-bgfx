@@ -3195,7 +3195,7 @@ napi_value napi_bgfx_set_state(napi_env env, napi_callback_info info){
   GET_ARGS(2)
   uint64_t arg_state;
   bool lossless = false;
-  ASSERT_OK(napi_get_value_bigint_uint64(env, argv[1], &arg_state, &lossless), "EINVAL", "Invalid argument 1 (state)");
+  ASSERT_OK(napi_get_value_bigint_uint64(env, argv[0], &arg_state, &lossless), "EINVAL", "Invalid argument 1 (state)");
   uint32_t arg_rgba;
   ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_rgba), "EINVAL", "Invalid argument 1 (rgba)");
   bgfx_set_state(arg_state, arg_rgba);

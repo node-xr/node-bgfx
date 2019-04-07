@@ -2,7 +2,7 @@ const bgfx = require('../../lib/index.js');
 const SDL = require('sdl2');
 const fs = require('fs');
 const path = require('path');
-const glMatrix = require('gl-matrix');
+const { mat4, vec3 } = require('gl-matrix');
 
 const s_cubePosition = [
   [-1.0, 1.0, 1.0],
@@ -137,6 +137,7 @@ const main = async () => {
     cubePoint: bgfx.create_index_buffer(new Uint16Array(s_cubePoints).buffer, BUFFER_NONE),
   };
 
+  let time_start = process.hrtime.bigint();
   let time_last = process.hrtime.bigint();
   while (!SDL.QuitRequested()) {
     let time_curr = process.hrtime.bigint();
@@ -146,15 +147,15 @@ const main = async () => {
     bgfx.dbg_text_print(1, 1, 0x8f,
       `API ${bgfx.API_VERSION} - frame ${period_ms}ms`);
 
-    const at = glMatrix.vec3.fromValues(0.0, 0.0, 0.0);
-    const eye = glMatrix.vec3.fromValues(0.0, 0.0, -35.0);
-    const up = glMatrix.vec3.fromValues(0.0, 1.0, 0.0);
+    const at = vec3.fromValues(0.0, 0.0, 0.0);
+    const eye = vec3.fromValues(0.0, 0.0, -35.0);
+    const up = vec3.fromValues(0.0, 1.0, 0.0);
 
-    const view = glMatrix.mat4.create();
-    glMatrix.mat4.lookAt(view, eye, at, up);
+    const view = mat4.create();
+    mat4.lookAt(view, eye, at, up);
 
-    const proj = glMatrix.mat4.create();
-    glMatrix.mat4.perspective(proj, 60.0, 640 / 480, 0.1, 100.0);
+    const proj = mat4.create();
+    mat4.perspective(proj, 1.0, 640 / 480, 0.1, 100.0);
 
     bgfx.set_view_transform(0, view.buffer, proj.buffer);
     bgfx.set_view_rect_ratio(0, 0, 0, bgfx.BACKBUFFER_RATIO.EQUAL);
@@ -164,13 +165,10 @@ const main = async () => {
     // Submit 11x11 cubes.
     for (let yy = 0; yy < 11; ++yy) {
       for (let xx = 0; xx < 11; ++xx) {
-        const mtx = glMatrix.mat4.create();
-        /*
-        bx::mtxRotateXY(mtx, time + xx*0.21f, time + yy*0.37f);
-        mtx[12] = -15.0f + float(xx)*3.0f;
-        mtx[13] = -15.0f + float(yy)*3.0f;
-        mtx[14] = 0.0f;
-        */
+        const mtx = mat4.create();
+        mat4.translate(mtx, mtx, [(xx - 5) * 3.0, (yy - 5) * 3.0, 0]);
+        mat4.rotateX(mtx, mtx, Number(time_curr - time_start) / 1e9);
+        mat4.rotateY(mtx, mtx, Number(time_curr - time_start) / 1e9);
 
         // Set model matrix for rendering.
         bgfx.set_transform(mtx.buffer, 1);
@@ -180,7 +178,6 @@ const main = async () => {
         bgfx.set_index_buffer(m_ibh.triList, 0, 0xffffffff);
 
         // Set render states.
-        console.log(bgfx.STATE_DEFAULT);
         bgfx.set_state(bgfx.STATE_DEFAULT, 0);
 
         // Submit primitive for rendering to view 0.
