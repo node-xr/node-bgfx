@@ -3,7 +3,6 @@
 #include <bgfx/c99/bgfx.h>
 #include <string.h>
 
-
 //napi_value napi_bgfx_attachment_init(napi_env env, napi_callback_info info){
 //  napi_value argv[6];
 //  GET_ARGS(6)
@@ -2233,11 +2232,8 @@ napi_value napi_bgfx_encoder_set_state(napi_env env, napi_callback_info info){
   bgfx_encoder_t* arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint64_t arg_state;
-  {
-    int64_t temp = (int64_t)0;
-    ASSERT_OK(napi_get_value_int64(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (state)");
-    arg_state = (uint64_t)temp;
-  }
+  bool lossless = false;
+  ASSERT_OK(napi_get_value_bigint_uint64(env, argv[1], &arg_state, &lossless), "EINVAL", "Invalid argument 1 (state)");
   uint32_t arg_rgba;
   ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_rgba), "EINVAL", "Invalid argument 2 (rgba)");
   bgfx_encoder_set_state(arg_self, arg_state, arg_rgba);
@@ -3198,11 +3194,8 @@ napi_value napi_bgfx_set_state(napi_env env, napi_callback_info info){
   napi_value argv[2];
   GET_ARGS(2)
   uint64_t arg_state;
-  {
-    int64_t temp = (int64_t)0;
-    ASSERT_OK(napi_get_value_int64(env, argv[0], &temp), "EINVAL", "Invalid argument 0 (state)");
-    arg_state = (uint64_t)temp;
-  }
+  bool lossless = false;
+  ASSERT_OK(napi_get_value_bigint_uint64(env, argv[1], &arg_state, &lossless), "EINVAL", "Invalid argument 1 (state)");
   uint32_t arg_rgba;
   ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_rgba), "EINVAL", "Invalid argument 1 (rgba)");
   bgfx_set_state(arg_state, arg_rgba);
@@ -4195,7 +4188,6 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "discard", napi_bgfx_discard);
   export_function(env, exports, "blit", napi_bgfx_blit);
   export_function(env, exports, "alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
-  export_function(env, exports, "release_vertex_decl", napi_bgfx_release_vertex_decl);
   export_function(env, exports, "init_minimal", napi_bgfx_init_minimal);
   export_function(env, exports, "dbg_text_print", napi_bgfx_dbg_text_print);
   return exports;
