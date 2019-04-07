@@ -5,69 +5,9 @@ const helpers = require('./vertex.helpers');
 
 describe('VertexBuffer', () => {
   let decl;
-  let mem;
 
   beforeAll(() => {
     decl = new VertexDeclaration(helpers.spec);
-    mem = new ArrayBuffer(16 * 100);
-  });
-
-  describe('#allocate', () => {
-    it('works with static buffers', () => {
-      const buffer = decl.allocate(100);
-      expect(buffer).toBeDefined();
-    });
-
-    it('works with dynamic buffers', () => {
-      const buffer = decl.allocate(100, { isDynamic: true });
-      expect(buffer).toBeDefined();
-    });
-
-    it('works with named buffers', () => {
-      const buffer = decl.allocate(100, { name: 'foo' });
-      expect(buffer).toBeDefined();
-    });
-
-    it('works with flagged buffers', () => {
-      const buffer = decl.allocate(100, { flags: bgfx.BUFFER_COMPUTE_WRITE });
-      expect(buffer).toBeDefined();
-    });
-
-    it('rejects invalid sizes', () => {
-      expect(() => {
-        decl.allocate(-100);
-      }).toThrow();
-    });
-  });
-
-  describe('#wrap', () => {
-    it('works with static buffers', () => {
-      const buffer = decl.wrap(mem);
-      expect(buffer).toBeDefined();
-    });
-
-    it('works with dynamic buffers', () => {
-      const buffer = decl.wrap(mem, { isDynamic: true });
-      expect(buffer).toBeDefined();
-    });
-
-    it('works with named buffers', () => {
-      const buffer = decl.wrap(mem, { name: 'foo' });
-      expect(buffer).toBeDefined();
-    });
-
-    it('works with flagged buffers', () => {
-      const buffer = decl.wrap(mem, {
-        flags: bgfx.BUFFER_COMPUTE_WRITE,
-      });
-      expect(buffer).toBeDefined();
-    });
-
-    it('rejects missing buffers', () => {
-      expect(() => {
-        decl.wrap(null);
-      }).toThrow();
-    });
   });
 
   describe('#clone', () => {
@@ -109,9 +49,9 @@ describe('VertexBuffer', () => {
     });
   });
 
-  describe('#from', () => {
+  describe('#wrap', () => {
     it('loads data from an object', () => {
-      const buffer = VertexBuffer.from(helpers.buffer);
+      const buffer = VertexBuffer.wrap(helpers.buffer);
       expect(buffer).toBeDefined();
       expect(buffer.array[0]).toBeDefined();
 
@@ -144,14 +84,14 @@ describe('VertexBuffer', () => {
     });
 
     it('works with static buffers', () => {
-      const buffer = VertexBuffer.from(helpers.buffer);
+      const buffer = VertexBuffer.wrap(helpers.buffer);
       const handle = buffer.upload();
       expect(handle).toBeDefined();
       expect(handle).not.toEqual(bgfx.INVALID_HANDLE);
     });
 
     it('works with dynamic buffers', () => {
-      const buffer = VertexBuffer.from(helpers.buffer, { isDynamic: true });
+      const buffer = VertexBuffer.wrap(helpers.buffer, { isDynamic: true });
       const handle = buffer.upload();
       expect(handle).toBeDefined();
       expect(handle).not.toEqual(bgfx.INVALID_HANDLE);
