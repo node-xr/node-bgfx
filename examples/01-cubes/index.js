@@ -50,6 +50,9 @@ const vshader = new Uint8Array(
   fs.readFileSync(path.resolve(__dirname, 'shaders/glsl/vs_uniformless.bin')),
 ).buffer;
 
+const width = 1280;
+const height = 1024;
+
 const main = async () => {
   const { CLEAR_COLOR, CLEAR_DEPTH, BUFFER_NONE } = bgfx;
 
@@ -58,12 +61,18 @@ const main = async () => {
   const window = SDL.CreateWindow(
     'Example Cubes',
     SDL.WINDOWPOS_CENTERED, SDL.WINDOWPOS_CENTERED,
-    640, 480, SDL.WINDOW_SHOWN,
+    width, height, SDL.WINDOW_SHOWN,
   );
   const info = SDL.GetWindowWMInfo(window);
 
   // Initialize BGFX w/debug text.
-  if (!bgfx.init_minimal(info.display, info.window, 640, 480, bgfx.RESET_VSYNC))
+  // prettier-ignore
+  if (
+    !bgfx.init_minimal(
+      info.display, info.window,
+      width, height, bgfx.RESET_VSYNC,
+    )
+  )
     throw new Error('Failed to initialize BGFX');
   bgfx.set_debug(bgfx.DEBUG_TEXT);
 
@@ -110,7 +119,7 @@ const main = async () => {
     mat4.lookAt(view, eye, at, up);
 
     const proj = mat4.create();
-    mat4.perspective(proj, 1.0, 640 / 480, 0.1, 100.0);
+    mat4.perspective(proj, 1.0, width / height, 0.1, 100.0);
 
     bgfx.set_view_transform(0, view.buffer, proj.buffer);
     bgfx.set_view_rect_ratio(0, 0, 0, bgfx.BACKBUFFER_RATIO.EQUAL);
@@ -143,7 +152,6 @@ const main = async () => {
     }
 
     bgfx.frame(false);
-
     time_last = time_curr;
   }
 
