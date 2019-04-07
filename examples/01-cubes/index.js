@@ -133,9 +133,11 @@ const main = async () => {
   let time_last = process.hrtime.bigint();
   while (!SDL.QuitRequested()) {
     let time_curr = process.hrtime.bigint();
+    const period_ms = Number(time_curr - time_last) / 1e6;
 
     // prettier-ignore
-    bgfx.dbg_text_print(1, 1, 0x8f, `API ${bgfx.API_VERSION} - frame ${(time_curr - time_last) / 1000n}us`);
+    bgfx.dbg_text_print(1, 1, 0x8f,
+      `API ${bgfx.API_VERSION} - frame ${period_ms}ms`);
     bgfx.set_view_rect_ratio(0, 0, 0, bgfx.BACKBUFFER_RATIO.EQUAL);
     bgfx.touch(0x0);
     bgfx.frame(false);
