@@ -11,7 +11,7 @@
     {
       'target_name': 'bgfx',
       'defines': [
-        'NAPI_VERSION=3',
+        'NAPI_EXPERIMENTAL',
         'NAPI_DISABLE_CPP_EXCEPTIONS',
       ],
       'sources': [
@@ -20,7 +20,6 @@
         'src/util.cpp',
       ],
       'include_dirs': [
-        "<!@(node -p \"require('node-addon-api').include\")",
         '<(module_root_dir)/deps/bgfx/include',
       ],
       "dependencies": [],

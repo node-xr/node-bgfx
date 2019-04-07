@@ -1,15 +1,15 @@
-const bgfx = require('../index.js');
+const bgfx = require('../../lib/index.js');
 const SDL = require('sdl2');
 
 const main = async () => {
   SDL.Init(SDL.INIT_VIDEO);
   const window = SDL.CreateWindow(
-    'Test',
+    'Example Window',
     SDL.WINDOWPOS_CENTERED,
     SDL.WINDOWPOS_CENTERED,
     640,
     480,
-    SDL.WINDOW_SHOWN
+    SDL.WINDOW_SHOWN,
   );
   const info = SDL.GetWindowWMInfo(window);
 
