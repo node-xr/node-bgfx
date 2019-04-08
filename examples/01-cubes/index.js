@@ -69,7 +69,7 @@ const main = async () => {
   // prettier-ignore
   if (
     !bgfx.init_minimal(
-      info.display, info.window,
+      info.display || null, info.window,
       width, height, bgfx.RESET_VSYNC,
     )
   )
