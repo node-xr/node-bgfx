@@ -13,7 +13,7 @@ const main = async () => {
   );
   const info = SDL.GetWindowWMInfo(window);
 
-  if (!bgfx.init_minimal(info.display, info.window, 640, 480, bgfx.RESET_VSYNC))
+  if (!bgfx.init_minimal(info.display || null, info.window, 640, 480, bgfx.RESET_VSYNC))
     throw new Error('Failed to initialize BGFX');
   bgfx.set_debug(bgfx.DEBUG_TEXT);
 

@@ -3,7 +3,6 @@
     'platform': '<(OS)',
   },
   'conditions': [
-    # Replace gyp platform with node platform, blech
     ['platform == "mac"', {'variables': {'platform': 'darwin'}}],
     ['platform == "win"', {'variables': {'platform': 'win32'}}],
   ],
@@ -26,24 +25,16 @@
       'conditions': [
         ['OS=="linux"', {
           'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/linux64'],
-          'libraries': ['<(module_root_dir)/deps/bgfx/bin/linux64/libbgfx-shared-libRelease.so'],
-          'copies':
-          [
-            {
-              'destination': '<(module_root_dir)/build/Release',
-              'files': ['<(module_root_dir)/deps/bgfx/bin/linux64/libbgfx-shared-libRelease.so']
-            }
+          'libraries': [
+            '-Wl,-rpath,<(module_root_dir)/deps/bgfx/bin/linux64',
+            '<(module_root_dir)/deps/bgfx/bin/linux64/libbgfx-shared-libRelease.so'
           ],
         }],
         ['OS=="mac"', {
           'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/osx64'],
-          'libraries': ['libbgfx-shared-libRelease.dylib'],
-          'copies':
-          [
-            {
-              'destination': '<(module_root_dir)/build/Release',
-              'files': ['<(module_root_dir)/deps/bgfx/bin/osx64/libbgfx-shared-libRelease.dylib']
-            }
+          'libraries': [
+            '-Wl,-rpath,<(module_root_dir)/deps/bgfx/bin/osx64',
+            '<(module_root_dir)/deps/bgfx/bin/osx64/libbgfx-shared-libRelease.dylib'
           ],
         }],
         ['OS=="win"', {

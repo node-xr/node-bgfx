@@ -3988,7 +3988,7 @@ napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info){
   napi_value argv[5];
   GET_ARGS(5)
   void* arg_ndt = nullptr;
-  ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_ndt), "EINVAL", "Invalid argument 0 (ndt)");
+  ASSERT_OK(napi_get_value_external_opt(env, argv[0], (void **)&arg_ndt), "EINVAL", "Invalid argument 0 (ndt)");
   void* arg_nwh = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_nwh), "EINVAL", "Invalid argument 1 (nwh)");
   uint32_t arg_width;

@@ -40,7 +40,7 @@ describe('bgfx', () => {
       // TODO: get window properties directly.
       // TODO: define enums properly.
       expect(
-        bgfx.init_minimal(info.display, info.window, 640, 480, 0x00000080),
+        bgfx.init_minimal(info.display || null, info.window, 640, 480, 0x00000080),
       ).toEqual(true);
 
       bgfx.shutdown();
