@@ -41,7 +41,9 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "bindings": "^1.5.0"
+    "bindings": "^1.5.0",
+    "flat-cache": "^2.0.1",
+    "tmp-promise": "^1.0.5"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.0",
