@@ -1,23 +1,27 @@
-const { ShaderCache, shaderc } = require('../lib/shader');
-const path = require('path');
+const crypto = require('crypto');
 const file = require('tmp-promise').file;
+const fs = require('fs');
+const path = require('path');
+const { ShaderCache, shaderc, loadShader, loadProgram } = require('../../lib/shader');
 
+// Payload definitions for testing.
 const fragmentPath = path.resolve(__dirname, '');
 const vertexPath = path.resolve(__dirname, '');
-const includes = path.resolve(__dirname, '');
-const defines = path.resolve(__dirname, '');
+const includes = [path.resolve(__dirname, '')];
+const defines = ['TEST_DEFINITION'];
 
 describe('shaderc', () => {
-  const checkBuild = async (file, type, hash, preprocess) => {
+  const checkBuild = async (inputPath, type, hash, preprocess) => {
     const { fd, path, cleanup } = await file();
     try {
-      await shaderc(file, path, type, { includes, defines, preprocess });
+      await shaderc(inputPath, path, type, { includes, defines, preprocess });
 
+      const stream = fs.createReadStream(null, {fd});
       const md5Sum = crypto.createHash('md5');
-      preprocFd.pipe(md5Sum);
+      stream.pipe(md5Sum);
       const md5 = await new Promise((resolve, reject) => {
         md5Sum.on('end', () => resolve(md5Sum.read()));
-        fd.on('error', reject); // TODO: do I need to close the hash?
+        stream.on('error', reject); // TODO: do I need to close the hash?
       });
 
       expect(md5).toEqual(hash);
@@ -68,6 +72,25 @@ describe('shaderc', () => {
   });
 });
 
+describe('loadShader', () => {
+  it('can load a vertex shader', async () => {
+    const result = await loadShader(vertexPath);
+    expect(result).toBeDefined();
+  })
+
+  it('can load a fragment shader', () => {
+    const result = await loadShader(fragmentPath);
+    expect(result).toBeDefined();
+  })
+})
+
+describe('loadProgram', () => {
+  it('can load a program', () => {
+    const result = await loadProgram(vertexPath, fragmentPath);
+    expect(result).toBeDefined();
+  })
+})
+
 describe('ShaderCache', () => {
   let cache;
 
@@ -88,6 +111,13 @@ describe('ShaderCache', () => {
     it('can load a fragment shader', async () => {
       const result = await cache.load(fragmentPath, 'fragment');
       expect(result).toEqual('foobar');
+    });
+  });
+
+  describe('#program', () => {
+    it('can create a shader program', async () => {
+      const result = await cache.program(vertexPath, fragmentPath);
+      expect(result).toBeDefined();
     });
   });
 });
