@@ -10,7 +10,7 @@ const {
   loadShader,
   loadProgram,
 } = require('../../lib/shader');
-const { checksumFile } = require('../../lib/util');
+const { checksumFile } = require('../../lib/utils');
 
 // Payload definitions for testing.
 const fragment = {
