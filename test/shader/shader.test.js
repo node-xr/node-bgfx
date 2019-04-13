@@ -1,12 +1,35 @@
 const crypto = require('crypto');
-const file = require('tmp-promise').file;
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
-const { ShaderCache, shaderc, loadShader, loadProgram } = require('../../lib/shader');
+
+const file = require('tmp-promise').file;
+const {
+  ShaderCache,
+  shaderc,
+  loadShader,
+  loadProgram,
+} = require('../../lib/shader');
 
 // Payload definitions for testing.
-const fragmentPath = path.resolve(__dirname, '');
-const vertexPath = path.resolve(__dirname, '');
+const fragment = {
+  src: path.resolve(__dirname, 'src/fs_uniformless.sc'),
+  bin: path.resolve(
+    __dirname,
+    os.platform(),
+    os.arch(),
+    'src/fs_uniformless.bin',
+  ),
+};
+const vertex = {
+  src: path.resolve(__dirname, 'src/vs_uniformless.sc'),
+  bin: path.resolve(
+    __dirname,
+    os.platform(),
+    os.arch(),
+    'src/vss_uniformless.bin',
+  ),
+};
 const includes = [path.resolve(__dirname, '')];
 const defines = ['TEST_DEFINITION'];
 
@@ -16,7 +39,7 @@ describe('shaderc', () => {
     try {
       await shaderc(inputPath, path, type, { includes, defines, preprocess });
 
-      const stream = fs.createReadStream(null, {fd});
+      const stream = fs.createReadStream(null, { fd });
       const md5Sum = crypto.createHash('md5');
       stream.pipe(md5Sum);
       const md5 = await new Promise((resolve, reject) => {
@@ -31,26 +54,26 @@ describe('shaderc', () => {
   };
 
   it('can preprocess a vertex shader', async () => {
-    await checkBuild(vertexPath, 'vertex', 'foobar', true);
+    await checkBuild(vertex.src, 'vertex', 'foobar', true);
   });
 
   it('can build a vertex shader', async () => {
-    await checkBuild(vertexPath, 'vertex', 'foobar', false);
+    await checkBuild(vertex.src, 'vertex', 'foobar', false);
   });
 
   it('can preprocess a fragment shader', async () => {
-    await checkBuild(fragmentPath, 'fragment', 'foobar', true);
+    await checkBuild(fragment.src, 'fragment', 'foobar', true);
   });
 
   it('can build a fragment shader', async () => {
-    await checkBuild(fragmentPath, 'fragment', 'foobar', false);
+    await checkBuild(fragment.src, 'fragment', 'foobar', false);
   });
 
   it('rejects invalid type', async () => {
     const { path, cleanup } = await file();
     try {
       expect(async () => {
-        await shaderc(vertexPath, path, 'banana', { includes, defines });
+        await shaderc(vertex.src, path, 'banana', { includes, defines });
       }).toThrow();
     } finally {
       cleanup();
@@ -61,7 +84,7 @@ describe('shaderc', () => {
     const { path, cleanup } = await file();
     try {
       expect(async () => {
-        await shaderc(vertexPath, path, 'vertex', {
+        await shaderc(vertex.src, path, 'vertex', {
           includes: '',
           defines: '',
         });
@@ -74,22 +97,22 @@ describe('shaderc', () => {
 
 describe('loadShader', () => {
   it('can load a vertex shader', async () => {
-    const result = await loadShader(vertexPath);
+    const result = await loadShader(vertex.bin);
     expect(result).toBeDefined();
-  })
+  });
 
-  it('can load a fragment shader', () => {
-    const result = await loadShader(fragmentPath);
+  it('can load a fragment shader', async () => {
+    const result = await loadShader(fragment.bin);
     expect(result).toBeDefined();
-  })
-})
+  });
+});
 
 describe('loadProgram', () => {
-  it('can load a program', () => {
-    const result = await loadProgram(vertexPath, fragmentPath);
+  it('can load a program', async () => {
+    const result = await loadProgram(vertex.bin, fragment.bin);
     expect(result).toBeDefined();
-  })
-})
+  });
+});
 
 describe('ShaderCache', () => {
   let cache;

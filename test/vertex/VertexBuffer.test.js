@@ -1,6 +1,6 @@
 const SDL = require('sdl2');
-const bgfx = require('../lib/index');
-const { VertexDeclaration, VertexBuffer } = require('../lib/vertex');
+const bgfx = require('bindings')('bgfx');
+const { VertexDeclaration, VertexBuffer } = require('../../lib/vertex');
 const helpers = require('./vertex.helpers');
 
 describe('VertexBuffer', () => {
@@ -74,7 +74,13 @@ describe('VertexBuffer', () => {
       SDL.Init(SDL.INIT_VIDEO);
       window = SDL.CreateWindow('Test', 0, 0, 640, 480, SDL.WINDOW_SHOWN);
       info = SDL.GetWindowWMInfo(window);
-      bgfx.init_minimal(info.display || null, info.window, 640, 480, 0x00000080);
+      bgfx.init_minimal(
+        info.display || null,
+        info.window,
+        640,
+        480,
+        0x00000080,
+      );
     });
 
     afterAll(() => {

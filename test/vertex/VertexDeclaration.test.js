@@ -1,5 +1,5 @@
-const bgfx = require('../lib/index');
-const { VertexDeclaration } = require('../lib/vertex');
+const bgfx = require('bindings')('bgfx');
+const { VertexDeclaration } = require('../../lib/vertex');
 const helpers = require('./vertex.helpers');
 
 describe('VertexDeclaration', () => {
