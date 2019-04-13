@@ -9,59 +9,40 @@ const { checksumFile } = require('../../lib/utils');
 const { vertex, fragment, includes, defines } = require('./shader.helpers');
 
 describe('shaderc', () => {
-  const checkBuild = async (inputPath, type, hash, preprocess) => {
+  const checkBuild = async (inputPath, type, expectedPath, preprocess) => {
     const { path, cleanup } = await file();
     try {
       await shaderc(inputPath, path, type, { includes, defines, preprocess });
       const result = await checksumFile(path);
-      expect(result).toEqual(hash);
+      const expected = await checksumFile(expectedPath);
+      expect(result).toEqual(expected);
     } finally {
       cleanup();
     }
   };
 
   it('can preprocess a vertex shader', async () => {
-    await checkBuild(
-      vertex.source,
-      'vertex',
-      await checksumFile(vertex.preprocessed),
-      true,
-    );
+    await checkBuild(vertex.source, 'vertex', vertex.preprocessed, true);
   });
 
   it('can build a vertex shader', async () => {
-    await checkBuild(
-      vertex.source,
-      'vertex',
-      await checksumFile(vertex.binary),
-      false,
-    );
+    await checkBuild(vertex.source, 'vertex', vertex.binary, false);
   });
 
   it('can preprocess a fragment shader', async () => {
-    await checkBuild(
-      fragment.source,
-      'fragment',
-      await checksumFile(fragment.preprocessed),
-      true,
-    );
+    await checkBuild(fragment.source, 'fragment', fragment.preprocessed, true);
   });
 
   it('can build a fragment shader', async () => {
-    await checkBuild(
-      fragment.source,
-      'fragment',
-      await checksumFile(fragment.binary),
-      false,
-    );
+    await checkBuild(fragment.source, 'fragment', fragment.binary, false);
   });
 
   it('rejects invalid type', async () => {
     const { path, cleanup } = await file();
     try {
-      expect(async () => {
-        await shaderc(vertex.source, path, 'banana', { includes, defines });
-      }).toThrow();
+      await expect(
+        shaderc(vertex.source, path, 'banana', { includes, defines }),
+      ).rejects.toThrow();
     } finally {
       cleanup();
     }
@@ -70,12 +51,12 @@ describe('shaderc', () => {
   it('rejects invalid include params', async () => {
     const { path, cleanup } = await file();
     try {
-      expect(async () => {
-        await shaderc(vertex.source, path, 'vertex', {
+      await expect(
+        shaderc(vertex.source, path, 'vertex', {
           includes,
           defines: [],
-        });
-      }).toThrow();
+        }),
+      ).rejects.toThrow();
     } finally {
       cleanup();
     }
@@ -84,12 +65,12 @@ describe('shaderc', () => {
   it('rejects invalid define params', async () => {
     const { path, cleanup } = await file();
     try {
-      expect(async () => {
-        await shaderc(vertex.source, path, 'vertex', {
+      await expect(
+        shaderc(vertex.source, path, 'vertex', {
           includes: [],
           defines,
-        });
-      }).toThrow();
+        }),
+      ).rejects.toThrow();
     } finally {
       cleanup();
     }
