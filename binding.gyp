@@ -23,22 +23,22 @@
       ],
       "dependencies": [],
       'conditions': [
-        ['OS=="linux"', {
-          'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/linux64'],
+        ['platform=="linux"', {
+          'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/linux/x64'],
           'libraries': [
-            '-Wl,-rpath,<(module_root_dir)/deps/bgfx/bin/linux64',
-            '<(module_root_dir)/deps/bgfx/bin/linux64/libbgfx-shared-libRelease.so'
+            '-Wl,-rpath,<(module_root_dir)/deps/bgfx/bin/linux/x64',
+            '<(module_root_dir)/deps/bgfx/bin/linux/x64/libbgfx-shared-libRelease.so'
           ],
         }],
-        ['OS=="mac"', {
-          'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/osx64'],
+        ['platform=="darwin"', {
+          'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/darwin/x64'],
           'libraries': [
-            '-Wl,-rpath,<(module_root_dir)/deps/bgfx/bin/osx64',
-            '<(module_root_dir)/deps/bgfx/bin/osx64/libbgfx-shared-libRelease.dylib'
+            '-Wl,-rpath,<(module_root_dir)/deps/bgfx/bin/darwin/x64',
+            '<(module_root_dir)/deps/bgfx/bin/darwin/x64/libbgfx-shared-libRelease.dylib'
           ],
         }],
-        ['OS=="win"', {
-          'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/win64'],
+        ['platform=="win32"', {
+          'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/win32/x64'],
           'libraries': ['bgfx-shared-libRelease.lib'],
           'defines' : ['WIN32_LEAN_AND_MEAN', 'VC_EXTRALEAN', 'NOMINMAX'],
           'msvs_settings' : {
@@ -53,7 +53,7 @@
           [
             {
               'destination': '<(module_root_dir)/build/Release',
-              'files': ['<(module_root_dir)/deps/bgfx/bin/win64/bgfx-shared-libRelease.dll']
+              'files': ['<(module_root_dir)/deps/bgfx/bin/win32/x64/bgfx-shared-libRelease.dll']
             }
           ],
         }],
