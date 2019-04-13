@@ -1,9 +1,4 @@
-const crypto = require('crypto');
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-
-const file = require('tmp-promise').file;
+const { file } = require('tmp-promise');
 const {
   ShaderCache,
   shaderc,
@@ -11,32 +6,7 @@ const {
   loadProgram,
 } = require('../../lib/shader');
 const { checksumFile } = require('../../lib/utils');
-
-// Payload definitions for testing.
-const fragment = {
-  source: path.resolve(__dirname, 'src/fs_uniformless.sc'),
-  preprocessed: path.resolve(__dirname, 'src/fs_uniformless_pp.sc'),
-  binary: path.resolve(
-    __dirname,
-    'bin',
-    os.platform(),
-    os.arch(),
-    'fs_uniformless.bin',
-  ),
-};
-const vertex = {
-  source: path.resolve(__dirname, 'src/vs_uniformless.sc'),
-  preprocessed: path.resolve(__dirname, 'src/vs_uniformless_pp.sc'),
-  binary: path.resolve(
-    __dirname,
-    'bin',
-    os.platform(),
-    os.arch(),
-    'vs_uniformless.bin',
-  ),
-};
-const includes = [path.resolve(__dirname, '../../deps/bgfx/shaders')];
-const defines = ['TEST_DEFINITION'];
+const { vertex, fragment, includes, defines } = require('./shader.helpers');
 
 describe('shaderc', () => {
   const checkBuild = async (inputPath, type, hash, preprocess) => {
@@ -86,7 +56,7 @@ describe('shaderc', () => {
     );
   });
 
-  it.skip('rejects invalid type', async () => {
+  it('rejects invalid type', async () => {
     const { path, cleanup } = await file();
     try {
       expect(async () => {
@@ -97,13 +67,27 @@ describe('shaderc', () => {
     }
   });
 
-  it.skip('rejects invalid build params', async () => {
+  it('rejects invalid include params', async () => {
     const { path, cleanup } = await file();
     try {
       expect(async () => {
         await shaderc(vertex.source, path, 'vertex', {
-          includes: '',
-          defines: '',
+          includes,
+          defines: [],
+        });
+      }).toThrow();
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('rejects invalid define params', async () => {
+    const { path, cleanup } = await file();
+    try {
+      expect(async () => {
+        await shaderc(vertex.source, path, 'vertex', {
+          includes: [],
+          defines,
         });
       }).toThrow();
     } finally {
