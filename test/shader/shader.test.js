@@ -16,21 +16,23 @@ const fragment = {
   src: path.resolve(__dirname, 'src/fs_uniformless.sc'),
   bin: path.resolve(
     __dirname,
+    'bin',
     os.platform(),
     os.arch(),
-    'src/fs_uniformless.bin',
+    'fs_uniformless.bin',
   ),
 };
 const vertex = {
   src: path.resolve(__dirname, 'src/vs_uniformless.sc'),
   bin: path.resolve(
     __dirname,
+    'bin',
     os.platform(),
     os.arch(),
-    'src/vss_uniformless.bin',
+    'vs_uniformless.bin',
   ),
 };
-const includes = [path.resolve(__dirname, '')];
+const includes = [path.resolve(__dirname, '../../deps/bgfx/shaders')];
 const defines = ['TEST_DEFINITION'];
 
 describe('shaderc', () => {
@@ -127,20 +129,23 @@ describe('ShaderCache', () => {
 
   describe('#load', () => {
     it('can load a vertex shader', async () => {
-      const result = await cache.load(vertexPath, 'vertex');
+      const result = await cache.load(vertex.src, 'vertex');
       expect(result).toEqual('foobar');
+      // TODO: release this shader?
     });
 
     it('can load a fragment shader', async () => {
-      const result = await cache.load(fragmentPath, 'fragment');
+      const result = await cache.load(fragment.src, 'fragment');
       expect(result).toEqual('foobar');
+      // TODO: release this shader?
     });
   });
 
   describe('#program', () => {
     it('can create a shader program', async () => {
-      const result = await cache.program(vertexPath, fragmentPath);
+      const result = await cache.program(vertex.src, fragment.src);
       expect(result).toBeDefined();
+      // TODO: release this program and shaders?
     });
   });
 });
