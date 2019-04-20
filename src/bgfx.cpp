@@ -4010,6 +4010,16 @@ napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
+napi_value napi_bgfx_init_headless(napi_env env, napi_callback_info info){
+  bgfx_init_t init;
+  bgfx_init_ctor(&init);
+  init.type = BGFX_RENDERER_TYPE_NOOP;
+  bool _ret = bgfx_init(&init);
+  napi_value _napi_ret;
+  ASSERT_OK(napi_get_boolean(env, (bool)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
+  return _napi_ret;
+}
+
 napi_value napi_bgfx_dbg_text_print(napi_env env, napi_callback_info info){
   napi_value argv[4];
   GET_ARGS(4)
@@ -4189,6 +4199,7 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "blit", napi_bgfx_blit);
   export_function(env, exports, "alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
   export_function(env, exports, "init_minimal", napi_bgfx_init_minimal);
+  export_function(env, exports, "init_headless", napi_bgfx_init_headless);
   export_function(env, exports, "dbg_text_print", napi_bgfx_dbg_text_print);
   return exports;
 }

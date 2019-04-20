@@ -6,7 +6,12 @@ const {
   loadProgram,
 } = require('../../lib/shader');
 const { checksumFile } = require('../../lib/utils');
+const { setupBgfxWindow } = require('../helpers');
 const { vertex, fragment, includes, defines } = require('./shader.helpers');
+const bgfx = require('bindings')('bgfx');
+const constants = require('../../lib/constants');
+
+setupBgfxWindow();
 
 describe('shaderc', () => {
   const checkBuild = async (inputPath, type, expectedPath, preprocess) => {
@@ -77,30 +82,36 @@ describe('shaderc', () => {
   });
 });
 
-describe.skip('loadShader', () => {
+describe('loadShader', () => {
   it('can load a vertex shader', async () => {
-    const result = await loadShader(vertex.binary);
-    expect(result).toBeDefined();
+    const handle = await loadShader(vertex.binary);
+    expect(handle).toBeDefined();
+    expect(handle).not.toEqual(constants.INVALID_HANDLE);
+    bgfx.destroy_shader(handle);
   });
 
   it('can load a fragment shader', async () => {
-    const result = await loadShader(fragment.binary);
-    expect(result).toBeDefined();
+    const handle = await loadShader(fragment.binary);
+    expect(handle).toBeDefined();
+    expect(handle).not.toEqual(constants.INVALID_HANDLE);
+    bgfx.destroy_shader(handle);
   });
 });
 
-describe.skip('loadProgram', () => {
+describe('loadProgram', () => {
   it('can load a program', async () => {
-    const result = await loadProgram(vertex.binary, fragment.binary);
-    expect(result).toBeDefined();
+    const handle = await loadProgram(vertex.binary, fragment.binary);
+    expect(handle).toBeDefined();
+    expect(handle).not.toEqual(constants.INVALID_HANDLE);
+    bgfx.destroy_program(handle);
   });
 });
 
-describe.skip('ShaderCache', () => {
+describe('ShaderCache', () => {
   let cache;
 
-  beforeAll(() => {
-    cache = new ShaderCache('test_bgfx');
+  beforeEach(() => {
+    cache = new ShaderCache('test_bgfx', null, { defines });
   });
 
   afterAll(() => {
@@ -109,23 +120,26 @@ describe.skip('ShaderCache', () => {
 
   describe('#load', () => {
     it('can load a vertex shader', async () => {
-      const result = await cache.load(vertex.source, 'vertex');
-      expect(result).toEqual('foobar');
-      // TODO: release this shader?
+      const handle = await cache.load(vertex.source, 'vertex');
+      expect(handle).toBeDefined();
+      expect(handle).not.toEqual(constants.INVALID_HANDLE);
+      bgfx.destroy_shader(handle);
     });
 
     it('can load a fragment shader', async () => {
-      const result = await cache.load(fragment.source, 'fragment');
-      expect(result).toEqual('foobar');
-      // TODO: release this shader?
+      const handle = await cache.load(fragment.source, 'fragment');
+      expect(handle).toBeDefined();
+      expect(handle).not.toEqual(constants.INVALID_HANDLE);
+      bgfx.destroy_shader(handle);
     });
   });
 
   describe('#program', () => {
     it('can create a shader program', async () => {
-      const result = await cache.program(vertex.source, fragment.source);
-      expect(result).toBeDefined();
-      // TODO: release this program and shaders?
+      const handle = await cache.program(vertex.source, fragment.source);
+      expect(handle).toBeDefined();
+      expect(handle).not.toEqual(constants.INVALID_HANDLE);
+      bgfx.destroy_program(handle);
     });
   });
 });
