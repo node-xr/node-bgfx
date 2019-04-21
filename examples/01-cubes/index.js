@@ -42,14 +42,6 @@ const s_cubeTriList = [
   6, 7, 3,
 ];
 
-const fshader = new Uint8Array(
-  fs.readFileSync(path.resolve(__dirname, 'shaders/glsl/fs_uniformless.bin')),
-).buffer;
-
-const vshader = new Uint8Array(
-  fs.readFileSync(path.resolve(__dirname, 'shaders/glsl/vs_uniformless.bin')),
-).buffer;
-
 const width = 1280;
 const height = 1024;
 
@@ -80,10 +72,10 @@ const main = async () => {
   bgfx.set_view_clear(0, CLEAR_COLOR | CLEAR_DEPTH, 0x303030ff, 1.0, 0);
 
   // Create shaders.
-  const m_program = bgfx.create_program(
-    bgfx.create_shader(vshader),
-    bgfx.create_shader(fshader),
-    true,
+  const cache = new bgfx.ShaderCache();
+  const m_program = await cache.program(
+    path.resolve(__dirname, 'vs_cube.sc'),
+    path.resolve(__dirname, 'fs_cube.sc'),
   );
 
   const PosColorVertex = new bgfx.VertexDeclaration([

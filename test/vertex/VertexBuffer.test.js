@@ -1,7 +1,9 @@
-const SDL = require('sdl2');
-const bgfx = require('../lib/index');
-const { VertexDeclaration, VertexBuffer } = require('../lib/vertex');
+const { setupBgfxWindow } = require('../helpers');
+const { VertexDeclaration, VertexBuffer } = require('../../lib/vertex');
+const constants = require('../../lib/constants');
 const helpers = require('./vertex.helpers');
+
+setupBgfxWindow();
 
 describe('VertexBuffer', () => {
   let decl;
@@ -19,6 +21,7 @@ describe('VertexBuffer', () => {
         options: {
           name: 'foo',
         },
+        decl,
       });
     });
 
@@ -31,6 +34,7 @@ describe('VertexBuffer', () => {
           isDynamic: true,
           name: 'foo',
         },
+        decl,
       });
     });
 
@@ -67,34 +71,18 @@ describe('VertexBuffer', () => {
   });
 
   describe('#upload', () => {
-    let window;
-    let info;
-
-    beforeAll(() => {
-      SDL.Init(SDL.INIT_VIDEO);
-      window = SDL.CreateWindow('Test', 0, 0, 640, 480, SDL.WINDOW_SHOWN);
-      info = SDL.GetWindowWMInfo(window);
-      bgfx.init_minimal(info.display || null, info.window, 640, 480, 0x00000080);
-    });
-
-    afterAll(() => {
-      bgfx.shutdown();
-      SDL.DestroyWindow(window);
-      SDL.Quit();
-    });
-
     it('works with static buffers', () => {
       const buffer = VertexBuffer.wrap(helpers.buffer);
       const handle = buffer.upload();
       expect(handle).toBeDefined();
-      expect(handle).not.toEqual(bgfx.INVALID_HANDLE);
+      expect(handle).not.toEqual(constants.INVALID_HANDLE);
     });
 
     it('works with dynamic buffers', () => {
       const buffer = VertexBuffer.wrap(helpers.buffer, { isDynamic: true });
       const handle = buffer.upload();
       expect(handle).toBeDefined();
-      expect(handle).not.toEqual(bgfx.INVALID_HANDLE);
+      expect(handle).not.toEqual(constants.INVALID_HANDLE);
     });
   });
 });

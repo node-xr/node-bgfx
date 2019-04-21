@@ -1,9 +1,9 @@
-const bgfx = require('../lib/index');
+const bgfx = require('bindings')('bgfx');
 const {
   VertexArray,
   ATTRIB_SIZE,
   ATTRIB_TYPEDARRAY,
-} = require('../lib/vertex');
+} = require('../../lib/vertex');
 const helpers = require('./vertex.helpers');
 
 describe('VertexArray', () => {

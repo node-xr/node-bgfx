@@ -1,5 +1,3 @@
-const bgfx = require('../lib/index');
-
 exports.spec = [
   { attr: 'POSITION', type: 'FLOAT', count: 3 },
   { attr: 'COLOR_0', type: 'UINT_8', count: 4 },
