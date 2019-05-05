@@ -2,6 +2,8 @@
 #include "bgfx.hpp"
 #include <bgfx/c99/bgfx.h>
 #include <string.h>
+#include "wrap.hpp"
+#include "bgfx_converters.hpp"
 
 //napi_value napi_bgfx_attachment_init(napi_env env, napi_callback_info info){
 //  napi_value argv[6];
@@ -41,10 +43,11 @@
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_vertex_decl_begin(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_vertex_decl_begin(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
-  bgfx_vertex_decl_t* arg_self = nullptr;
+  bgfx_vertex_decl_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_renderer_type_t arg_rendererType;
   {
@@ -52,16 +55,17 @@ napi_value napi_bgfx_vertex_decl_begin(napi_env env, napi_callback_info info){
     ASSERT_OK(napi_get_value_int32(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (rendererType)");
     arg_rendererType = (bgfx_renderer_type_t)temp;
   }
-  bgfx_vertex_decl_t* _ret = bgfx_vertex_decl_begin(arg_self, arg_rendererType);
+  bgfx_vertex_decl_t *_ret = bgfx_vertex_decl_begin(arg_self, arg_rendererType);
   napi_value _napi_ret;
-  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  ASSERT_OK(napi_create_external(env, (void *)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
   return _napi_ret;
 }
 
-napi_value napi_bgfx_vertex_decl_add(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_vertex_decl_add(napi_env env, napi_callback_info info)
+{
   napi_value argv[6];
   GET_ARGS(6)
-  bgfx_vertex_decl_t* arg_self = nullptr;
+  bgfx_vertex_decl_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_attrib_t arg_attrib;
   {
@@ -85,9 +89,9 @@ napi_value napi_bgfx_vertex_decl_add(napi_env env, napi_callback_info info){
   ASSERT_OK(napi_get_value_bool(env, argv[4], &arg_normalized), "EINVAL", "Invalid argument 4 (normalized)");
   bool arg_asInt;
   ASSERT_OK(napi_get_value_bool(env, argv[5], &arg_asInt), "EINVAL", "Invalid argument 5 (asInt)");
-  bgfx_vertex_decl_t* _ret = bgfx_vertex_decl_add(arg_self, arg_attrib, arg_num, arg_type, arg_normalized, arg_asInt);
+  bgfx_vertex_decl_t *_ret = bgfx_vertex_decl_add(arg_self, arg_attrib, arg_num, arg_type, arg_normalized, arg_asInt);
   napi_value _napi_ret;
-  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  ASSERT_OK(napi_create_external(env, (void *)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
   return _napi_ret;
 }
 
@@ -110,10 +114,11 @@ napi_value napi_bgfx_vertex_decl_add(napi_env env, napi_callback_info info){
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_vertex_decl_has(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_vertex_decl_has(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
-  bgfx_vertex_decl_t* arg_self = nullptr;
+  bgfx_vertex_decl_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_attrib_t arg_attrib;
   {
@@ -127,10 +132,11 @@ napi_value napi_bgfx_vertex_decl_has(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_vertex_decl_skip(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_vertex_decl_skip(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
-  bgfx_vertex_decl_t* arg_self = nullptr;
+  bgfx_vertex_decl_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_num;
   {
@@ -138,16 +144,17 @@ napi_value napi_bgfx_vertex_decl_skip(napi_env env, napi_callback_info info){
     ASSERT_OK(napi_get_value_int32(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (num)");
     arg_num = (uint8_t)temp;
   }
-  bgfx_vertex_decl_t* _ret = bgfx_vertex_decl_skip(arg_self, arg_num);
+  bgfx_vertex_decl_t *_ret = bgfx_vertex_decl_skip(arg_self, arg_num);
   napi_value _napi_ret;
-  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  ASSERT_OK(napi_create_external(env, (void *)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
   return _napi_ret;
 }
 
-napi_value napi_bgfx_vertex_decl_end(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_vertex_decl_end(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
-  bgfx_vertex_decl_t* arg_self = nullptr;
+  bgfx_vertex_decl_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_vertex_decl_end(arg_self);
   return nullptr;
@@ -197,18 +204,19 @@ napi_value napi_bgfx_vertex_decl_end(napi_env env, napi_callback_info info){
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_vertex_convert(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_vertex_convert(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
-  bgfx_vertex_decl_t* arg_dstDecl = nullptr;
+  bgfx_vertex_decl_t *arg_dstDecl = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_dstDecl), "EINVAL", "Invalid argument 0 (dstDecl)");
   size_t _size_1 = 0;
-  void* arg_dstData = nullptr;
+  void *arg_dstData = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_dstData, &_size_1), "EINVAL", "Invalid argument 1 (dstData)");
-  bgfx_vertex_decl_t* arg_srcDecl = nullptr;
+  bgfx_vertex_decl_t *arg_srcDecl = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[2], (void **)&arg_srcDecl), "EINVAL", "Invalid argument 2 (srcDecl)");
   size_t _size_3 = 0;
-  void* arg_srcData = nullptr;
+  void *arg_srcData = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_srcData, &_size_3), "EINVAL", "Invalid argument 3 (srcData)");
   uint32_t arg_num;
   ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_num), "EINVAL", "Invalid argument 4 (num)");
@@ -243,7 +251,8 @@ napi_value napi_bgfx_vertex_convert(napi_env env, napi_callback_info info){
 //  return _napi_ret;
 //}
 
-napi_value napi_bgfx_topology_convert(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_topology_convert(napi_env env, napi_callback_info info)
+{
   napi_value argv[6];
   GET_ARGS(6)
   bgfx_topology_convert_t arg_conversion;
@@ -253,12 +262,12 @@ napi_value napi_bgfx_topology_convert(napi_env env, napi_callback_info info){
     arg_conversion = (bgfx_topology_convert_t)temp;
   }
   size_t _size_1 = 0;
-  void* arg_dst = nullptr;
+  void *arg_dst = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_dst, &_size_1), "EINVAL", "Invalid argument 1 (dst)");
   uint32_t arg_dstSize;
   ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_dstSize), "EINVAL", "Invalid argument 2 (dstSize)");
   size_t _size_3 = 0;
-  void* arg_indices = nullptr;
+  void *arg_indices = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[3], &arg_indices, &_size_3), "EINVAL", "Invalid argument 3 (indices)");
   uint32_t arg_numIndices;
   ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_numIndices), "EINVAL", "Invalid argument 4 (numIndices)");
@@ -318,7 +327,8 @@ napi_value napi_bgfx_topology_convert(napi_env env, napi_callback_info info){
 //  return _napi_ret;
 //}
 
-napi_value napi_bgfx_get_renderer_name(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_get_renderer_name(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_renderer_type_t arg_type;
@@ -327,7 +337,7 @@ napi_value napi_bgfx_get_renderer_name(napi_env env, napi_callback_info info){
     ASSERT_OK(napi_get_value_int32(env, argv[0], &temp), "EINVAL", "Invalid argument 0 (type)");
     arg_type = (bgfx_renderer_type_t)temp;
   }
-  const char* _ret = bgfx_get_renderer_name(arg_type);
+  const char *_ret = bgfx_get_renderer_name(arg_type);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_string_utf8(env, _ret, strlen(_ret), &_napi_ret), "EINVAL", "Unknown Error.");
   return _napi_ret;
@@ -351,12 +361,14 @@ napi_value napi_bgfx_get_renderer_name(napi_env env, napi_callback_info info){
 //  return _napi_ret;
 //}
 
-napi_value napi_bgfx_shutdown(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_shutdown(napi_env env, napi_callback_info info)
+{
   bgfx_shutdown();
   return nullptr;
 }
 
-napi_value napi_bgfx_reset(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_reset(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   uint32_t arg_width;
@@ -375,7 +387,8 @@ napi_value napi_bgfx_reset(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_frame(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_frame(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bool arg_capture;
@@ -386,7 +399,8 @@ napi_value napi_bgfx_frame(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_get_renderer_type(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_get_renderer_type(napi_env env, napi_callback_info info)
+{
   bgfx_renderer_type_t _ret = bgfx_get_renderer_type();
   napi_value _napi_ret;
   ASSERT_OK(napi_create_int32(env, (int32_t)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -452,7 +466,8 @@ napi_value napi_bgfx_get_renderer_type(napi_env env, napi_callback_info info){
 //  MISSING_RETURN<const Memory*>
 //}
 
-napi_value napi_bgfx_set_debug(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_debug(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_debug;
@@ -461,7 +476,8 @@ napi_value napi_bgfx_set_debug(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_dbg_text_clear(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_dbg_text_clear(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   uint8_t arg_attr;
@@ -476,7 +492,8 @@ napi_value napi_bgfx_dbg_text_clear(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_dbg_text_printf(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_dbg_text_printf(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   uint16_t arg_x;
@@ -535,7 +552,8 @@ napi_value napi_bgfx_dbg_text_printf(napi_env env, napi_callback_info info){
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_dbg_text_image(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_dbg_text_image(napi_env env, napi_callback_info info)
+{
   napi_value argv[6];
   GET_ARGS(6)
   uint16_t arg_x;
@@ -563,7 +581,7 @@ napi_value napi_bgfx_dbg_text_image(napi_env env, napi_callback_info info){
     arg_height = (uint16_t)temp;
   }
   size_t _size_4 = 0;
-  void* arg_data = nullptr;
+  void *arg_data = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[4], &arg_data, &_size_4), "EINVAL", "Invalid argument 4 (data)");
   uint16_t arg_pitch;
   {
@@ -575,13 +593,14 @@ napi_value napi_bgfx_dbg_text_image(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_create_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   size_t _size_0 = 0;
-  void* _ptr_0 = nullptr;
+  void *_ptr_0 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Invalid argument 0 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_0, _size_0);
   uint16_t arg_flags;
   {
     int32_t temp = (int32_t)0;
@@ -594,7 +613,8 @@ napi_value napi_bgfx_create_index_buffer(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_set_index_buffer_name(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_index_buffer_name(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_index_buffer_handle_t arg_handle;
@@ -613,7 +633,8 @@ napi_value napi_bgfx_set_index_buffer_name(napi_env env, napi_callback_info info
   return nullptr;
 }
 
-napi_value napi_bgfx_destroy_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_index_buffer_handle_t arg_handle;
@@ -626,14 +647,15 @@ napi_value napi_bgfx_destroy_index_buffer(napi_env env, napi_callback_info info)
   return nullptr;
 }
 
-napi_value napi_bgfx_create_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   size_t _size_0 = 0;
-  void* _ptr_0 = nullptr;
+  void *_ptr_0 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Invalid argument 0 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
-  bgfx_vertex_decl_t* arg_decl = nullptr;
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_0, _size_0);
+  bgfx_vertex_decl_t *arg_decl = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Invalid argument 1 (decl)");
   uint16_t arg_flags;
   {
@@ -647,7 +669,8 @@ napi_value napi_bgfx_create_vertex_buffer(napi_env env, napi_callback_info info)
   return _napi_ret;
 }
 
-napi_value napi_bgfx_set_vertex_buffer_name(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_vertex_buffer_name(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_vertex_buffer_handle_t arg_handle;
@@ -666,7 +689,8 @@ napi_value napi_bgfx_set_vertex_buffer_name(napi_env env, napi_callback_info inf
   return nullptr;
 }
 
-napi_value napi_bgfx_destroy_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_vertex_buffer_handle_t arg_handle;
@@ -679,7 +703,8 @@ napi_value napi_bgfx_destroy_vertex_buffer(napi_env env, napi_callback_info info
   return nullptr;
 }
 
-napi_value napi_bgfx_create_dynamic_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_dynamic_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_num;
@@ -696,13 +721,14 @@ napi_value napi_bgfx_create_dynamic_index_buffer(napi_env env, napi_callback_inf
   return _napi_ret;
 }
 
-napi_value napi_bgfx_create_dynamic_index_buffer_mem(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_dynamic_index_buffer_mem(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   size_t _size_0 = 0;
-  void* _ptr_0 = nullptr;
+  void *_ptr_0 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Invalid argument 0 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_0, _size_0);
   uint16_t arg_flags;
   {
     int32_t temp = (int32_t)0;
@@ -715,7 +741,8 @@ napi_value napi_bgfx_create_dynamic_index_buffer_mem(napi_env env, napi_callback
   return _napi_ret;
 }
 
-napi_value napi_bgfx_update_dynamic_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_update_dynamic_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_dynamic_index_buffer_handle_t arg_handle;
@@ -727,14 +754,15 @@ napi_value napi_bgfx_update_dynamic_index_buffer(napi_env env, napi_callback_inf
   uint32_t arg_startIndex;
   ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_startIndex), "EINVAL", "Invalid argument 1 (startIndex)");
   size_t _size_2 = 0;
-  void* _ptr_2 = nullptr;
+  void *_ptr_2 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &_ptr_2, &_size_2), "EINVAL", "Invalid argument 2 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_2, _size_2);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_2, _size_2);
   bgfx_update_dynamic_index_buffer(arg_handle, arg_startIndex, arg_mem);
   return nullptr;
 }
 
-napi_value napi_bgfx_destroy_dynamic_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_dynamic_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_dynamic_index_buffer_handle_t arg_handle;
@@ -747,12 +775,13 @@ napi_value napi_bgfx_destroy_dynamic_index_buffer(napi_env env, napi_callback_in
   return nullptr;
 }
 
-napi_value napi_bgfx_create_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   uint32_t arg_num;
   ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_num), "EINVAL", "Invalid argument 0 (num)");
-  bgfx_vertex_decl_t* arg_decl = nullptr;
+  bgfx_vertex_decl_t *arg_decl = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Invalid argument 1 (decl)");
   uint16_t arg_flags;
   {
@@ -766,14 +795,15 @@ napi_value napi_bgfx_create_dynamic_vertex_buffer(napi_env env, napi_callback_in
   return _napi_ret;
 }
 
-napi_value napi_bgfx_create_dynamic_vertex_buffer_mem(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_dynamic_vertex_buffer_mem(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   size_t _size_0 = 0;
-  void* _ptr_0 = nullptr;
+  void *_ptr_0 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Invalid argument 0 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
-  bgfx_vertex_decl_t* arg_decl = nullptr;
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_0, _size_0);
+  bgfx_vertex_decl_t *arg_decl = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Invalid argument 1 (decl)");
   uint16_t arg_flags;
   {
@@ -787,7 +817,8 @@ napi_value napi_bgfx_create_dynamic_vertex_buffer_mem(napi_env env, napi_callbac
   return _napi_ret;
 }
 
-napi_value napi_bgfx_update_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_update_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_dynamic_vertex_buffer_handle_t arg_handle;
@@ -799,14 +830,15 @@ napi_value napi_bgfx_update_dynamic_vertex_buffer(napi_env env, napi_callback_in
   uint32_t arg_startVertex;
   ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_startVertex), "EINVAL", "Invalid argument 1 (startVertex)");
   size_t _size_2 = 0;
-  void* _ptr_2 = nullptr;
+  void *_ptr_2 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &_ptr_2, &_size_2), "EINVAL", "Invalid argument 2 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_2, _size_2);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_2, _size_2);
   bgfx_update_dynamic_vertex_buffer(arg_handle, arg_startVertex, arg_mem);
   return nullptr;
 }
 
-napi_value napi_bgfx_destroy_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_dynamic_vertex_buffer_handle_t arg_handle;
@@ -819,7 +851,8 @@ napi_value napi_bgfx_destroy_dynamic_vertex_buffer(napi_env env, napi_callback_i
   return nullptr;
 }
 
-napi_value napi_bgfx_get_avail_transient_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_get_avail_transient_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_num;
@@ -830,12 +863,13 @@ napi_value napi_bgfx_get_avail_transient_index_buffer(napi_env env, napi_callbac
   return _napi_ret;
 }
 
-napi_value napi_bgfx_get_avail_transient_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_get_avail_transient_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_num;
   ASSERT_OK(napi_get_value_uint32(env, argv[0], &arg_num), "EINVAL", "Invalid argument 0 (num)");
-  bgfx_vertex_decl_t* arg_decl = nullptr;
+  bgfx_vertex_decl_t *arg_decl = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_decl), "EINVAL", "Invalid argument 1 (decl)");
   uint32_t _ret = bgfx_get_avail_transient_vertex_buffer(arg_num, arg_decl);
   napi_value _napi_ret;
@@ -843,7 +877,8 @@ napi_value napi_bgfx_get_avail_transient_vertex_buffer(napi_env env, napi_callba
   return _napi_ret;
 }
 
-napi_value napi_bgfx_get_avail_instance_data_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_get_avail_instance_data_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_num;
@@ -915,7 +950,8 @@ napi_value napi_bgfx_get_avail_instance_data_buffer(napi_env env, napi_callback_
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_create_indirect_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_indirect_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_num;
@@ -926,7 +962,8 @@ napi_value napi_bgfx_create_indirect_buffer(napi_env env, napi_callback_info inf
   return _napi_ret;
 }
 
-napi_value napi_bgfx_destroy_indirect_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_indirect_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_indirect_buffer_handle_t arg_handle;
@@ -939,13 +976,14 @@ napi_value napi_bgfx_destroy_indirect_buffer(napi_env env, napi_callback_info in
   return nullptr;
 }
 
-napi_value napi_bgfx_create_shader(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_shader(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   size_t _size_0 = 0;
-  void* _ptr_0 = nullptr;
+  void *_ptr_0 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Invalid argument 0 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_0, _size_0);
   bgfx_shader_handle_t _ret = bgfx_create_shader(arg_mem);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -974,7 +1012,8 @@ napi_value napi_bgfx_create_shader(napi_env env, napi_callback_info info){
 //  return _napi_ret;
 //}
 
-napi_value napi_bgfx_set_shader_name(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_shader_name(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_shader_handle_t arg_handle;
@@ -993,7 +1032,8 @@ napi_value napi_bgfx_set_shader_name(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_destroy_shader(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_shader(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_shader_handle_t arg_handle;
@@ -1006,7 +1046,8 @@ napi_value napi_bgfx_destroy_shader(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_create_program(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_program(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_shader_handle_t arg_vsh;
@@ -1029,7 +1070,8 @@ napi_value napi_bgfx_create_program(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_create_compute_program(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_compute_program(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_shader_handle_t arg_csh;
@@ -1046,7 +1088,8 @@ napi_value napi_bgfx_create_compute_program(napi_env env, napi_callback_info inf
   return _napi_ret;
 }
 
-napi_value napi_bgfx_destroy_program(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_program(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_program_handle_t arg_handle;
@@ -1059,7 +1102,8 @@ napi_value napi_bgfx_destroy_program(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_is_texture_valid(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_is_texture_valid(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   uint16_t arg_depth;
@@ -1094,10 +1138,11 @@ napi_value napi_bgfx_is_texture_valid(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_calc_texture_size(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_calc_texture_size(napi_env env, napi_callback_info info)
+{
   napi_value argv[8];
   GET_ARGS(8)
-  bgfx_texture_info_t* arg_info = nullptr;
+  bgfx_texture_info_t *arg_info = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_info), "EINVAL", "Invalid argument 0 (info)");
   uint16_t arg_width;
   {
@@ -1137,13 +1182,14 @@ napi_value napi_bgfx_calc_texture_size(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_create_texture(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_texture(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   size_t _size_0 = 0;
-  void* _ptr_0 = nullptr;
+  void *_ptr_0 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &_ptr_0, &_size_0), "EINVAL", "Invalid argument 0 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_0, _size_0);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_0, _size_0);
   uint64_t arg_flags;
   {
     int64_t temp = (int64_t)0;
@@ -1156,7 +1202,7 @@ napi_value napi_bgfx_create_texture(napi_env env, napi_callback_info info){
     ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Invalid argument 2 (skip)");
     arg_skip = (uint8_t)temp;
   }
-  bgfx_texture_info_t* arg_info = nullptr;
+  bgfx_texture_info_t *arg_info = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[3], (void **)&arg_info), "EINVAL", "Invalid argument 3 (info)");
   bgfx_texture_handle_t _ret = bgfx_create_texture(arg_mem, arg_flags, arg_skip, arg_info);
   napi_value _napi_ret;
@@ -1164,7 +1210,8 @@ napi_value napi_bgfx_create_texture(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_create_texture_2d(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_texture_2d(napi_env env, napi_callback_info info)
+{
   napi_value argv[7];
   GET_ARGS(7)
   uint16_t arg_width;
@@ -1200,16 +1247,17 @@ napi_value napi_bgfx_create_texture_2d(napi_env env, napi_callback_info info){
     arg_flags = (uint64_t)temp;
   }
   size_t _size_6 = 0;
-  void* _ptr_6 = nullptr;
+  void *_ptr_6 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[6], &_ptr_6, &_size_6), "EINVAL", "Invalid argument 6 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_6, _size_6);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_6, _size_6);
   bgfx_texture_handle_t _ret = bgfx_create_texture_2d(arg_width, arg_height, arg_hasMips, arg_numLayers, arg_format, arg_flags, arg_mem);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
-napi_value napi_bgfx_create_texture_2d_scaled(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_texture_2d_scaled(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_backbuffer_ratio_t arg_ratio;
@@ -1244,7 +1292,8 @@ napi_value napi_bgfx_create_texture_2d_scaled(napi_env env, napi_callback_info i
   return _napi_ret;
 }
 
-napi_value napi_bgfx_create_texture_3d(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_texture_3d(napi_env env, napi_callback_info info)
+{
   napi_value argv[7];
   GET_ARGS(7)
   uint16_t arg_width;
@@ -1280,16 +1329,17 @@ napi_value napi_bgfx_create_texture_3d(napi_env env, napi_callback_info info){
     arg_flags = (uint64_t)temp;
   }
   size_t _size_6 = 0;
-  void* _ptr_6 = nullptr;
+  void *_ptr_6 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[6], &_ptr_6, &_size_6), "EINVAL", "Invalid argument 6 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_6, _size_6);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_6, _size_6);
   bgfx_texture_handle_t _ret = bgfx_create_texture_3d(arg_width, arg_height, arg_depth, arg_hasMips, arg_format, arg_flags, arg_mem);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
-napi_value napi_bgfx_create_texture_cube(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_texture_cube(napi_env env, napi_callback_info info)
+{
   napi_value argv[6];
   GET_ARGS(6)
   uint16_t arg_size;
@@ -1319,16 +1369,17 @@ napi_value napi_bgfx_create_texture_cube(napi_env env, napi_callback_info info){
     arg_flags = (uint64_t)temp;
   }
   size_t _size_5 = 0;
-  void* _ptr_5 = nullptr;
+  void *_ptr_5 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[5], &_ptr_5, &_size_5), "EINVAL", "Invalid argument 5 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_5, _size_5);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_5, _size_5);
   bgfx_texture_handle_t _ret = bgfx_create_texture_cube(arg_size, arg_hasMips, arg_numLayers, arg_format, arg_flags, arg_mem);
   napi_value _napi_ret;
   ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
   return _napi_ret;
 }
 
-napi_value napi_bgfx_update_texture_2d(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_update_texture_2d(napi_env env, napi_callback_info info)
+{
   napi_value argv[9];
   GET_ARGS(9)
   bgfx_texture_handle_t arg_handle;
@@ -1374,9 +1425,9 @@ napi_value napi_bgfx_update_texture_2d(napi_env env, napi_callback_info info){
     arg_height = (uint16_t)temp;
   }
   size_t _size_7 = 0;
-  void* _ptr_7 = nullptr;
+  void *_ptr_7 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[7], &_ptr_7, &_size_7), "EINVAL", "Invalid argument 7 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_7, _size_7);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_7, _size_7);
   uint16_t arg_pitch;
   {
     int32_t temp = (int32_t)0;
@@ -1387,7 +1438,8 @@ napi_value napi_bgfx_update_texture_2d(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_update_texture_3d(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_update_texture_3d(napi_env env, napi_callback_info info)
+{
   napi_value argv[9];
   GET_ARGS(9)
   bgfx_texture_handle_t arg_handle;
@@ -1439,14 +1491,15 @@ napi_value napi_bgfx_update_texture_3d(napi_env env, napi_callback_info info){
     arg_depth = (uint16_t)temp;
   }
   size_t _size_8 = 0;
-  void* _ptr_8 = nullptr;
+  void *_ptr_8 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[8], &_ptr_8, &_size_8), "EINVAL", "Invalid argument 8 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_8, _size_8);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_8, _size_8);
   bgfx_update_texture_3d(arg_handle, arg_mip, arg_x, arg_y, arg_z, arg_width, arg_height, arg_depth, arg_mem);
   return nullptr;
 }
 
-napi_value napi_bgfx_update_texture_cube(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_update_texture_cube(napi_env env, napi_callback_info info)
+{
   napi_value argv[10];
   GET_ARGS(10)
   bgfx_texture_handle_t arg_handle;
@@ -1498,9 +1551,9 @@ napi_value napi_bgfx_update_texture_cube(napi_env env, napi_callback_info info){
     arg_height = (uint16_t)temp;
   }
   size_t _size_8 = 0;
-  void* _ptr_8 = nullptr;
+  void *_ptr_8 = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[8], &_ptr_8, &_size_8), "EINVAL", "Invalid argument 8 (mem)");
-  const bgfx_memory_t* arg_mem = bgfx_copy(_ptr_8, _size_8);
+  const bgfx_memory_t *arg_mem = bgfx_copy(_ptr_8, _size_8);
   uint16_t arg_pitch;
   {
     int32_t temp = (int32_t)0;
@@ -1511,7 +1564,8 @@ napi_value napi_bgfx_update_texture_cube(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_read_texture(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_read_texture(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_texture_handle_t arg_handle;
@@ -1521,7 +1575,7 @@ napi_value napi_bgfx_read_texture(napi_env env, napi_callback_info info){
     arg_handle.idx = (uint16_t)temp;
   }
   size_t _size_1 = 0;
-  void* arg_data = nullptr;
+  void *arg_data = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_data, &_size_1), "EINVAL", "Invalid argument 1 (data)");
   uint8_t arg_mip;
   {
@@ -1535,7 +1589,8 @@ napi_value napi_bgfx_read_texture(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_set_texture_name(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_texture_name(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_texture_handle_t arg_handle;
@@ -1567,7 +1622,8 @@ napi_value napi_bgfx_set_texture_name(napi_env env, napi_callback_info info){
 //  MISSING_RETURN<void*>
 //}
 
-napi_value napi_bgfx_destroy_texture(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_texture(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_texture_handle_t arg_handle;
@@ -1580,7 +1636,8 @@ napi_value napi_bgfx_destroy_texture(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_create_frame_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_frame_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   uint16_t arg_width;
@@ -1613,7 +1670,8 @@ napi_value napi_bgfx_create_frame_buffer(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_create_frame_buffer_scaled(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_frame_buffer_scaled(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_backbuffer_ratio_t arg_ratio;
@@ -1676,11 +1734,12 @@ napi_value napi_bgfx_create_frame_buffer_scaled(napi_env env, napi_callback_info
 //  return _napi_ret;
 //}
 
-napi_value napi_bgfx_create_frame_buffer_from_nwh(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_frame_buffer_from_nwh(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   size_t _size_0 = 0;
-  void* arg_nwh = nullptr;
+  void *arg_nwh = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_nwh, &_size_0), "EINVAL", "Invalid argument 0 (nwh)");
   uint16_t arg_width;
   {
@@ -1712,7 +1771,8 @@ napi_value napi_bgfx_create_frame_buffer_from_nwh(napi_env env, napi_callback_in
   return _napi_ret;
 }
 
-napi_value napi_bgfx_set_frame_buffer_name(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_frame_buffer_name(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_frame_buffer_handle_t arg_handle;
@@ -1731,7 +1791,8 @@ napi_value napi_bgfx_set_frame_buffer_name(napi_env env, napi_callback_info info
   return nullptr;
 }
 
-napi_value napi_bgfx_get_texture(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_get_texture(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_frame_buffer_handle_t arg_handle;
@@ -1752,7 +1813,8 @@ napi_value napi_bgfx_get_texture(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_destroy_frame_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_frame_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_frame_buffer_handle_t arg_handle;
@@ -1765,7 +1827,8 @@ napi_value napi_bgfx_destroy_frame_buffer(napi_env env, napi_callback_info info)
   return nullptr;
 }
 
-napi_value napi_bgfx_create_uniform(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_uniform(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   char arg_name[2048];
@@ -1804,7 +1867,8 @@ napi_value napi_bgfx_create_uniform(napi_env env, napi_callback_info info){
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_destroy_uniform(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_uniform(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_uniform_handle_t arg_handle;
@@ -1817,7 +1881,8 @@ napi_value napi_bgfx_destroy_uniform(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_create_occlusion_query(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_create_occlusion_query(napi_env env, napi_callback_info info)
+{
   bgfx_occlusion_query_handle_t _ret = bgfx_create_occlusion_query();
   napi_value _napi_ret;
   ASSERT_OK(napi_create_int32(env, (int32_t)_ret.idx, &_napi_ret), "EINVAL", "Return type error somehow?!");
@@ -1840,7 +1905,8 @@ napi_value napi_bgfx_create_occlusion_query(napi_env env, napi_callback_info inf
 //  return _napi_ret;
 //}
 
-napi_value napi_bgfx_destroy_occlusion_query(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_destroy_occlusion_query(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_occlusion_query_handle_t arg_handle;
@@ -1867,7 +1933,8 @@ napi_value napi_bgfx_destroy_occlusion_query(napi_env env, napi_callback_info in
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_set_palette_color_rgba8(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_palette_color_rgba8(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   uint8_t arg_index;
@@ -1882,7 +1949,8 @@ napi_value napi_bgfx_set_palette_color_rgba8(napi_env env, napi_callback_info in
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_name(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_name(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_view_id_t arg_id;
@@ -1899,7 +1967,8 @@ napi_value napi_bgfx_set_view_name(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_rect(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_rect(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_view_id_t arg_id;
@@ -1936,7 +2005,8 @@ napi_value napi_bgfx_set_view_rect(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_rect_ratio(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_rect_ratio(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_view_id_t arg_id;
@@ -1967,7 +2037,8 @@ napi_value napi_bgfx_set_view_rect_ratio(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_scissor(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_scissor(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_view_id_t arg_id;
@@ -2004,7 +2075,8 @@ napi_value napi_bgfx_set_view_scissor(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_clear(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_clear(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_view_id_t arg_id;
@@ -2037,7 +2109,8 @@ napi_value napi_bgfx_set_view_clear(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_clear_mrt(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_clear_mrt(napi_env env, napi_callback_info info)
+{
   napi_value argv[12];
   GET_ARGS(12)
   bgfx_view_id_t arg_id;
@@ -2116,7 +2189,8 @@ napi_value napi_bgfx_set_view_clear_mrt(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_mode(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_mode(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_view_id_t arg_id;
@@ -2135,7 +2209,8 @@ napi_value napi_bgfx_set_view_mode(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_frame_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_frame_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_view_id_t arg_id;
@@ -2154,7 +2229,8 @@ napi_value napi_bgfx_set_view_frame_buffer(napi_env env, napi_callback_info info
   return nullptr;
 }
 
-napi_value napi_bgfx_set_view_transform(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_view_transform(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_view_id_t arg_id;
@@ -2164,10 +2240,10 @@ napi_value napi_bgfx_set_view_transform(napi_env env, napi_callback_info info){
     arg_id = (bgfx_view_id_t)temp;
   }
   size_t _size_1 = 0;
-  void* arg_view = nullptr;
+  void *arg_view = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_view, &_size_1), "EINVAL", "Invalid argument 1 (view)");
   size_t _size_2 = 0;
-  void* arg_proj = nullptr;
+  void *arg_proj = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &arg_proj, &_size_2), "EINVAL", "Invalid argument 2 (proj)");
   bgfx_set_view_transform(arg_id, arg_view, arg_proj);
   return nullptr;
@@ -2193,30 +2269,33 @@ napi_value napi_bgfx_set_view_transform(napi_env env, napi_callback_info info){
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_encoder_begin(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_begin(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bool arg_forThread;
   ASSERT_OK(napi_get_value_bool(env, argv[0], &arg_forThread), "EINVAL", "Invalid argument 0 (forThread)");
-  bgfx_encoder_t* _ret = bgfx_encoder_begin(arg_forThread);
+  bgfx_encoder_t *_ret = bgfx_encoder_begin(arg_forThread);
   napi_value _napi_ret;
-  ASSERT_OK(napi_create_external(env, (void*)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  ASSERT_OK(napi_create_external(env, (void *)_ret, nullptr, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
   return _napi_ret;
 }
 
-napi_value napi_bgfx_encoder_end(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_end(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
-  bgfx_encoder_t* arg_encoder = nullptr;
+  bgfx_encoder_t *arg_encoder = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_encoder), "EINVAL", "Invalid argument 0 (encoder)");
   bgfx_encoder_end(arg_encoder);
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_marker(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_marker(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   char arg_marker[2048];
   size_t _temp_size_1 = 2048;
@@ -2226,10 +2305,11 @@ napi_value napi_bgfx_encoder_set_marker(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_state(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_state(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint64_t arg_state;
   bool lossless = false;
@@ -2240,10 +2320,11 @@ napi_value napi_bgfx_encoder_set_state(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_condition(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_condition(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_occlusion_query_handle_t arg_handle;
   {
@@ -2257,10 +2338,11 @@ napi_value napi_bgfx_encoder_set_condition(napi_env env, napi_callback_info info
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_stencil(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_stencil(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint32_t arg_fstencil;
   ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_fstencil), "EINVAL", "Invalid argument 1 (fstencil)");
@@ -2270,10 +2352,11 @@ napi_value napi_bgfx_encoder_set_stencil(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_scissor(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_scissor(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint16_t arg_x;
   {
@@ -2305,10 +2388,11 @@ napi_value napi_bgfx_encoder_set_scissor(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_encoder_set_scissor_cached(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_scissor_cached(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint16_t arg_cache;
   {
@@ -2320,13 +2404,14 @@ napi_value napi_bgfx_encoder_set_scissor_cached(napi_env env, napi_callback_info
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_transform(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_transform(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   size_t _size_1 = 0;
-  void* arg_mtx = nullptr;
+  void *arg_mtx = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_mtx, &_size_1), "EINVAL", "Invalid argument 1 (mtx)");
   uint16_t arg_num;
   {
@@ -2340,10 +2425,11 @@ napi_value napi_bgfx_encoder_set_transform(napi_env env, napi_callback_info info
   return _napi_ret;
 }
 
-napi_value napi_bgfx_encoder_set_transform_cached(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_transform_cached(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint32_t arg_cache;
   ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_cache), "EINVAL", "Invalid argument 1 (cache)");
@@ -2375,10 +2461,11 @@ napi_value napi_bgfx_encoder_set_transform_cached(napi_env env, napi_callback_in
 //  return _napi_ret;
 //}
 
-napi_value napi_bgfx_encoder_set_uniform(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_uniform(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_uniform_handle_t arg_handle;
   {
@@ -2387,7 +2474,7 @@ napi_value napi_bgfx_encoder_set_uniform(napi_env env, napi_callback_info info){
     arg_handle.idx = (uint16_t)temp;
   }
   size_t _size_2 = 0;
-  void* arg_value = nullptr;
+  void *arg_value = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[2], &arg_value, &_size_2), "EINVAL", "Invalid argument 2 (value)");
   uint16_t arg_num;
   {
@@ -2399,10 +2486,11 @@ napi_value napi_bgfx_encoder_set_uniform(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_index_buffer_handle_t arg_handle;
   {
@@ -2418,10 +2506,11 @@ napi_value napi_bgfx_encoder_set_index_buffer(napi_env env, napi_callback_info i
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_dynamic_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_dynamic_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_dynamic_index_buffer_handle_t arg_handle;
   {
@@ -2451,10 +2540,11 @@ napi_value napi_bgfx_encoder_set_dynamic_index_buffer(napi_env env, napi_callbac
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_encoder_set_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stream;
   {
@@ -2476,10 +2566,11 @@ napi_value napi_bgfx_encoder_set_vertex_buffer(napi_env env, napi_callback_info 
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stream;
   {
@@ -2521,10 +2612,11 @@ napi_value napi_bgfx_encoder_set_dynamic_vertex_buffer(napi_env env, napi_callba
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_encoder_set_vertex_count(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_vertex_count(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint32_t arg_numVertices;
   ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_numVertices), "EINVAL", "Invalid argument 1 (numVertices)");
@@ -2546,10 +2638,11 @@ napi_value napi_bgfx_encoder_set_vertex_count(napi_env env, napi_callback_info i
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_encoder_set_instance_data_from_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_instance_data_from_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_vertex_buffer_handle_t arg_handle;
   {
@@ -2565,10 +2658,11 @@ napi_value napi_bgfx_encoder_set_instance_data_from_vertex_buffer(napi_env env, 
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_dynamic_vertex_buffer_handle_t arg_handle;
   {
@@ -2584,10 +2678,11 @@ napi_value napi_bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer(napi_e
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_instance_count(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_instance_count(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint32_t arg_numInstances;
   ASSERT_OK(napi_get_value_uint32(env, argv[1], &arg_numInstances), "EINVAL", "Invalid argument 1 (numInstances)");
@@ -2595,10 +2690,11 @@ napi_value napi_bgfx_encoder_set_instance_count(napi_env env, napi_callback_info
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_texture(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_texture(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stage;
   {
@@ -2624,10 +2720,11 @@ napi_value napi_bgfx_encoder_set_texture(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_touch(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_touch(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_view_id_t arg_id;
   {
@@ -2639,10 +2736,11 @@ napi_value napi_bgfx_encoder_touch(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_submit(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_submit(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_view_id_t arg_id;
   {
@@ -2664,10 +2762,11 @@ napi_value napi_bgfx_encoder_submit(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_submit_occlusion_query(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_submit_occlusion_query(napi_env env, napi_callback_info info)
+{
   napi_value argv[6];
   GET_ARGS(6)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_view_id_t arg_id;
   {
@@ -2695,10 +2794,11 @@ napi_value napi_bgfx_encoder_submit_occlusion_query(napi_env env, napi_callback_
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_submit_indirect(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_submit_indirect(napi_env env, napi_callback_info info)
+{
   napi_value argv[8];
   GET_ARGS(8)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_view_id_t arg_id;
   {
@@ -2738,10 +2838,11 @@ napi_value napi_bgfx_encoder_submit_indirect(napi_env env, napi_callback_info in
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_compute_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_compute_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stage;
   {
@@ -2765,10 +2866,11 @@ napi_value napi_bgfx_encoder_set_compute_index_buffer(napi_env env, napi_callbac
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_compute_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_compute_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stage;
   {
@@ -2792,10 +2894,11 @@ napi_value napi_bgfx_encoder_set_compute_vertex_buffer(napi_env env, napi_callba
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_compute_dynamic_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_compute_dynamic_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stage;
   {
@@ -2819,10 +2922,11 @@ napi_value napi_bgfx_encoder_set_compute_dynamic_index_buffer(napi_env env, napi
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_compute_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_compute_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stage;
   {
@@ -2846,10 +2950,11 @@ napi_value napi_bgfx_encoder_set_compute_dynamic_vertex_buffer(napi_env env, nap
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_compute_indirect_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_compute_indirect_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stage;
   {
@@ -2873,10 +2978,11 @@ napi_value napi_bgfx_encoder_set_compute_indirect_buffer(napi_env env, napi_call
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_set_image(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_set_image(napi_env env, napi_callback_info info)
+{
   napi_value argv[6];
   GET_ARGS(6)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   uint8_t arg_stage;
   {
@@ -2912,10 +3018,11 @@ napi_value napi_bgfx_encoder_set_image(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_dispatch(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_dispatch(napi_env env, napi_callback_info info)
+{
   napi_value argv[6];
   GET_ARGS(6)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_view_id_t arg_id;
   {
@@ -2939,10 +3046,11 @@ napi_value napi_bgfx_encoder_dispatch(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_dispatch_indirect(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_dispatch_indirect(napi_env env, napi_callback_info info)
+{
   napi_value argv[6];
   GET_ARGS(6)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_view_id_t arg_id;
   {
@@ -2978,19 +3086,21 @@ napi_value napi_bgfx_encoder_dispatch_indirect(napi_env env, napi_callback_info 
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_discard(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_discard(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_encoder_discard(arg_self);
   return nullptr;
 }
 
-napi_value napi_bgfx_encoder_blit(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_encoder_blit(napi_env env, napi_callback_info info)
+{
   napi_value argv[15];
   GET_ARGS(15)
-  bgfx_encoder_t* arg_self = nullptr;
+  bgfx_encoder_t *arg_self = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_self), "EINVAL", "Invalid argument 0 (self)");
   bgfx_view_id_t arg_id;
   {
@@ -3080,7 +3190,8 @@ napi_value napi_bgfx_encoder_blit(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_request_screen_shot(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_request_screen_shot(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_frame_buffer_handle_t arg_handle;
@@ -3097,7 +3208,8 @@ napi_value napi_bgfx_request_screen_shot(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_render_frame(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_render_frame(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   int32_t arg_msecs;
@@ -3108,10 +3220,11 @@ napi_value napi_bgfx_render_frame(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_set_platform_data(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_platform_data(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
-  bgfx_platform_data_t* arg_data = nullptr;
+  bgfx_platform_data_t *arg_data = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[0], (void **)&arg_data), "EINVAL", "Invalid argument 0 (data)");
   bgfx_set_platform_data(arg_data);
   return nullptr;
@@ -3179,7 +3292,8 @@ napi_value napi_bgfx_set_platform_data(napi_env env, napi_callback_info info){
 //  MISSING_RETURN;
 //}
 
-napi_value napi_bgfx_set_marker(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_marker(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   char arg_marker[2048];
@@ -3190,7 +3304,8 @@ napi_value napi_bgfx_set_marker(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_state(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_state(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   uint64_t arg_state;
@@ -3202,7 +3317,8 @@ napi_value napi_bgfx_set_state(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_condition(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_condition(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   bgfx_occlusion_query_handle_t arg_handle;
@@ -3217,7 +3333,8 @@ napi_value napi_bgfx_set_condition(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_stencil(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_stencil(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_fstencil;
@@ -3228,7 +3345,8 @@ napi_value napi_bgfx_set_stencil(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_scissor(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_scissor(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   uint16_t arg_x;
@@ -3261,7 +3379,8 @@ napi_value napi_bgfx_set_scissor(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_set_scissor_cached(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_scissor_cached(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   uint16_t arg_cache;
@@ -3274,11 +3393,12 @@ napi_value napi_bgfx_set_scissor_cached(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_transform(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_transform(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   size_t _size_0 = 0;
-  void* arg_mtx = nullptr;
+  void *arg_mtx = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[0], &arg_mtx, &_size_0), "EINVAL", "Invalid argument 0 (mtx)");
   uint16_t arg_num;
   {
@@ -3292,7 +3412,8 @@ napi_value napi_bgfx_set_transform(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_set_transform_cached(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_transform_cached(napi_env env, napi_callback_info info)
+{
   napi_value argv[2];
   GET_ARGS(2)
   uint32_t arg_cache;
@@ -3323,7 +3444,8 @@ napi_value napi_bgfx_set_transform_cached(napi_env env, napi_callback_info info)
 //  return _napi_ret;
 //}
 
-napi_value napi_bgfx_set_uniform(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_uniform(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_uniform_handle_t arg_handle;
@@ -3333,7 +3455,7 @@ napi_value napi_bgfx_set_uniform(napi_env env, napi_callback_info info){
     arg_handle.idx = (uint16_t)temp;
   }
   size_t _size_1 = 0;
-  void* arg_value = nullptr;
+  void *arg_value = nullptr;
   ASSERT_OK(napi_get_arraybuffer_info(env, argv[1], &arg_value, &_size_1), "EINVAL", "Invalid argument 1 (value)");
   uint16_t arg_num;
   {
@@ -3345,7 +3467,8 @@ napi_value napi_bgfx_set_uniform(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_index_buffer_handle_t arg_handle;
@@ -3362,7 +3485,8 @@ napi_value napi_bgfx_set_index_buffer(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_dynamic_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_dynamic_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_dynamic_index_buffer_handle_t arg_handle;
@@ -3391,7 +3515,8 @@ napi_value napi_bgfx_set_dynamic_index_buffer(napi_env env, napi_callback_info i
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_set_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   uint8_t arg_stream;
@@ -3414,7 +3539,8 @@ napi_value napi_bgfx_set_vertex_buffer(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   uint8_t arg_stream;
@@ -3455,7 +3581,8 @@ napi_value napi_bgfx_set_dynamic_vertex_buffer(napi_env env, napi_callback_info 
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_set_vertex_count(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_vertex_count(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_numVertices;
@@ -3476,7 +3603,8 @@ napi_value napi_bgfx_set_vertex_count(napi_env env, napi_callback_info info){
 //  return nullptr;
 //}
 
-napi_value napi_bgfx_set_instance_data_from_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_instance_data_from_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_vertex_buffer_handle_t arg_handle;
@@ -3493,7 +3621,8 @@ napi_value napi_bgfx_set_instance_data_from_vertex_buffer(napi_env env, napi_cal
   return nullptr;
 }
 
-napi_value napi_bgfx_set_instance_data_from_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_instance_data_from_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   bgfx_dynamic_vertex_buffer_handle_t arg_handle;
@@ -3510,7 +3639,8 @@ napi_value napi_bgfx_set_instance_data_from_dynamic_vertex_buffer(napi_env env, 
   return nullptr;
 }
 
-napi_value napi_bgfx_set_instance_count(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_instance_count(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   uint32_t arg_numInstances;
@@ -3519,7 +3649,8 @@ napi_value napi_bgfx_set_instance_count(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_texture(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_texture(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   uint8_t arg_stage;
@@ -3546,7 +3677,8 @@ napi_value napi_bgfx_set_texture(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_touch(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_touch(napi_env env, napi_callback_info info)
+{
   napi_value argv[1];
   GET_ARGS(1)
   bgfx_view_id_t arg_id;
@@ -3559,7 +3691,8 @@ napi_value napi_bgfx_touch(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_submit(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_submit(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   bgfx_view_id_t arg_id;
@@ -3582,7 +3715,8 @@ napi_value napi_bgfx_submit(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_submit_occlusion_query(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_submit_occlusion_query(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_view_id_t arg_id;
@@ -3611,7 +3745,8 @@ napi_value napi_bgfx_submit_occlusion_query(napi_env env, napi_callback_info inf
   return nullptr;
 }
 
-napi_value napi_bgfx_submit_indirect(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_submit_indirect(napi_env env, napi_callback_info info)
+{
   napi_value argv[7];
   GET_ARGS(7)
   bgfx_view_id_t arg_id;
@@ -3652,7 +3787,8 @@ napi_value napi_bgfx_submit_indirect(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_set_compute_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_compute_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   uint8_t arg_stage;
@@ -3677,7 +3813,8 @@ napi_value napi_bgfx_set_compute_index_buffer(napi_env env, napi_callback_info i
   return nullptr;
 }
 
-napi_value napi_bgfx_set_compute_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_compute_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   uint8_t arg_stage;
@@ -3702,7 +3839,8 @@ napi_value napi_bgfx_set_compute_vertex_buffer(napi_env env, napi_callback_info 
   return nullptr;
 }
 
-napi_value napi_bgfx_set_compute_dynamic_index_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_compute_dynamic_index_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   uint8_t arg_stage;
@@ -3727,7 +3865,8 @@ napi_value napi_bgfx_set_compute_dynamic_index_buffer(napi_env env, napi_callbac
   return nullptr;
 }
 
-napi_value napi_bgfx_set_compute_dynamic_vertex_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_compute_dynamic_vertex_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   uint8_t arg_stage;
@@ -3752,7 +3891,8 @@ napi_value napi_bgfx_set_compute_dynamic_vertex_buffer(napi_env env, napi_callba
   return nullptr;
 }
 
-napi_value napi_bgfx_set_compute_indirect_buffer(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_compute_indirect_buffer(napi_env env, napi_callback_info info)
+{
   napi_value argv[3];
   GET_ARGS(3)
   uint8_t arg_stage;
@@ -3777,7 +3917,8 @@ napi_value napi_bgfx_set_compute_indirect_buffer(napi_env env, napi_callback_inf
   return nullptr;
 }
 
-napi_value napi_bgfx_set_image(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_set_image(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   uint8_t arg_stage;
@@ -3814,7 +3955,8 @@ napi_value napi_bgfx_set_image(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_dispatch(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_dispatch(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_view_id_t arg_id;
@@ -3839,7 +3981,8 @@ napi_value napi_bgfx_dispatch(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_dispatch_indirect(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_dispatch_indirect(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
   bgfx_view_id_t arg_id;
@@ -3876,12 +4019,14 @@ napi_value napi_bgfx_dispatch_indirect(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-napi_value napi_bgfx_discard(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_discard(napi_env env, napi_callback_info info)
+{
   bgfx_discard();
   return nullptr;
 }
 
-napi_value napi_bgfx_blit(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_blit(napi_env env, napi_callback_info info)
+{
   napi_value argv[14];
   GET_ARGS(14)
   bgfx_view_id_t arg_id;
@@ -3972,24 +4117,27 @@ napi_value napi_bgfx_blit(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
-void napi_bgfx_finalize_vertex_decl(napi_env env, void* finalize_data, void* finalize_hint) {
-  bgfx_vertex_decl_t* _decl = (bgfx_vertex_decl_t*)finalize_data;
+void napi_bgfx_finalize_vertex_decl(napi_env env, void *finalize_data, void *finalize_hint)
+{
+  bgfx_vertex_decl_t *_decl = (bgfx_vertex_decl_t *)finalize_data;
   delete _decl;
 }
 
-napi_value napi_bgfx_alloc_vertex_decl(napi_env env, napi_callback_info info){
-  bgfx_vertex_decl_t* _ret = new bgfx_vertex_decl_t;
+napi_value napi_bgfx_alloc_vertex_decl(napi_env env, napi_callback_info info)
+{
+  bgfx_vertex_decl_t *_ret = new bgfx_vertex_decl_t;
   napi_value _napi_ret;
-  ASSERT_OK(napi_create_external(env, (void*)_ret, napi_bgfx_finalize_vertex_decl, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
+  ASSERT_OK(napi_create_external(env, (void *)_ret, napi_bgfx_finalize_vertex_decl, nullptr, &_napi_ret), "EINVAL", "Unknown Error.");
   return _napi_ret;
 }
 
-napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info)
+{
   napi_value argv[5];
   GET_ARGS(5)
-  void* arg_ndt = nullptr;
+  void *arg_ndt = nullptr;
   ASSERT_OK(napi_get_value_external_opt(env, argv[0], (void **)&arg_ndt), "EINVAL", "Invalid argument 0 (ndt)");
-  void* arg_nwh = nullptr;
+  void *arg_nwh = nullptr;
   ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_nwh), "EINVAL", "Invalid argument 1 (nwh)");
   uint32_t arg_width;
   ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_width), "EINVAL", "Invalid argument 2 (width)");
@@ -4010,7 +4158,8 @@ napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_init_headless(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_init_headless(napi_env env, napi_callback_info info)
+{
   bgfx_init_t init;
   bgfx_init_ctor(&init);
   init.type = BGFX_RENDERER_TYPE_NOOP;
@@ -4020,7 +4169,8 @@ napi_value napi_bgfx_init_headless(napi_env env, napi_callback_info info){
   return _napi_ret;
 }
 
-napi_value napi_bgfx_dbg_text_print(napi_env env, napi_callback_info info){
+napi_value napi_bgfx_dbg_text_print(napi_env env, napi_callback_info info)
+{
   napi_value argv[4];
   GET_ARGS(4)
   uint16_t arg_x;
@@ -4049,75 +4199,69 @@ napi_value napi_bgfx_dbg_text_print(napi_env env, napi_callback_info info){
   return nullptr;
 }
 
+void bgfx_dbg_text_print(uint16_t x, uint16_t y, uint8_t attr, const std::string text)
+{
+  bgfx_dbg_text_printf(x, y, attr, "%s", text.c_str());
+}
+
 napi_value create_bgfx(napi_env env)
 {
   napi_value exports;
   ASSERT_OK(napi_create_object(env, &exports), "EINVAL", "Failed to create exports.");
 
-  export_function(env, exports, "vertex_decl_begin", napi_bgfx_vertex_decl_begin);
-  export_function(env, exports, "vertex_decl_add", napi_bgfx_vertex_decl_add);
-  export_function(env, exports, "vertex_decl_has", napi_bgfx_vertex_decl_has);
-  export_function(env, exports, "vertex_decl_skip", napi_bgfx_vertex_decl_skip);
-  export_function(env, exports, "vertex_decl_end", napi_bgfx_vertex_decl_end);
-  export_function(env, exports, "vertex_convert", napi_bgfx_vertex_convert);
-  export_function(env, exports, "topology_convert", napi_bgfx_topology_convert);
-  export_function(env, exports, "get_renderer_name", napi_bgfx_get_renderer_name);
-  export_function(env, exports, "shutdown", napi_bgfx_shutdown);
-  export_function(env, exports, "reset", napi_bgfx_reset);
-  export_function(env, exports, "frame", napi_bgfx_frame);
-  export_function(env, exports, "get_renderer_type", napi_bgfx_get_renderer_type);
-  export_function(env, exports, "set_debug", napi_bgfx_set_debug);
-  export_function(env, exports, "dbg_text_clear", napi_bgfx_dbg_text_clear);
-  export_function(env, exports, "dbg_text_printf", napi_bgfx_dbg_text_printf);
-  export_function(env, exports, "dbg_text_image", napi_bgfx_dbg_text_image);
-  export_function(env, exports, "create_index_buffer", napi_bgfx_create_index_buffer);
-  export_function(env, exports, "set_index_buffer_name", napi_bgfx_set_index_buffer_name);
-  export_function(env, exports, "destroy_index_buffer", napi_bgfx_destroy_index_buffer);
-  export_function(env, exports, "create_vertex_buffer", napi_bgfx_create_vertex_buffer);
-  export_function(env, exports, "set_vertex_buffer_name", napi_bgfx_set_vertex_buffer_name);
-  export_function(env, exports, "destroy_vertex_buffer", napi_bgfx_destroy_vertex_buffer);
-  export_function(env, exports, "create_dynamic_index_buffer", napi_bgfx_create_dynamic_index_buffer);
-  export_function(env, exports, "create_dynamic_index_buffer_mem", napi_bgfx_create_dynamic_index_buffer_mem);
-  export_function(env, exports, "update_dynamic_index_buffer", napi_bgfx_update_dynamic_index_buffer);
-  export_function(env, exports, "destroy_dynamic_index_buffer", napi_bgfx_destroy_dynamic_index_buffer);
-  export_function(env, exports, "create_dynamic_vertex_buffer", napi_bgfx_create_dynamic_vertex_buffer);
-  export_function(env, exports, "create_dynamic_vertex_buffer_mem", napi_bgfx_create_dynamic_vertex_buffer_mem);
-  export_function(env, exports, "update_dynamic_vertex_buffer", napi_bgfx_update_dynamic_vertex_buffer);
-  export_function(env, exports, "destroy_dynamic_vertex_buffer", napi_bgfx_destroy_dynamic_vertex_buffer);
-  export_function(env, exports, "get_avail_transient_index_buffer", napi_bgfx_get_avail_transient_index_buffer);
-  export_function(env, exports, "get_avail_transient_vertex_buffer", napi_bgfx_get_avail_transient_vertex_buffer);
-  export_function(env, exports, "get_avail_instance_data_buffer", napi_bgfx_get_avail_instance_data_buffer);
-  export_function(env, exports, "create_indirect_buffer", napi_bgfx_create_indirect_buffer);
-  export_function(env, exports, "destroy_indirect_buffer", napi_bgfx_destroy_indirect_buffer);
-  export_function(env, exports, "create_shader", napi_bgfx_create_shader);
-  export_function(env, exports, "set_shader_name", napi_bgfx_set_shader_name);
-  export_function(env, exports, "destroy_shader", napi_bgfx_destroy_shader);
-  export_function(env, exports, "create_program", napi_bgfx_create_program);
-  export_function(env, exports, "create_compute_program", napi_bgfx_create_compute_program);
-  export_function(env, exports, "destroy_program", napi_bgfx_destroy_program);
-  export_function(env, exports, "is_texture_valid", napi_bgfx_is_texture_valid);
-  export_function(env, exports, "calc_texture_size", napi_bgfx_calc_texture_size);
-  export_function(env, exports, "create_texture", napi_bgfx_create_texture);
-  export_function(env, exports, "create_texture_2d", napi_bgfx_create_texture_2d);
-  export_function(env, exports, "create_texture_2d_scaled", napi_bgfx_create_texture_2d_scaled);
-  export_function(env, exports, "create_texture_3d", napi_bgfx_create_texture_3d);
-  export_function(env, exports, "create_texture_cube", napi_bgfx_create_texture_cube);
-  export_function(env, exports, "update_texture_2d", napi_bgfx_update_texture_2d);
-  export_function(env, exports, "update_texture_3d", napi_bgfx_update_texture_3d);
-  export_function(env, exports, "update_texture_cube", napi_bgfx_update_texture_cube);
-  export_function(env, exports, "read_texture", napi_bgfx_read_texture);
-  export_function(env, exports, "set_texture_name", napi_bgfx_set_texture_name);
-  export_function(env, exports, "destroy_texture", napi_bgfx_destroy_texture);
-  export_function(env, exports, "create_frame_buffer", napi_bgfx_create_frame_buffer);
-  export_function(env, exports, "create_frame_buffer_scaled", napi_bgfx_create_frame_buffer_scaled);
-  export_function(env, exports, "create_frame_buffer_from_nwh", napi_bgfx_create_frame_buffer_from_nwh);
-  export_function(env, exports, "set_frame_buffer_name", napi_bgfx_set_frame_buffer_name);
-  export_function(env, exports, "get_texture", napi_bgfx_get_texture);
-  export_function(env, exports, "destroy_frame_buffer", napi_bgfx_destroy_frame_buffer);
-  export_function(env, exports, "create_uniform", napi_bgfx_create_uniform);
-  export_function(env, exports, "destroy_uniform", napi_bgfx_destroy_uniform);
-  export_function(env, exports, "create_occlusion_query", napi_bgfx_create_occlusion_query);
-  export_function(env, exports, "destroy_occlusion_query", napi_bgfx_destroy_occlusion_query);
+  wrap::set_function(env, exports, "vertex_decl_begin", bgfx_vertex_decl_begin);
+  wrap::set_function(env, exports, "vertex_decl_add", bgfx_vertex_decl_add);
+  wrap::set_function(env, exports, "vertex_decl_has", bgfx_vertex_decl_has);
+  wrap::set_function(env, exports, "vertex_decl_skip", bgfx_vertex_decl_skip);
+  wrap::set_function(env, exports, "vertex_decl_end", bgfx_vertex_decl_end);
+  wrap::set_function(env, exports, "vertex_convert", bgfx_vertex_convert);
+  wrap::set_function(env, exports, "topology_convert", bgfx_topology_convert);
+  wrap::set_function(env, exports, "get_renderer_name", bgfx_get_renderer_name);
+  wrap::set_function(env, exports, "shutdown", bgfx_shutdown);
+  wrap::set_function(env, exports, "reset", bgfx_reset);
+  wrap::set_function(env, exports, "frame", bgfx_frame);
+  wrap::set_function(env, exports, "get_renderer_type", bgfx_get_renderer_type);
+  wrap::set_function(env, exports, "set_debug", bgfx_set_debug);
+  wrap::set_function(env, exports, "dbg_text_clear", bgfx_dbg_text_clear);
+  wrap::set_function(env, exports, "dbg_text_print", bgfx_dbg_text_print);
+  wrap::set_function(env, exports, "dbg_text_image", bgfx_dbg_text_image);
+  wrap::set_function(env, exports, "create_index_buffer", bgfx_create_index_buffer);
+  wrap::set_function(env, exports, "set_index_buffer_name", bgfx_set_index_buffer_name);
+  wrap::set_function(env, exports, "create_vertex_buffer", bgfx_create_vertex_buffer);
+  wrap::set_function(env, exports, "set_vertex_buffer_name", bgfx_set_vertex_buffer_name);
+  wrap::set_function(env, exports, "create_dynamic_index_buffer", bgfx_create_dynamic_index_buffer);
+  wrap::set_function(env, exports, "create_dynamic_index_buffer_mem", bgfx_create_dynamic_index_buffer_mem);
+  wrap::set_function(env, exports, "update_dynamic_index_buffer", bgfx_update_dynamic_index_buffer);
+  wrap::set_function(env, exports, "create_dynamic_vertex_buffer", bgfx_create_dynamic_vertex_buffer);
+  wrap::set_function(env, exports, "create_dynamic_vertex_buffer_mem", bgfx_create_dynamic_vertex_buffer_mem);
+  wrap::set_function(env, exports, "update_dynamic_vertex_buffer", bgfx_update_dynamic_vertex_buffer);
+  wrap::set_function(env, exports, "get_avail_transient_index_buffer", bgfx_get_avail_transient_index_buffer);
+  wrap::set_function(env, exports, "get_avail_transient_vertex_buffer", bgfx_get_avail_transient_vertex_buffer);
+  wrap::set_function(env, exports, "get_avail_instance_data_buffer", bgfx_get_avail_instance_data_buffer);
+  wrap::set_function(env, exports, "create_indirect_buffer", bgfx_create_indirect_buffer);
+  wrap::set_function(env, exports, "create_shader", bgfx_create_shader);
+  wrap::set_function(env, exports, "set_shader_name", bgfx_set_shader_name);
+  wrap::set_function(env, exports, "create_program", bgfx_create_program);
+  wrap::set_function(env, exports, "create_compute_program", bgfx_create_compute_program);
+  wrap::set_function(env, exports, "is_texture_valid", bgfx_is_texture_valid);
+  wrap::set_function(env, exports, "calc_texture_size", bgfx_calc_texture_size);
+  wrap::set_function(env, exports, "create_texture", bgfx_create_texture);
+  wrap::set_function(env, exports, "create_texture_2d", bgfx_create_texture_2d);
+  wrap::set_function(env, exports, "create_texture_2d_scaled", bgfx_create_texture_2d_scaled);
+  wrap::set_function(env, exports, "create_texture_3d", bgfx_create_texture_3d);
+  wrap::set_function(env, exports, "create_texture_cube", bgfx_create_texture_cube);
+  wrap::set_function(env, exports, "update_texture_2d", bgfx_update_texture_2d);
+  wrap::set_function(env, exports, "update_texture_3d", bgfx_update_texture_3d);
+  wrap::set_function(env, exports, "update_texture_cube", bgfx_update_texture_cube);
+  wrap::set_function(env, exports, "read_texture", bgfx_read_texture);
+  wrap::set_function(env, exports, "set_texture_name", bgfx_set_texture_name);
+  wrap::set_function(env, exports, "create_frame_buffer", bgfx_create_frame_buffer);
+  wrap::set_function(env, exports, "create_frame_buffer_scaled", bgfx_create_frame_buffer_scaled);
+  wrap::set_function(env, exports, "create_frame_buffer_from_nwh", bgfx_create_frame_buffer_from_nwh);
+  wrap::set_function(env, exports, "set_frame_buffer_name", bgfx_set_frame_buffer_name);
+  wrap::set_function(env, exports, "get_texture", bgfx_get_texture);
+  wrap::set_function(env, exports, "create_uniform", bgfx_create_uniform);
+  wrap::set_function(env, exports, "create_occlusion_query", bgfx_create_occlusion_query);
   export_function(env, exports, "set_palette_color_rgba8", napi_bgfx_set_palette_color_rgba8);
   export_function(env, exports, "set_view_name", napi_bgfx_set_view_name);
   export_function(env, exports, "set_view_rect", napi_bgfx_set_view_rect);
@@ -4174,10 +4318,10 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "set_transform", napi_bgfx_set_transform);
   export_function(env, exports, "set_transform_cached", napi_bgfx_set_transform_cached);
   export_function(env, exports, "set_uniform", napi_bgfx_set_uniform);
-  export_function(env, exports, "set_index_buffer", napi_bgfx_set_index_buffer);
-  export_function(env, exports, "set_dynamic_index_buffer", napi_bgfx_set_dynamic_index_buffer);
-  export_function(env, exports, "set_vertex_buffer", napi_bgfx_set_vertex_buffer);
-  export_function(env, exports, "set_dynamic_vertex_buffer", napi_bgfx_set_dynamic_vertex_buffer);
+  wrap::set_function(env, exports, "set_index_buffer", bgfx_set_index_buffer);
+  wrap::set_function(env, exports, "set_dynamic_index_buffer", bgfx_set_dynamic_index_buffer);
+  wrap::set_function(env, exports, "set_vertex_buffer", bgfx_set_vertex_buffer);
+  wrap::set_function(env, exports, "set_dynamic_vertex_buffer", bgfx_set_dynamic_vertex_buffer);
   export_function(env, exports, "set_vertex_count", napi_bgfx_set_vertex_count);
   export_function(env, exports, "set_instance_data_from_vertex_buffer", napi_bgfx_set_instance_data_from_vertex_buffer);
   export_function(env, exports, "set_instance_data_from_dynamic_vertex_buffer", napi_bgfx_set_instance_data_from_dynamic_vertex_buffer);
@@ -4187,10 +4331,10 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "submit", napi_bgfx_submit);
   export_function(env, exports, "submit_occlusion_query", napi_bgfx_submit_occlusion_query);
   export_function(env, exports, "submit_indirect", napi_bgfx_submit_indirect);
-  export_function(env, exports, "set_compute_index_buffer", napi_bgfx_set_compute_index_buffer);
-  export_function(env, exports, "set_compute_vertex_buffer", napi_bgfx_set_compute_vertex_buffer);
-  export_function(env, exports, "set_compute_dynamic_index_buffer", napi_bgfx_set_compute_dynamic_index_buffer);
-  export_function(env, exports, "set_compute_dynamic_vertex_buffer", napi_bgfx_set_compute_dynamic_vertex_buffer);
+  wrap::set_function(env, exports, "set_compute_index_buffer", bgfx_set_compute_index_buffer);
+  wrap::set_function(env, exports, "set_compute_vertex_buffer", bgfx_set_compute_vertex_buffer);
+  wrap::set_function(env, exports, "set_compute_dynamic_index_buffer", bgfx_set_compute_dynamic_index_buffer);
+  wrap::set_function(env, exports, "set_compute_dynamic_vertex_buffer", bgfx_set_compute_dynamic_vertex_buffer);
   export_function(env, exports, "set_compute_indirect_buffer", napi_bgfx_set_compute_indirect_buffer);
   export_function(env, exports, "set_image", napi_bgfx_set_image);
   export_function(env, exports, "dispatch", napi_bgfx_dispatch);
@@ -4200,6 +4344,5 @@ napi_value create_bgfx(napi_env env)
   export_function(env, exports, "alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
   export_function(env, exports, "init_minimal", napi_bgfx_init_minimal);
   export_function(env, exports, "init_headless", napi_bgfx_init_headless);
-  export_function(env, exports, "dbg_text_print", napi_bgfx_dbg_text_print);
   return exports;
 }
