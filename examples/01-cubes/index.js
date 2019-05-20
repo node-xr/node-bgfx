@@ -129,7 +129,7 @@ const main = async () => {
         mat4.rotateY(mtx, mtx, yy + time);
 
         // Set model matrix for rendering.
-        bgfx.set_transform(mtx.buffer, 1);
+        bgfx.set_transform(mtx.buffer);
 
         // Set vertex and index buffer.
         bgfx.set_vertex_buffer(0, m_vbh, 0, 0xffffffff);

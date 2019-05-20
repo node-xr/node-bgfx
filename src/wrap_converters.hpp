@@ -136,7 +136,10 @@ template <>
 inline int64_t decode(napi_env env, napi_value value)
 {
   int64_t result;
-  ok(napi_get_value_int64(env, value, &result));
+  bool lossless;
+  ok(napi_get_value_bigint_int64(env, value, &result, &lossless));
+  if (!lossless)
+    throw new std::runtime_error("BigInt to Int64 conversion loss.");
   return result;
 }
 
@@ -144,7 +147,7 @@ template <>
 inline napi_value encode(napi_env env, const int64_t value)
 {
   napi_value result;
-  ok(napi_create_int64(env, value, &result));
+  ok(napi_create_bigint_int64(env, value, &result));
   return result;
 }
 
@@ -152,16 +155,19 @@ inline napi_value encode(napi_env env, const int64_t value)
 template <>
 inline uint64_t decode(napi_env env, napi_value value)
 {
-  int64_t result;
-  ok(napi_get_value_int64(env, value, &result));
-  return static_cast<uint64_t>(result);
+  uint64_t result;
+  bool lossless;
+  ok(napi_get_value_bigint_uint64(env, value, &result, &lossless));
+  if (!lossless)
+    throw new std::runtime_error("BigInt to Uint64 conversion loss.");
+  return result;
 }
 
 template <>
 inline napi_value encode(napi_env env, const uint64_t value)
 {
   napi_value result;
-  ok(napi_create_int64(env, static_cast<int64_t>(value), &result));
+  ok(napi_create_bigint_uint64(env, value, &result));
   return result;
 }
 

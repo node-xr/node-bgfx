@@ -4131,72 +4131,39 @@ napi_value napi_bgfx_alloc_vertex_decl(napi_env env, napi_callback_info info)
   return _napi_ret;
 }
 
-napi_value napi_bgfx_init_minimal(napi_env env, napi_callback_info info)
+uint32_t bgfx_encoder_set_transform2(bgfx_encoder_t *encoder, wrap::bgfx_mat4_array arr)
 {
-  napi_value argv[5];
-  GET_ARGS(5)
-  void *arg_ndt = nullptr;
-  ASSERT_OK(napi_get_value_external_opt(env, argv[0], (void **)&arg_ndt), "EINVAL", "Invalid argument 0 (ndt)");
-  void *arg_nwh = nullptr;
-  ASSERT_OK(napi_get_value_external(env, argv[1], (void **)&arg_nwh), "EINVAL", "Invalid argument 1 (nwh)");
-  uint32_t arg_width;
-  ASSERT_OK(napi_get_value_uint32(env, argv[2], &arg_width), "EINVAL", "Invalid argument 2 (width)");
-  uint32_t arg_height;
-  ASSERT_OK(napi_get_value_uint32(env, argv[3], &arg_height), "EINVAL", "Invalid argument 3 (height)");
-  uint32_t arg_reset;
-  ASSERT_OK(napi_get_value_uint32(env, argv[4], &arg_reset), "EINVAL", "Invalid argument 4 (reset)");
-  bgfx_init_t init;
-  bgfx_init_ctor(&init);
-  init.platformData.ndt = arg_ndt;
-  init.platformData.nwh = arg_nwh;
-  init.resolution.width = arg_width;
-  init.resolution.height = arg_height;
-  init.resolution.reset = arg_reset;
-  bool _ret = bgfx_init(&init);
-  napi_value _napi_ret;
-  ASSERT_OK(napi_get_boolean(env, (bool)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  return _napi_ret;
+  return bgfx_encoder_set_transform(encoder, arr.head, arr.count);
 }
 
-napi_value napi_bgfx_init_headless(napi_env env, napi_callback_info info)
+uint32_t bgfx_set_transform2(wrap::bgfx_mat4_array arr)
+{
+  return bgfx_set_transform(arr.head, arr.count);
+}
+
+void bgfx_set_view_transform2(bgfx_view_id_t view, wrap::bgfx_mat4 *xform, wrap::bgfx_mat4 *proj)
+{
+  bgfx_set_view_transform(view, static_cast<void *>(xform), static_cast<void *>(proj));
+}
+
+bool bgfx_init_minimal(void *ndt, void *nwh, uint32_t width, uint32_t height, uint32_t reset)
+{
+  bgfx_init_t init;
+  bgfx_init_ctor(&init);
+  init.platformData.ndt = ndt;
+  init.platformData.nwh = nwh;
+  init.resolution.width = width;
+  init.resolution.height = height;
+  init.resolution.reset = reset;
+  return bgfx_init(&init);
+}
+
+bool bgfx_init_headless()
 {
   bgfx_init_t init;
   bgfx_init_ctor(&init);
   init.type = BGFX_RENDERER_TYPE_NOOP;
-  bool _ret = bgfx_init(&init);
-  napi_value _napi_ret;
-  ASSERT_OK(napi_get_boolean(env, (bool)_ret, &_napi_ret), "EINVAL", "Return type error somehow?!");
-  return _napi_ret;
-}
-
-napi_value napi_bgfx_dbg_text_print(napi_env env, napi_callback_info info)
-{
-  napi_value argv[4];
-  GET_ARGS(4)
-  uint16_t arg_x;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[0], &temp), "EINVAL", "Invalid argument 0 (x)");
-    arg_x = (uint16_t)temp;
-  }
-  uint16_t arg_y;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[1], &temp), "EINVAL", "Invalid argument 1 (y)");
-    arg_y = (uint16_t)temp;
-  }
-  uint8_t arg_attr;
-  {
-    int32_t temp = (int32_t)0;
-    ASSERT_OK(napi_get_value_int32(env, argv[2], &temp), "EINVAL", "Invalid argument 2 (attr)");
-    arg_attr = (uint8_t)temp;
-  }
-  char arg_text[2048];
-  size_t _temp_size_3 = 2048;
-  size_t _temp_size_out_3;
-  ASSERT_OK(napi_get_value_string_utf8(env, argv[3], arg_text, _temp_size_3, &_temp_size_out_3), "EINVAL", "Invalid argument 3 (text)");
-  bgfx_dbg_text_printf(arg_x, arg_y, arg_attr, "%s", arg_text);
-  return nullptr;
+  return bgfx_init(&init);
 }
 
 void bgfx_dbg_text_print(uint16_t x, uint16_t y, uint8_t attr, const std::string text)
@@ -4262,87 +4229,87 @@ napi_value create_bgfx(napi_env env)
   wrap::set_function(env, exports, "get_texture", bgfx_get_texture);
   wrap::set_function(env, exports, "create_uniform", bgfx_create_uniform);
   wrap::set_function(env, exports, "create_occlusion_query", bgfx_create_occlusion_query);
-  export_function(env, exports, "set_palette_color_rgba8", napi_bgfx_set_palette_color_rgba8);
-  export_function(env, exports, "set_view_name", napi_bgfx_set_view_name);
-  export_function(env, exports, "set_view_rect", napi_bgfx_set_view_rect);
-  export_function(env, exports, "set_view_rect_ratio", napi_bgfx_set_view_rect_ratio);
-  export_function(env, exports, "set_view_scissor", napi_bgfx_set_view_scissor);
-  export_function(env, exports, "set_view_clear", napi_bgfx_set_view_clear);
-  export_function(env, exports, "set_view_clear_mrt", napi_bgfx_set_view_clear_mrt);
-  export_function(env, exports, "set_view_mode", napi_bgfx_set_view_mode);
-  export_function(env, exports, "set_view_frame_buffer", napi_bgfx_set_view_frame_buffer);
-  export_function(env, exports, "set_view_transform", napi_bgfx_set_view_transform);
-  export_function(env, exports, "encoder_begin", napi_bgfx_encoder_begin);
-  export_function(env, exports, "encoder_end", napi_bgfx_encoder_end);
-  export_function(env, exports, "encoder_set_marker", napi_bgfx_encoder_set_marker);
-  export_function(env, exports, "encoder_set_state", napi_bgfx_encoder_set_state);
-  export_function(env, exports, "encoder_set_condition", napi_bgfx_encoder_set_condition);
-  export_function(env, exports, "encoder_set_stencil", napi_bgfx_encoder_set_stencil);
-  export_function(env, exports, "encoder_set_scissor", napi_bgfx_encoder_set_scissor);
-  export_function(env, exports, "encoder_set_scissor_cached", napi_bgfx_encoder_set_scissor_cached);
-  export_function(env, exports, "encoder_set_transform", napi_bgfx_encoder_set_transform);
-  export_function(env, exports, "encoder_set_transform_cached", napi_bgfx_encoder_set_transform_cached);
-  export_function(env, exports, "encoder_set_uniform", napi_bgfx_encoder_set_uniform);
-  export_function(env, exports, "encoder_set_index_buffer", napi_bgfx_encoder_set_index_buffer);
-  export_function(env, exports, "encoder_set_dynamic_index_buffer", napi_bgfx_encoder_set_dynamic_index_buffer);
-  export_function(env, exports, "encoder_set_vertex_buffer", napi_bgfx_encoder_set_vertex_buffer);
-  export_function(env, exports, "encoder_set_dynamic_vertex_buffer", napi_bgfx_encoder_set_dynamic_vertex_buffer);
-  export_function(env, exports, "encoder_set_vertex_count", napi_bgfx_encoder_set_vertex_count);
-  export_function(env, exports, "encoder_set_instance_data_from_vertex_buffer", napi_bgfx_encoder_set_instance_data_from_vertex_buffer);
-  export_function(env, exports, "encoder_set_instance_data_from_dynamic_vertex_buffer", napi_bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer);
-  export_function(env, exports, "encoder_set_instance_count", napi_bgfx_encoder_set_instance_count);
-  export_function(env, exports, "encoder_set_texture", napi_bgfx_encoder_set_texture);
-  export_function(env, exports, "encoder_touch", napi_bgfx_encoder_touch);
-  export_function(env, exports, "encoder_submit", napi_bgfx_encoder_submit);
-  export_function(env, exports, "encoder_submit_occlusion_query", napi_bgfx_encoder_submit_occlusion_query);
-  export_function(env, exports, "encoder_submit_indirect", napi_bgfx_encoder_submit_indirect);
-  export_function(env, exports, "encoder_set_compute_index_buffer", napi_bgfx_encoder_set_compute_index_buffer);
-  export_function(env, exports, "encoder_set_compute_vertex_buffer", napi_bgfx_encoder_set_compute_vertex_buffer);
-  export_function(env, exports, "encoder_set_compute_dynamic_index_buffer", napi_bgfx_encoder_set_compute_dynamic_index_buffer);
-  export_function(env, exports, "encoder_set_compute_dynamic_vertex_buffer", napi_bgfx_encoder_set_compute_dynamic_vertex_buffer);
-  export_function(env, exports, "encoder_set_compute_indirect_buffer", napi_bgfx_encoder_set_compute_indirect_buffer);
-  export_function(env, exports, "encoder_set_image", napi_bgfx_encoder_set_image);
-  export_function(env, exports, "encoder_dispatch", napi_bgfx_encoder_dispatch);
-  export_function(env, exports, "encoder_dispatch_indirect", napi_bgfx_encoder_dispatch_indirect);
-  export_function(env, exports, "encoder_discard", napi_bgfx_encoder_discard);
-  export_function(env, exports, "encoder_blit", napi_bgfx_encoder_blit);
-  export_function(env, exports, "request_screen_shot", napi_bgfx_request_screen_shot);
-  export_function(env, exports, "render_frame", napi_bgfx_render_frame);
-  export_function(env, exports, "set_platform_data", napi_bgfx_set_platform_data);
-  export_function(env, exports, "set_marker", napi_bgfx_set_marker);
-  export_function(env, exports, "set_state", napi_bgfx_set_state);
-  export_function(env, exports, "set_condition", napi_bgfx_set_condition);
-  export_function(env, exports, "set_stencil", napi_bgfx_set_stencil);
-  export_function(env, exports, "set_scissor", napi_bgfx_set_scissor);
-  export_function(env, exports, "set_scissor_cached", napi_bgfx_set_scissor_cached);
-  export_function(env, exports, "set_transform", napi_bgfx_set_transform);
-  export_function(env, exports, "set_transform_cached", napi_bgfx_set_transform_cached);
-  export_function(env, exports, "set_uniform", napi_bgfx_set_uniform);
+  wrap::set_function(env, exports, "set_palette_color_rgba8", bgfx_set_palette_color_rgba8);
+  wrap::set_function(env, exports, "set_view_name", bgfx_set_view_name);
+  wrap::set_function(env, exports, "set_view_rect", bgfx_set_view_rect);
+  wrap::set_function(env, exports, "set_view_rect_ratio", bgfx_set_view_rect_ratio);
+  wrap::set_function(env, exports, "set_view_scissor", bgfx_set_view_scissor);
+  wrap::set_function(env, exports, "set_view_clear", bgfx_set_view_clear);
+  wrap::set_function(env, exports, "set_view_clear_mrt", bgfx_set_view_clear_mrt);
+  wrap::set_function(env, exports, "set_view_mode", bgfx_set_view_mode);
+  wrap::set_function(env, exports, "set_view_frame_buffer", bgfx_set_view_frame_buffer);
+  wrap::set_function(env, exports, "set_view_transform", bgfx_set_view_transform2);
+  wrap::set_function(env, exports, "encoder_begin", bgfx_encoder_begin);
+  wrap::set_function(env, exports, "encoder_end", bgfx_encoder_end);
+  wrap::set_function(env, exports, "encoder_set_marker", bgfx_encoder_set_marker);
+  wrap::set_function(env, exports, "encoder_set_state", bgfx_encoder_set_state);
+  wrap::set_function(env, exports, "encoder_set_condition", bgfx_encoder_set_condition);
+  wrap::set_function(env, exports, "encoder_set_stencil", bgfx_encoder_set_stencil);
+  wrap::set_function(env, exports, "encoder_set_scissor", bgfx_encoder_set_scissor);
+  wrap::set_function(env, exports, "encoder_set_scissor_cached", bgfx_encoder_set_scissor_cached);
+  wrap::set_function(env, exports, "encoder_set_transform", bgfx_encoder_set_transform2);
+  wrap::set_function(env, exports, "encoder_set_transform_cached", bgfx_encoder_set_transform_cached);
+  wrap::set_function(env, exports, "encoder_set_uniform", bgfx_encoder_set_uniform);
+  wrap::set_function(env, exports, "encoder_set_index_buffer", bgfx_encoder_set_index_buffer);
+  wrap::set_function(env, exports, "encoder_set_dynamic_index_buffer", bgfx_encoder_set_dynamic_index_buffer);
+  wrap::set_function(env, exports, "encoder_set_vertex_buffer", bgfx_encoder_set_vertex_buffer);
+  wrap::set_function(env, exports, "encoder_set_dynamic_vertex_buffer", bgfx_encoder_set_dynamic_vertex_buffer);
+  wrap::set_function(env, exports, "encoder_set_vertex_count", bgfx_encoder_set_vertex_count);
+  wrap::set_function(env, exports, "encoder_set_instance_data_from_vertex_buffer", bgfx_encoder_set_instance_data_from_vertex_buffer);
+  wrap::set_function(env, exports, "encoder_set_instance_data_from_dynamic_vertex_buffer", bgfx_encoder_set_instance_data_from_dynamic_vertex_buffer);
+  wrap::set_function(env, exports, "encoder_set_instance_count", bgfx_encoder_set_instance_count);
+  wrap::set_function(env, exports, "encoder_set_texture", bgfx_encoder_set_texture);
+  wrap::set_function(env, exports, "encoder_touch", bgfx_encoder_touch);
+  wrap::set_function(env, exports, "encoder_submit", bgfx_encoder_submit);
+  wrap::set_function(env, exports, "encoder_submit_occlusion_query", bgfx_encoder_submit_occlusion_query);
+  wrap::set_function(env, exports, "encoder_submit_indirect", bgfx_encoder_submit_indirect);
+  wrap::set_function(env, exports, "encoder_set_compute_index_buffer", bgfx_encoder_set_compute_index_buffer);
+  wrap::set_function(env, exports, "encoder_set_compute_vertex_buffer", bgfx_encoder_set_compute_vertex_buffer);
+  wrap::set_function(env, exports, "encoder_set_compute_dynamic_index_buffer", bgfx_encoder_set_compute_dynamic_index_buffer);
+  wrap::set_function(env, exports, "encoder_set_compute_dynamic_vertex_buffer", bgfx_encoder_set_compute_dynamic_vertex_buffer);
+  wrap::set_function(env, exports, "encoder_set_compute_indirect_buffer", bgfx_encoder_set_compute_indirect_buffer);
+  wrap::set_function(env, exports, "encoder_set_image", bgfx_encoder_set_image);
+  wrap::set_function(env, exports, "encoder_dispatch", bgfx_encoder_dispatch);
+  wrap::set_function(env, exports, "encoder_dispatch_indirect", bgfx_encoder_dispatch_indirect);
+  wrap::set_function(env, exports, "encoder_discard", bgfx_encoder_discard);
+  wrap::set_function(env, exports, "encoder_blit", bgfx_encoder_blit);
+  wrap::set_function(env, exports, "request_screen_shot", bgfx_request_screen_shot);
+  wrap::set_function(env, exports, "render_frame", bgfx_render_frame);
+  wrap::set_function(env, exports, "set_platform_data", bgfx_set_platform_data);
+  wrap::set_function(env, exports, "set_marker", bgfx_set_marker);
+  wrap::set_function(env, exports, "set_state", bgfx_set_state);
+  wrap::set_function(env, exports, "set_condition", bgfx_set_condition);
+  wrap::set_function(env, exports, "set_stencil", bgfx_set_stencil);
+  wrap::set_function(env, exports, "set_scissor", bgfx_set_scissor);
+  wrap::set_function(env, exports, "set_scissor_cached", bgfx_set_scissor_cached);
+  wrap::set_function(env, exports, "set_transform", bgfx_set_transform2);
+  wrap::set_function(env, exports, "set_transform_cached", bgfx_set_transform_cached);
+  wrap::set_function(env, exports, "set_uniform", bgfx_set_uniform);
   wrap::set_function(env, exports, "set_index_buffer", bgfx_set_index_buffer);
   wrap::set_function(env, exports, "set_dynamic_index_buffer", bgfx_set_dynamic_index_buffer);
   wrap::set_function(env, exports, "set_vertex_buffer", bgfx_set_vertex_buffer);
   wrap::set_function(env, exports, "set_dynamic_vertex_buffer", bgfx_set_dynamic_vertex_buffer);
-  export_function(env, exports, "set_vertex_count", napi_bgfx_set_vertex_count);
-  export_function(env, exports, "set_instance_data_from_vertex_buffer", napi_bgfx_set_instance_data_from_vertex_buffer);
-  export_function(env, exports, "set_instance_data_from_dynamic_vertex_buffer", napi_bgfx_set_instance_data_from_dynamic_vertex_buffer);
-  export_function(env, exports, "set_instance_count", napi_bgfx_set_instance_count);
-  export_function(env, exports, "set_texture", napi_bgfx_set_texture);
-  export_function(env, exports, "touch", napi_bgfx_touch);
-  export_function(env, exports, "submit", napi_bgfx_submit);
-  export_function(env, exports, "submit_occlusion_query", napi_bgfx_submit_occlusion_query);
-  export_function(env, exports, "submit_indirect", napi_bgfx_submit_indirect);
+  wrap::set_function(env, exports, "set_vertex_count", bgfx_set_vertex_count);
+  wrap::set_function(env, exports, "set_instance_data_from_vertex_buffer", bgfx_set_instance_data_from_vertex_buffer);
+  wrap::set_function(env, exports, "set_instance_data_from_dynamic_vertex_buffer", bgfx_set_instance_data_from_dynamic_vertex_buffer);
+  wrap::set_function(env, exports, "set_instance_count", bgfx_set_instance_count);
+  wrap::set_function(env, exports, "set_texture", bgfx_set_texture);
+  wrap::set_function(env, exports, "touch", bgfx_touch);
+  wrap::set_function(env, exports, "submit", bgfx_submit);
+  wrap::set_function(env, exports, "submit_occlusion_query", bgfx_submit_occlusion_query);
+  wrap::set_function(env, exports, "submit_indirect", bgfx_submit_indirect);
   wrap::set_function(env, exports, "set_compute_index_buffer", bgfx_set_compute_index_buffer);
   wrap::set_function(env, exports, "set_compute_vertex_buffer", bgfx_set_compute_vertex_buffer);
   wrap::set_function(env, exports, "set_compute_dynamic_index_buffer", bgfx_set_compute_dynamic_index_buffer);
   wrap::set_function(env, exports, "set_compute_dynamic_vertex_buffer", bgfx_set_compute_dynamic_vertex_buffer);
-  export_function(env, exports, "set_compute_indirect_buffer", napi_bgfx_set_compute_indirect_buffer);
-  export_function(env, exports, "set_image", napi_bgfx_set_image);
-  export_function(env, exports, "dispatch", napi_bgfx_dispatch);
-  export_function(env, exports, "dispatch_indirect", napi_bgfx_dispatch_indirect);
-  export_function(env, exports, "discard", napi_bgfx_discard);
-  export_function(env, exports, "blit", napi_bgfx_blit);
+  wrap::set_function(env, exports, "set_compute_indirect_buffer", bgfx_set_compute_indirect_buffer);
+  wrap::set_function(env, exports, "set_image", bgfx_set_image);
+  wrap::set_function(env, exports, "dispatch", bgfx_dispatch);
+  wrap::set_function(env, exports, "dispatch_indirect", bgfx_dispatch_indirect);
+  wrap::set_function(env, exports, "discard", bgfx_discard);
+  wrap::set_function(env, exports, "blit", bgfx_blit);
+  wrap::set_function(env, exports, "init_minimal", bgfx_init_minimal);
+  wrap::set_function(env, exports, "init_headless", bgfx_init_headless);
   export_function(env, exports, "alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
-  export_function(env, exports, "init_minimal", napi_bgfx_init_minimal);
-  export_function(env, exports, "init_headless", napi_bgfx_init_headless);
   return exports;
 }

@@ -334,4 +334,43 @@ inline napi_value encode(napi_env env, bgfx_occlusion_query_handle_t value)
   return result;
 }
 
+//===========================================================================
+struct bgfx_mat4
+{
+  float data[16];
+};
+
+template <>
+inline bgfx_mat4 *decode(napi_env env, napi_value value)
+{
+  size_t n;
+  bgfx_mat4 *result;
+  ok(napi_get_arraybuffer_info(env, value, reinterpret_cast<void **>(&result), &n));
+  if (n != sizeof(bgfx_mat4))
+    throw std::runtime_error("Matrix 4x4 must have 16 float elements.");
+  return result;
+}
+
+//===========================================================================
+struct bgfx_mat4_array
+{
+  bgfx_mat4 *head;
+  size_t count;
+};
+
+template <>
+inline bgfx_mat4_array decode(napi_env env, napi_value value)
+{
+  size_t n;
+  bgfx_mat4 *ptr;
+  ok(napi_get_arraybuffer_info(env, value, reinterpret_cast<void **>(&ptr), &n));
+  if (n % sizeof(bgfx_mat4))
+    throw std::runtime_error("Matrix 4x4 array must have multiple of 16 float elements.");
+
+  bgfx_mat4_array result;
+  result.head = ptr;
+  result.count = n / sizeof(bgfx_mat4);
+  return result;
+}
+
 } // namespace wrap
