@@ -19,17 +19,17 @@ napi_value napi_bgfx_alloc_vertex_decl(napi_env env, napi_callback_info info)
   return _napi_ret;
 }
 
-uint32_t bgfx_encoder_set_transform2(bgfx_encoder_t *encoder, wrap::bgfx_mat4_array arr)
+uint32_t bgfx_encoder_set_transform2(bgfx_encoder_t *encoder, wrap::bgfx_mat4_array_t arr)
 {
   return bgfx_encoder_set_transform(encoder, arr.head, arr.count);
 }
 
-uint32_t bgfx_set_transform2(wrap::bgfx_mat4_array arr)
+uint32_t bgfx_set_transform2(wrap::bgfx_mat4_array_t arr)
 {
   return bgfx_set_transform(arr.head, arr.count);
 }
 
-void bgfx_set_view_transform2(bgfx_view_id_t view, wrap::bgfx_mat4 *xform, wrap::bgfx_mat4 *proj)
+void bgfx_set_view_transform2(bgfx_view_id_t view, wrap::bgfx_mat4_t *xform, wrap::bgfx_mat4_t *proj)
 {
   bgfx_set_view_transform(view, static_cast<void *>(xform), static_cast<void *>(proj));
 }
@@ -57,6 +57,21 @@ bool bgfx_init_headless()
 void bgfx_dbg_text_print(uint16_t x, uint16_t y, uint8_t attr, const std::string text)
 {
   bgfx_dbg_text_printf(x, y, attr, "%s", text.c_str());
+}
+
+void bgfx_draw(bgfx_drawcall_t drawcall)
+{
+  bgfx_set_transform(mtx, num);
+  bgfx_set_index_buffer(m_ibh, 0, 0xffffffff);
+  bgfx_set_vertex_buffer(0, m_vbh, 0, 0xffffffff);
+  bgfx_set_state(bgfx.STATE_DEFAULT, 0);
+
+  for (const auto uniform : uniforms)
+  {
+    bgfx_set_uniform(handle, value, num);
+  }
+
+  bgfx_submit(view, program, depth, preserveState);
 }
 
 napi_value create_bgfx(napi_env env)
@@ -198,6 +213,7 @@ napi_value create_bgfx(napi_env env)
   wrap::set_function(env, exports, "blit", bgfx_blit);
   wrap::set_function(env, exports, "init_minimal", bgfx_init_minimal);
   wrap::set_function(env, exports, "init_headless", bgfx_init_headless);
+  wrap::set_function(env, exports, "draw", bgfx_draw);
   export_function(env, exports, "alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
   return exports;
 }
