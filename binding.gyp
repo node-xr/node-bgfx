@@ -11,8 +11,11 @@
       'target_name': 'bgfx',
       'defines': [
         'NAPI_EXPERIMENTAL',
-        'NAPI_DISABLE_CPP_EXCEPTIONS',
+        'NAPI_ENABLE_CPP_EXCEPTIONS',
       ],
+      'cflags_cc': [ '-std=c++17', '-Wall', '-pedantic' ],
+      'cflags!': [ '-fno-exceptions' ],
+      'cflags_cc!': [ '-fno-exceptions' ],
       'sources': [
         'src/bindings.cpp',
         'src/bgfx.cpp',

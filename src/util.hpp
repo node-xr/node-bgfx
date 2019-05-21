@@ -22,5 +22,5 @@
     }                                                       \
   }
 
-napi_status napi_get_value_external_opt(napi_env env, napi_value value, void** result);
+napi_status napi_get_value_external_opt(napi_env env, napi_value value, void **result);
 void export_function(napi_env env, napi_value exports, const char *name, napi_callback fn);
