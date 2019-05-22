@@ -373,21 +373,4 @@ inline bgfx_mat4_array_t decode(napi_env env, napi_value value)
   return result;
 }
 
-//===========================================================================
-struct bgfx_drawcall_t
-{
-  uint32_t state;
-  void *index_buffer;
-  void *vertex_buffer;
-  bgfx_mat4_array_t transform;
-  std::vector<void *> uniforms;
-};
-
-template <>
-inline bgfx_drawcall_t decode(napi_env env, napi_value value)
-{
-  bgfx_drawcall_t result;
-  return result;
-}
-
 } // namespace wrap

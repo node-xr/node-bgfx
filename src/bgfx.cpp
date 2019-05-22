@@ -59,21 +59,6 @@ void bgfx_dbg_text_print(uint16_t x, uint16_t y, uint8_t attr, const std::string
   bgfx_dbg_text_printf(x, y, attr, "%s", text.c_str());
 }
 
-void bgfx_draw(bgfx_drawcall_t drawcall)
-{
-  bgfx_set_transform(mtx, num);
-  bgfx_set_index_buffer(m_ibh, 0, 0xffffffff);
-  bgfx_set_vertex_buffer(0, m_vbh, 0, 0xffffffff);
-  bgfx_set_state(bgfx.STATE_DEFAULT, 0);
-
-  for (const auto uniform : uniforms)
-  {
-    bgfx_set_uniform(handle, value, num);
-  }
-
-  bgfx_submit(view, program, depth, preserveState);
-}
-
 napi_value create_bgfx(napi_env env)
 {
   napi_value exports;
