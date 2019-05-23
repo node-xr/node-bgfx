@@ -47,6 +47,21 @@ T decode_idx(napi_env env, napi_value *argv, size_t idx)
   return decode<T>(env, argv[idx]);
 }
 
+template <typename T>
+T decode_property(napi_env env, napi_value object, const char *prop)
+{
+  napi_value result;
+  ok(napi_get_named_property(env, object, prop, &result));
+  return decode<T>(env, result);
+}
+
+template <typename T>
+void encode_property(napi_env env, napi_value object, const char *prop, const T value)
+{
+  napi_value result = encode<T>(env, value);
+  ok(napi_set_named_property(env, object, prop, result));
+}
+
 // https://blog.tartanllama.xyz/exploding-tuples-fold-expressions/
 template <typename Result, typename... Args, std::size_t... Idx>
 napi_value caller(Result (*fn)(Args...), napi_env env, napi_value *argv, std::index_sequence<Idx...>)

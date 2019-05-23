@@ -36,12 +36,8 @@ void bgfx_draw(bgfx_drawcall_t drawcall);
 
 namespace wrap
 {
-//===========================================================================
+
 template <>
-inline bgfx_drawcall_t decode(napi_env env, napi_value value)
-{
-  bgfx_drawcall_t result;
-  return result;
-}
+bgfx_drawcall_t decode(napi_env env, napi_value value);
 
 } // namespace wrap
