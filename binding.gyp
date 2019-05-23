@@ -39,6 +39,9 @@
             '-Wl,-rpath,<(module_root_dir)/deps/bgfx/bin/darwin/x64',
             '<(module_root_dir)/deps/bgfx/bin/darwin/x64/libbgfx-shared-libRelease.dylib'
           ],
+          'xcode_settings': {
+            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
+          },
         }],
         ['platform=="win32"', {
           'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/win32/x64'],
