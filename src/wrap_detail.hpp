@@ -56,6 +56,19 @@ T decode_property(napi_env env, napi_value object, const char *prop)
 }
 
 template <typename T>
+T decode_property(napi_env env, napi_value object, const char *prop, T default_value)
+{
+  bool has_property;
+  ok(napi_has_named_property(env, object, prop, &has_property));
+
+  if (has_property) {
+    return decode_property<T>(env, object, prop);
+  } else {
+    return default_value;
+  }
+}
+
+template <typename T>
 void encode_property(napi_env env, napi_value object, const char *prop, const T value)
 {
   napi_value result = encode<T>(env, value);
