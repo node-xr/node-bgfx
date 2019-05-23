@@ -1,7 +1,7 @@
 #pragma once
+#include <cstring>
 #include <node_api.h>
 #include <type_traits>
-#include <cstring>
 
 namespace wrap
 {

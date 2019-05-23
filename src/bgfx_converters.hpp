@@ -1,6 +1,18 @@
 #pragma once
+#include "wrap.hpp"
+#include <bgfx/c99/bgfx.h>
 #include <node_api.h>
-#include "bgfx.hpp"
+
+struct bgfx_mat4_t
+{
+  float data[16];
+};
+
+struct bgfx_mat4_array_t
+{
+  bgfx_mat4_t *head;
+  size_t count;
+};
 
 namespace wrap
 {
@@ -335,11 +347,6 @@ inline napi_value encode(napi_env env, bgfx_occlusion_query_handle_t value)
 }
 
 //===========================================================================
-struct bgfx_mat4_t
-{
-  float data[16];
-};
-
 template <>
 inline bgfx_mat4_t *decode(napi_env env, napi_value value)
 {
@@ -352,12 +359,6 @@ inline bgfx_mat4_t *decode(napi_env env, napi_value value)
 }
 
 //===========================================================================
-struct bgfx_mat4_array_t
-{
-  bgfx_mat4_t *head;
-  size_t count;
-};
-
 template <>
 inline bgfx_mat4_array_t decode(napi_env env, napi_value value)
 {

@@ -1,9 +1,9 @@
 #pragma once
-#include <node_api.h>
 #include <array>
+#include <node_api.h>
+#include <sstream>
 #include <stdexcept>
 #include <utility>
-#include <sstream>
 
 namespace wrap
 {
