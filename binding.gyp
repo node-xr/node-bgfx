@@ -17,8 +17,9 @@
       'cflags!': [ '-fno-exceptions' ],
       'cflags_cc!': [ '-fno-exceptions' ],
       'sources': [
-        'src/bindings.cpp',
+        'src/bgfx_draw.cpp',
         'src/bgfx.cpp',
+        'src/bindings.cpp',
         'src/util.cpp',
       ],
       'include_dirs': [

@@ -28,7 +28,7 @@ inline const bgfx_memory_t *decode(napi_env env, napi_value value)
 }
 
 //===========================================================================
-void bgfx_finalize_index_buffer(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_index_buffer(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -57,7 +57,7 @@ inline napi_value encode(napi_env env, bgfx_index_buffer_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_dynamic_index_buffer(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_dynamic_index_buffer(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -86,7 +86,7 @@ inline napi_value encode(napi_env env, bgfx_dynamic_index_buffer_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_vertex_buffer(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_vertex_buffer(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -115,7 +115,7 @@ inline napi_value encode(napi_env env, bgfx_vertex_buffer_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_dynamic_vertex_buffer(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_dynamic_vertex_buffer(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -144,7 +144,7 @@ inline napi_value encode(napi_env env, bgfx_dynamic_vertex_buffer_handle_t value
 }
 
 //===========================================================================
-void bgfx_finalize_indirect_buffer(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_indirect_buffer(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -173,7 +173,7 @@ inline napi_value encode(napi_env env, bgfx_indirect_buffer_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_shader(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_shader(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -202,7 +202,7 @@ inline napi_value encode(napi_env env, bgfx_shader_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_program(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_program(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -231,7 +231,7 @@ inline napi_value encode(napi_env env, bgfx_program_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_texture(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_texture(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -260,7 +260,7 @@ inline napi_value encode(napi_env env, bgfx_texture_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_frame_buffer(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_frame_buffer(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -289,7 +289,7 @@ inline napi_value encode(napi_env env, bgfx_frame_buffer_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_uniform(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_uniform(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
@@ -318,7 +318,7 @@ inline napi_value encode(napi_env env, bgfx_uniform_handle_t value)
 }
 
 //===========================================================================
-void bgfx_finalize_occlusion_query(napi_env env, void *data, void *hint)
+inline void bgfx_finalize_occlusion_query(napi_env env, void *data, void *hint)
 {
   auto handle = reinterpret_cast<uintptr_t>(data);
 
