@@ -1,6 +1,5 @@
 const bgfx = require('../../lib/index.js');
 const SDL = require('sdl2');
-const fs = require('fs');
 const path = require('path');
 const { mat4, vec3 } = require('gl-matrix');
 
