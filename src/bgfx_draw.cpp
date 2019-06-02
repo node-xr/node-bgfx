@@ -39,9 +39,27 @@ template <>
 inline bgfx_index_buffer_args_t decode(napi_env env, napi_value value)
 {
   bgfx_index_buffer_args_t result;
-  result.buffer = reinterpret_cast<uintptr_t>(decode_property<void *>(env, value, "buffer"));
-  result.first = decode_property<uint32_t>(env, value, "first", 0);
-  result.numIndices = decode_property<uint32_t>(env, value, "numIndices", UINT32_MAX);
+
+  napi_valuetype type;
+  ok(napi_typeof(env, value, &type));
+
+  if (type == napi_object)
+  {
+    result.buffer = reinterpret_cast<uintptr_t>(decode_property<void *>(env, value, "buffer"));
+    result.first = decode_property<uint32_t>(env, value, "first", 0);
+    result.numIndices = decode_property<uint32_t>(env, value, "numIndices", UINT32_MAX);
+  }
+  else if (type == napi_external)
+  {
+    result.buffer = reinterpret_cast<uintptr_t>(decode<void *>(env, value));
+    result.first = 0;
+    result.numIndices = UINT32_MAX;
+  }
+  else
+  {
+    throw std::runtime_error("Invalid index buffer.");
+  }
+
   return result;
 }
 
@@ -49,10 +67,29 @@ template <>
 inline bgfx_vertex_buffer_args_t decode(napi_env env, napi_value value)
 {
   bgfx_vertex_buffer_args_t result;
-  result.stream = decode_property<uint8_t>(env, value, "stream", 0);
-  result.buffer = reinterpret_cast<uintptr_t>(decode_property<void *>(env, value, "buffer"));
-  result.first = decode_property<uint32_t>(env, value, "first", 0);
-  result.numIndices = decode_property<uint32_t>(env, value, "numIndices", UINT32_MAX);
+
+  napi_valuetype type;
+  ok(napi_typeof(env, value, &type));
+
+  if (type == napi_object)
+  {
+    result.stream = decode_property<uint8_t>(env, value, "stream", 0);
+    result.buffer = reinterpret_cast<uintptr_t>(decode_property<void *>(env, value, "buffer"));
+    result.first = decode_property<uint32_t>(env, value, "first", 0);
+    result.numIndices = decode_property<uint32_t>(env, value, "numIndices", UINT32_MAX);
+  }
+  else if (type == napi_external)
+  {
+    result.stream = 0;
+    result.buffer = reinterpret_cast<uintptr_t>(decode<void *>(env, value));
+    result.first = 0;
+    result.numIndices = UINT32_MAX;
+  }
+  else
+  {
+    throw std::runtime_error("Invalid index buffer.");
+  }
+
   return result;
 }
 

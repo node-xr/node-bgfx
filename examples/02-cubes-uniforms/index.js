@@ -145,12 +145,8 @@ const main = async () => {
         const draw_begin = process.hrtime.bigint();
         bgfx.draw({
           xform: mtx.buffer,
-          vertex: {
-            buffer: m_vbh,
-          },
-          index: {
-            buffer: m_ibh,
-          },
+          vertex: m_vbh,
+          index: m_ibh,
           uniforms: [[u_baseColor, baseColor]],
           program: m_program,
           view: 0,
