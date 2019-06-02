@@ -4,9 +4,12 @@
 #include <sstream>
 #include <stdexcept>
 #include <utility>
+#include <experimental/optional>
 
 namespace wrap
 {
+template <typename T>
+using optional = std::experimental::optional<T>;
 
 // https://stackoverflow.com/a/47640807
 template <typename T, typename = void>
@@ -56,15 +59,36 @@ T decode_property(napi_env env, napi_value object, const char *prop)
 }
 
 template <typename T>
-T decode_property(napi_env env, napi_value object, const char *prop, T default_value)
+T decode_property(napi_env env, napi_value object, const char *prop, const T default_value)
 {
   bool has_property;
   ok(napi_has_named_property(env, object, prop, &has_property));
 
-  if (has_property) {
+  if (has_property)
+  {
     return decode_property<T>(env, object, prop);
-  } else {
+  }
+  else
+  {
     return default_value;
+  }
+}
+
+template <typename T>
+optional<T> decode_property_opt(napi_env env, napi_value object, const char *prop)
+{
+  bool has_property;
+  ok(napi_has_named_property(env, object, prop, &has_property));
+
+  if (has_property)
+  {
+    napi_value result;
+    ok(napi_get_named_property(env, object, prop, &result));
+    return {decode<T>(env, result)};
+  }
+  else
+  {
+    return {};
   }
 }
 

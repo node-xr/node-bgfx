@@ -33,8 +33,8 @@ struct bgfx_drawcall_t
   uint64_t state;
   uint32_t rgba;
   uint32_t depth;
-  bgfx_index_buffer_args_t index;
-  bgfx_vertex_buffer_args_t vertex;
+  wrap::optional<bgfx_index_buffer_args_t> index;
+  wrap::optional<bgfx_vertex_buffer_args_t> vertex;
   std::vector<bgfx_uniform_args_t> uniforms;
   bgfx_view_id_t view;
   bgfx_program_handle_t program;

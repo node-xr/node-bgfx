@@ -128,18 +128,28 @@ const main = async () => {
         mat4.rotateX(mtx, mtx, xx + time);
         mat4.rotateY(mtx, mtx, yy + time);
 
-        // Set model matrix for rendering.
-        bgfx.set_transform(mtx.buffer);
-
-        // Set vertex and index buffer.
-        bgfx.set_vertex_buffer(0, m_vbh, 0, 0xffffffff);
-        bgfx.set_index_buffer(m_ibh, 0, 0xffffffff);
-
-        // Set render states.
-        bgfx.set_state(bgfx.STATE_DEFAULT, 0);
-
-        // Submit primitive for rendering to view 0.
-        bgfx.submit(0, m_program, 0, false);
+        // Use unified draw call.
+        bgfx.draw({
+          xform: mtx.buffer,
+          vertex: {
+            stream: 0,
+            buffer: m_vbh,
+            first: 0,
+            numIndices: 0xffffffff,
+          },
+          index: {
+            buffer: m_ibh,
+            first: 0,
+            numIndices: 0xffffffff,
+          },
+          state: bgfx.STATE_DEFAULT,
+          rgba: 0,
+          program: m_program,
+          depth: 0,
+          uniforms: [],
+          view: 0,
+          preserve_state: false,
+        });
       }
     }
 

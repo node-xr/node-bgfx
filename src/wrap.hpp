@@ -37,7 +37,7 @@ T decode_property(napi_env env, napi_value object, const char *prop);
 
 // Decode a property of a javascript object or return a default value.
 template <typename T>
-T decode_property(napi_env env, napi_value object, const char *prop, T default_value);
+T decode_property(napi_env env, napi_value object, const char *prop, const T default_value);
 
 // Encode a property and store it in a javascript object.
 // Specialize this function to implement a custom encoder for a single type.

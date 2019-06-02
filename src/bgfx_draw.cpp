@@ -1,6 +1,12 @@
 #include "bgfx_draw.hpp"
 #include "bgfx_converters.hpp"
 
+const std::vector<bgfx_uniform_args_t> EMPTY_UNIFORMS;
+const bgfx_mat4_t IDENTITY_MATRIX = {{1, 0, 0, 0,
+                                      0, 1, 0, 0,
+                                      0, 0, 1, 0,
+                                      0, 0, 0, 1}};
+
 template <typename T>
 constexpr T to_handle(uintptr_t handle)
 {
@@ -16,9 +22,9 @@ template <>
 inline bgfx_index_buffer_args_t decode(napi_env env, napi_value value)
 {
   bgfx_index_buffer_args_t result;
-  result.buffer = decode_property<uintptr_t>(env, value, "buffer");
-  result.first = decode_property<uint32_t>(env, value, "first");
-  result.numIndices = decode_property<uint32_t>(env, value, "numIndices");
+  result.buffer = reinterpret_cast<uintptr_t>(decode_property<void *>(env, value, "buffer"));
+  result.first = decode_property<uint32_t>(env, value, "first", 0);
+  result.numIndices = decode_property<uint32_t>(env, value, "numIndices", UINT32_MAX);
   return result;
 }
 
@@ -26,9 +32,10 @@ template <>
 inline bgfx_vertex_buffer_args_t decode(napi_env env, napi_value value)
 {
   bgfx_vertex_buffer_args_t result;
-  result.buffer = decode_property<uintptr_t>(env, value, "buffer");
-  result.first = decode_property<uint32_t>(env, value, "first");
-  result.numIndices = decode_property<uint32_t>(env, value, "numIndices");
+  result.stream = decode_property<uint8_t>(env, value, "stream", 0);
+  result.buffer = reinterpret_cast<uintptr_t>(decode_property<void *>(env, value, "buffer"));
+  result.first = decode_property<uint32_t>(env, value, "first", 0);
+  result.numIndices = decode_property<uint32_t>(env, value, "numIndices", UINT32_MAX);
   return result;
 }
 
@@ -46,16 +53,16 @@ template <>
 bgfx_drawcall_t decode(napi_env env, napi_value value)
 {
   bgfx_drawcall_t result;
-  result.xform = wrap::decode_property<bgfx_mat4_t *>(env, value, "xform");
-  result.state = wrap::decode_property<uint64_t>(env, value, "state");
-  result.rgba = wrap::decode_property<uint32_t>(env, value, "rgba");
-  result.depth = wrap::decode_property<uint32_t>(env, value, "depth");
-  result.index = wrap::decode_property<bgfx_index_buffer_args_t>(env, value, "index");
-  result.vertex = wrap::decode_property<bgfx_vertex_buffer_args_t>(env, value, "vertex");
-  result.uniforms = wrap::decode_property<std::vector<bgfx_uniform_args_t>>(env, value, "uniforms");
+  result.xform = wrap::decode_property<bgfx_mat4_t *>(env, value, "xform", const_cast<bgfx_mat4_t *>(&IDENTITY_MATRIX));
+  result.state = wrap::decode_property<uint64_t>(env, value, "state", BGFX_STATE_DEFAULT);
+  result.rgba = wrap::decode_property<uint32_t>(env, value, "rgba", 0);
+  result.depth = wrap::decode_property<uint32_t>(env, value, "depth", 0);
+  result.index = wrap::decode_property_opt<bgfx_index_buffer_args_t>(env, value, "index");
+  result.vertex = wrap::decode_property_opt<bgfx_vertex_buffer_args_t>(env, value, "vertex");
+  result.uniforms = wrap::decode_property<std::vector<bgfx_uniform_args_t>>(env, value, "uniforms", EMPTY_UNIFORMS);
   result.view = wrap::decode_property<bgfx_view_id_t>(env, value, "view");
   result.program = wrap::decode_property<bgfx_program_handle_t>(env, value, "program");
-  result.preserve_state = wrap::decode_property<bool>(env, value, "preserve_state");
+  result.preserve_state = wrap::decode_property<bool>(env, value, "preserve_state", false);
   return result;
 }
 
@@ -65,44 +72,52 @@ void bgfx_draw(bgfx_drawcall_t drawcall)
 {
   bgfx_set_transform(drawcall.xform, 1);
 
-  if (bgfx_get_handle_type(drawcall.index.buffer) == bgfx_handle_type::dynamic_index)
+  if (drawcall.index)
   {
-    bgfx_set_dynamic_index_buffer(
-        to_handle<bgfx_dynamic_index_buffer_handle_t>(drawcall.index.buffer),
-        drawcall.index.first,
-        drawcall.index.numIndices);
-  }
-  else if (bgfx_get_handle_type(drawcall.index.buffer) == bgfx_handle_type::index)
-  {
-    bgfx_set_index_buffer(
-        to_handle<bgfx_index_buffer_handle_t>(drawcall.index.buffer),
-        drawcall.index.first,
-        drawcall.index.numIndices);
-  }
-  else
-  {
-    throw std::runtime_error("Invalid index buffer handle.");
+    auto index = *drawcall.index;
+    if (bgfx_get_handle_type(index.buffer) == bgfx_handle_type::dynamic_index)
+    {
+      bgfx_set_dynamic_index_buffer(
+          to_handle<bgfx_dynamic_index_buffer_handle_t>(index.buffer),
+          index.first,
+          index.numIndices);
+    }
+    else if (bgfx_get_handle_type(index.buffer) == bgfx_handle_type::index)
+    {
+      bgfx_set_index_buffer(
+          to_handle<bgfx_index_buffer_handle_t>(index.buffer),
+          index.first,
+          index.numIndices);
+    }
+    else
+    {
+      throw std::runtime_error("Invalid index buffer handle.");
+    }
   }
 
-  if (bgfx_get_handle_type(drawcall.index.buffer) == bgfx_handle_type::dynamic_vertex)
+  if (drawcall.vertex)
   {
-    bgfx_set_dynamic_vertex_buffer(
-        drawcall.vertex.stream,
-        to_handle<bgfx_dynamic_vertex_buffer_handle_t>(drawcall.vertex.buffer),
-        drawcall.vertex.first,
-        drawcall.vertex.numIndices);
-  }
-  else if (bgfx_get_handle_type(drawcall.index.buffer) == bgfx_handle_type::vertex)
-  {
-    bgfx_set_vertex_buffer(
-        drawcall.vertex.stream,
-        to_handle<bgfx_vertex_buffer_handle_t>(drawcall.vertex.buffer),
-        drawcall.vertex.first,
-        drawcall.vertex.numIndices);
-  }
-  else
-  {
-    throw std::runtime_error("Invalid vertex buffer handle.");
+    auto vertex = *drawcall.vertex;
+    if (bgfx_get_handle_type(vertex.buffer) == bgfx_handle_type::dynamic_vertex)
+    {
+      bgfx_set_dynamic_vertex_buffer(
+          vertex.stream,
+          to_handle<bgfx_dynamic_vertex_buffer_handle_t>(vertex.buffer),
+          vertex.first,
+          vertex.numIndices);
+    }
+    else if (bgfx_get_handle_type(vertex.buffer) == bgfx_handle_type::vertex)
+    {
+      bgfx_set_vertex_buffer(
+          vertex.stream,
+          to_handle<bgfx_vertex_buffer_handle_t>(vertex.buffer),
+          vertex.first,
+          vertex.numIndices);
+    }
+    else
+    {
+      throw std::runtime_error("Invalid vertex buffer handle.");
+    }
   }
 
   for (const auto uniform : drawcall.uniforms)
