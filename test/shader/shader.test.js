@@ -87,14 +87,12 @@ describe('loadShader', () => {
     const handle = await loadShader(vertex.binary);
     expect(handle).toBeDefined();
     expect(handle).not.toEqual(constants.INVALID_HANDLE);
-    bgfx.destroy_shader(handle);
   });
 
   it('can load a fragment shader', async () => {
     const handle = await loadShader(fragment.binary);
     expect(handle).toBeDefined();
     expect(handle).not.toEqual(constants.INVALID_HANDLE);
-    bgfx.destroy_shader(handle);
   });
 });
 
@@ -103,7 +101,6 @@ describe('loadProgram', () => {
     const handle = await loadProgram(vertex.binary, fragment.binary);
     expect(handle).toBeDefined();
     expect(handle).not.toEqual(constants.INVALID_HANDLE);
-    bgfx.destroy_program(handle);
   });
 });
 
@@ -123,14 +120,12 @@ describe('ShaderCache', () => {
       const handle = await cache.load(vertex.source, 'vertex');
       expect(handle).toBeDefined();
       expect(handle).not.toEqual(constants.INVALID_HANDLE);
-      bgfx.destroy_shader(handle);
     });
 
     it('can load a fragment shader', async () => {
       const handle = await cache.load(fragment.source, 'fragment');
       expect(handle).toBeDefined();
       expect(handle).not.toEqual(constants.INVALID_HANDLE);
-      bgfx.destroy_shader(handle);
     });
   });
 
@@ -139,7 +134,6 @@ describe('ShaderCache', () => {
       const handle = await cache.program(vertex.source, fragment.source);
       expect(handle).toBeDefined();
       expect(handle).not.toEqual(constants.INVALID_HANDLE);
-      bgfx.destroy_program(handle);
     });
   });
 });

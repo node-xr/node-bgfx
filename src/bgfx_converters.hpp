@@ -14,6 +14,33 @@ struct bgfx_mat4_array_t
   size_t count;
 };
 
+enum class bgfx_handle_type
+{
+  dynamic_index = 0x00,
+  dynamic_vertex,
+  frame,
+  index,
+  indirect,
+  occlusion,
+  program,
+  shader,
+  texture,
+  uniform,
+  vertex,
+  vertex_decl,
+};
+static_assert(sizeof(bgfx_handle_type) == 4);
+
+constexpr bgfx_handle_type bgfx_get_handle_type(uintptr_t handle)
+{
+  return static_cast<bgfx_handle_type>((handle >> 16) & 0xFFFF);
+}
+
+constexpr uintptr_t bgfx_set_handle_type(uintptr_t handle, bgfx_handle_type type)
+{
+  return handle | (static_cast<uint16_t>(type) << 16);
+}
+
 namespace wrap
 {
 
@@ -42,6 +69,8 @@ inline bgfx_index_buffer_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::index)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_index_buffer_handle_t result;
   result.idx = handle;
@@ -51,8 +80,10 @@ inline bgfx_index_buffer_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_index_buffer_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::index);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_index_buffer, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_index_buffer, nullptr, &result));
   return result;
 }
 
@@ -71,6 +102,8 @@ inline bgfx_dynamic_index_buffer_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::index)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_dynamic_index_buffer_handle_t result;
   result.idx = handle;
@@ -80,8 +113,10 @@ inline bgfx_dynamic_index_buffer_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_dynamic_index_buffer_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::dynamic_index);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_dynamic_index_buffer, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_dynamic_index_buffer, nullptr, &result));
   return result;
 }
 
@@ -100,6 +135,8 @@ inline bgfx_vertex_buffer_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::vertex)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_vertex_buffer_handle_t result;
   result.idx = handle;
@@ -109,8 +146,10 @@ inline bgfx_vertex_buffer_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_vertex_buffer_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::vertex);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_vertex_buffer, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_vertex_buffer, nullptr, &result));
   return result;
 }
 
@@ -129,6 +168,8 @@ inline bgfx_dynamic_vertex_buffer_handle_t decode(napi_env env, napi_value value
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::dynamic_vertex)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_dynamic_vertex_buffer_handle_t result;
   result.idx = handle;
@@ -138,8 +179,10 @@ inline bgfx_dynamic_vertex_buffer_handle_t decode(napi_env env, napi_value value
 template <>
 inline napi_value encode(napi_env env, bgfx_dynamic_vertex_buffer_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::dynamic_vertex);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_dynamic_vertex_buffer, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_dynamic_vertex_buffer, nullptr, &result));
   return result;
 }
 
@@ -158,6 +201,8 @@ inline bgfx_indirect_buffer_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::indirect)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_indirect_buffer_handle_t result;
   result.idx = handle;
@@ -167,8 +212,10 @@ inline bgfx_indirect_buffer_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_indirect_buffer_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::indirect);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_indirect_buffer, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_indirect_buffer, nullptr, &result));
   return result;
 }
 
@@ -187,6 +234,8 @@ inline bgfx_shader_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::shader)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_shader_handle_t result;
   result.idx = handle;
@@ -196,8 +245,10 @@ inline bgfx_shader_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_shader_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::shader);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_shader, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_shader, nullptr, &result));
   return result;
 }
 
@@ -216,6 +267,8 @@ inline bgfx_program_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::program)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_program_handle_t result;
   result.idx = handle;
@@ -225,8 +278,10 @@ inline bgfx_program_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_program_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::program);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_program, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_program, nullptr, &result));
   return result;
 }
 
@@ -245,6 +300,8 @@ inline bgfx_texture_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::texture)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_texture_handle_t result;
   result.idx = handle;
@@ -254,8 +311,10 @@ inline bgfx_texture_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_texture_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::texture);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_texture, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_texture, nullptr, &result));
   return result;
 }
 
@@ -274,6 +333,8 @@ inline bgfx_frame_buffer_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::frame)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_frame_buffer_handle_t result;
   result.idx = handle;
@@ -283,8 +344,10 @@ inline bgfx_frame_buffer_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_frame_buffer_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::frame);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_frame_buffer, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_frame_buffer, nullptr, &result));
   return result;
 }
 
@@ -303,6 +366,8 @@ inline bgfx_uniform_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::uniform)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_uniform_handle_t result;
   result.idx = handle;
@@ -312,8 +377,10 @@ inline bgfx_uniform_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_uniform_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::uniform);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_uniform, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_uniform, nullptr, &result));
   return result;
 }
 
@@ -332,6 +399,8 @@ inline bgfx_occlusion_query_handle_t decode(napi_env env, napi_value value)
 {
   uintptr_t handle;
   ok(napi_get_value_external(env, value, reinterpret_cast<void **>(&handle)));
+  if (bgfx_get_handle_type(handle) != bgfx_handle_type::occlusion)
+    throw std::runtime_error("Invalid handle type.");
 
   bgfx_occlusion_query_handle_t result;
   result.idx = handle;
@@ -341,8 +410,10 @@ inline bgfx_occlusion_query_handle_t decode(napi_env env, napi_value value)
 template <>
 inline napi_value encode(napi_env env, bgfx_occlusion_query_handle_t value)
 {
+  uintptr_t handle = bgfx_set_handle_type(value.idx, bgfx_handle_type::occlusion);
+
   napi_value result;
-  ok(napi_create_external(env, reinterpret_cast<void *>(value.idx), bgfx_finalize_occlusion_query, nullptr, &result));
+  ok(napi_create_external(env, reinterpret_cast<void *>(handle), bgfx_finalize_occlusion_query, nullptr, &result));
   return result;
 }
 
