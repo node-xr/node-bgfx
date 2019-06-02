@@ -130,12 +130,8 @@ const main = async () => {
         // Use unified draw call.
         bgfx.draw({
           xform: mtx.buffer,
-          vertex: {
-            buffer: m_vbh,
-          },
-          index: {
-            buffer: m_ibh,
-          },
+          vertex: m_vbh,
+          index: m_ibh,
           program: m_program,
           view: 0,
         });
