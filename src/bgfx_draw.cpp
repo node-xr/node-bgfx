@@ -7,6 +7,23 @@ const bgfx_mat4_t IDENTITY_MATRIX = {{1, 0, 0, 0,
                                       0, 0, 1, 0,
                                       0, 0, 0, 1}};
 
+constexpr size_t uniform_size(bgfx_uniform_type_t type)
+{
+  switch (type)
+  {
+  case BGFX_UNIFORM_TYPE_SAMPLER:
+    return sizeof(bgfx_texture_handle_t);
+  case BGFX_UNIFORM_TYPE_VEC4:
+    return sizeof(float) * 4;
+  case BGFX_UNIFORM_TYPE_MAT3:
+    return sizeof(float) * 9;
+  case BGFX_UNIFORM_TYPE_MAT4:
+    return sizeof(float) * 9;
+  default:
+    throw std::runtime_error("Unsupported uniform type.");
+  }
+}
+
 template <typename T>
 constexpr T to_handle(uintptr_t handle)
 {
@@ -44,8 +61,20 @@ inline bgfx_uniform_args_t decode(napi_env env, napi_value value)
 {
   bgfx_uniform_args_t result;
   result.handle = decode_property<bgfx_uniform_handle_t>(env, value, "handle");
-  result.value = decode_property<void *>(env, value, "value");
-  result.num = decode_property<uint32_t>(env, value, "num", UINT16_MAX);
+  // result.num = decode_property<uint32_t>(env, value, "num", UINT16_MAX);
+
+  // TODO: is retrieving this a performance problem?
+  bgfx_uniform_info_t info;
+  bgfx_get_uniform_info(result.handle, &info);
+  const auto element_size = uniform_size(info.type);
+
+  napi_value buffer;
+  ok(napi_get_named_property(env, value, "value", &buffer));
+
+  size_t len;
+  napi_get_arraybuffer_info(env, buffer, &result.value, &len);
+
+  result.num = len / element_size;
   return result;
 }
 
