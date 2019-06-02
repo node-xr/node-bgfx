@@ -33,6 +33,18 @@ inline napi_value encode(napi_env env, const std::string &value)
 
 //===========================================================================
 template <>
+inline const char *decode(napi_env env, napi_value value)
+{
+  constexpr size_t buffer_len = 2048;
+  char *leaky_buffer = new char[buffer_len];
+
+  // FIXME: this is 100% wrong behavior.
+  size_t result_len;
+  ok(napi_get_value_string_utf8(env, value, leaky_buffer, buffer_len, &result_len));
+  return leaky_buffer;
+}
+
+template <>
 inline napi_value encode(napi_env env, const char *value)
 {
   napi_value result;
