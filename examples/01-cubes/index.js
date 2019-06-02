@@ -132,23 +132,13 @@ const main = async () => {
         bgfx.draw({
           xform: mtx.buffer,
           vertex: {
-            stream: 0,
             buffer: m_vbh,
-            first: 0,
-            numIndices: 0xffffffff,
           },
           index: {
             buffer: m_ibh,
-            first: 0,
-            numIndices: 0xffffffff,
           },
-          state: bgfx.STATE_DEFAULT,
-          rgba: 0,
           program: m_program,
-          depth: 0,
-          uniforms: [],
           view: 0,
-          preserve_state: false,
         });
       }
     }
