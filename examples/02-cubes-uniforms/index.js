@@ -87,6 +87,7 @@ const main = async () => {
     bgfx.UNIFORM_TYPE.VEC_4,
     1,
   );
+  const baseColor = Float32Array.from([0.5, 1.0, 0.5, 0.5]).buffer;
 
   const m_vbh = PosColorVertex.wrap({
     POSITION: s_cubePosition,
@@ -98,42 +99,50 @@ const main = async () => {
     BUFFER_NONE,
   );
 
+  const at = vec3.fromValues(0.0, 0.0, 0.0);
+  const eye = vec3.fromValues(0.0, 0.0, -200.0);
+  const up = vec3.fromValues(0.0, 1.0, 0.0);
+
   let time_start = process.hrtime.bigint();
   let time_last = process.hrtime.bigint();
+
   while (!SDL.QuitRequested()) {
     let time_curr = process.hrtime.bigint();
+    const dt = Number((time_curr - time_start) / 1000000n) / 1e3;
     const period_ms = Number(time_curr - time_last) / 1e6;
 
     // prettier-ignore
     bgfx.dbg_text_print(1, 1, 0x8f,
       `API ${bgfx.API_VERSION} - frame ${period_ms}ms`);
 
-    const at = vec3.fromValues(0.0, 0.0, 0.0);
-    const eye = vec3.fromValues(0.0, 0.0, -35.0);
-    const up = vec3.fromValues(0.0, 1.0, 0.0);
-
     const view = mat4.create();
     mat4.lookAt(view, eye, at, up);
 
     const proj = mat4.create();
-    mat4.perspective(proj, 1.0, width / height, 0.1, 100.0);
+    mat4.perspective(proj, 1.0, width / height, 0.1, 300.0);
 
     bgfx.set_view_transform(0, view.buffer, proj.buffer);
     bgfx.set_view_rect_ratio(0, 0, 0, bgfx.BACKBUFFER_RATIO.EQUAL);
 
     bgfx.touch(0x0);
 
-    // Submit 11x11 cubes.
-    for (let yy = 0; yy < 11; ++yy) {
-      for (let xx = 0; xx < 11; ++xx) {
-        const time = Number((time_curr - time_start) / 1000000n) / 1e3;
-
+    // Submit cubes.
+    let draw_time = 0;
+    const span = 50;
+    for (let yy = 0; yy < span; ++yy) {
+      for (let xx = 0; xx < span; ++xx) {
+        // Create cube-specific view transform.
         const mtx = mat4.create();
-        mat4.translate(mtx, mtx, [(xx - 5) * 3.0, (yy - 5) * 3.0, 0]);
-        mat4.rotateX(mtx, mtx, xx + time);
-        mat4.rotateY(mtx, mtx, yy + time);
+        mat4.translate(mtx, mtx, [
+          (xx - span / 2) * 3.0,
+          (yy - span / 2) * 3.0,
+          0,
+        ]);
+        mat4.rotateX(mtx, mtx, xx + dt);
+        mat4.rotateY(mtx, mtx, yy + dt);
 
         // Use unified draw call.
+        const draw_begin = process.hrtime.bigint();
         bgfx.draw({
           xform: mtx.buffer,
           vertex: {
@@ -142,17 +151,16 @@ const main = async () => {
           index: {
             buffer: m_ibh,
           },
-          uniforms: [
-            {
-              handle: u_baseColor,
-              value: Float32Array.from([0.5, 1.0, 0.5, 0.5]).buffer,
-            },
-          ],
+          uniforms: [[u_baseColor, baseColor]],
           program: m_program,
           view: 0,
         });
+        const draw_end = process.hrtime.bigint();
+        draw_time += Number(draw_end - draw_begin) / 1e6;
       }
     }
+
+    console.log(`submit ${draw_time}ms`);
 
     bgfx.frame(false);
     time_last = time_curr;

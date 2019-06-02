@@ -60,21 +60,23 @@ template <>
 inline bgfx_uniform_args_t decode(napi_env env, napi_value value)
 {
   bgfx_uniform_args_t result;
-  result.handle = decode_property<bgfx_uniform_handle_t>(env, value, "handle");
-  // result.num = decode_property<uint32_t>(env, value, "num", UINT16_MAX);
+
+  napi_value handle;
+  ok(napi_get_element(env, value, 0, &handle));
+  result.handle = decode<bgfx_uniform_handle_t>(env, handle);
+
+  napi_value buffer;
+  ok(napi_get_element(env, value, 1, &buffer));
 
   // TODO: is retrieving this a performance problem?
   bgfx_uniform_info_t info;
   bgfx_get_uniform_info(result.handle, &info);
   const auto element_size = uniform_size(info.type);
 
-  napi_value buffer;
-  ok(napi_get_named_property(env, value, "value", &buffer));
+  size_t element_len;
+  ok(napi_get_arraybuffer_info(env, buffer, &result.value, &element_len));
 
-  size_t len;
-  napi_get_arraybuffer_info(env, buffer, &result.value, &len);
-
-  result.num = len / element_size;
+  result.num = element_len / element_size;
   return result;
 }
 
