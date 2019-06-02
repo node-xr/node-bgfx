@@ -102,6 +102,7 @@ const main = async () => {
   const at = vec3.fromValues(0.0, 0.0, 0.0);
   const eye = vec3.fromValues(0.0, 0.0, -200.0);
   const up = vec3.fromValues(0.0, 1.0, 0.0);
+  const mtx = mat4.create();
 
   let time_start = process.hrtime.bigint();
   let time_last = process.hrtime.bigint();
@@ -128,12 +129,11 @@ const main = async () => {
 
     // Submit cubes.
     let draw_time = 0;
-    const span = 50;
+    const span = 33;
     for (let yy = 0; yy < span; ++yy) {
       for (let xx = 0; xx < span; ++xx) {
         // Create cube-specific view transform.
-        const mtx = mat4.create();
-        mat4.translate(mtx, mtx, [
+        mat4.fromTranslation(mtx, [
           (xx - span / 2) * 3.0,
           (yy - span / 2) * 3.0,
           0,
