@@ -101,7 +101,32 @@ const main = async () => {
   const at = vec3.fromValues(0.0, 0.0, 0.0);
   const eye = vec3.fromValues(0.0, 0.0, -200.0);
   const up = vec3.fromValues(0.0, 1.0, 0.0);
+
   const mtx = mat4.create();
+  const view = mat4.create();
+  const proj = mat4.create();
+
+  const span = 33;
+  const cubes = new Array(span).fill(0).map(() => new Array(span).fill(0));
+
+  // Pre-construct the draw calls to modify and submit on the fly.
+  for (let yy = 0; yy < span; ++yy) {
+    for (let xx = 0; xx < span; ++xx) {
+      const baseColor = Float32Array.from([xx / span, yy / span, 0.5, 1.0])
+        .buffer;
+
+      cubes[xx][yy] = {
+        xform: mtx.buffer,
+        vertex: m_vbh,
+        index: m_ibh,
+        uniforms: {
+          [u_baseColor]: baseColor,
+        },
+        program: m_program,
+        view: 0,
+      };
+    }
+  }
 
   let time_start = process.hrtime.bigint();
   let time_last = process.hrtime.bigint();
@@ -112,13 +137,9 @@ const main = async () => {
     const period_ms = Number(time_curr - time_last) / 1e6;
 
     // prettier-ignore
-    bgfx.dbg_text_print(1, 1, 0x8f,
-      `API ${bgfx.API_VERSION} - frame ${period_ms}ms`);
+    bgfx.dbg_text_print(1, 1, 0x8f, `API ${bgfx.API_VERSION} - frame ${period_ms}ms`);
 
-    const view = mat4.create();
     mat4.lookAt(view, eye, at, up);
-
-    const proj = mat4.create();
     mat4.perspective(proj, 1.0, width / height, 0.1, 300.0);
 
     bgfx.set_view_transform(0, view.buffer, proj.buffer);
@@ -126,33 +147,11 @@ const main = async () => {
 
     bgfx.touch(0x0);
 
-    const span = 50;
-    const cubes = new Array(span).fill(0).map(() => new Array(span).fill(0));
-
-    // Pre-construct the draw calls to modify and submit on the fly.
+    // Submit cubes via draw() call.
+    const draw_begin = process.hrtime.bigint();
     for (let yy = 0; yy < span; ++yy) {
       for (let xx = 0; xx < span; ++xx) {
-        const baseColor = Float32Array.from([xx / span, yy / span, 0.5, 1.0])
-          .buffer;
-
-        cubes[xx][yy] = {
-          xform: null,
-          vertex: m_vbh,
-          index: m_ibh,
-          uniforms: {
-            [u_baseColor]: baseColor,
-          },
-          program: m_program,
-          view: 0,
-        };
-      }
-    }
-
-    // Submit cubes.
-    let draw_time = 0;
-    for (let yy = 0; yy < span; ++yy) {
-      for (let xx = 0; xx < span; ++xx) {
-        // Create cube-specific view transform.
+        // The cubes share a transformation that updates between draw() calls.
         mat4.fromTranslation(mtx, [
           (xx - span / 2) * 3.0,
           (yy - span / 2) * 3.0,
@@ -160,16 +159,14 @@ const main = async () => {
         ]);
         mat4.rotateX(mtx, mtx, xx + dt);
         mat4.rotateY(mtx, mtx, yy + dt);
-        cubes[xx][yy].xform = mtx.buffer;
 
-        // Use unified draw call.
-        const draw_begin = process.hrtime.bigint();
+        // Use unified draw() call.
         bgfx.draw(cubes[xx][yy]);
-        const draw_end = process.hrtime.bigint();
-        draw_time += Number(draw_end - draw_begin) / 1e6;
       }
     }
+    const draw_end = process.hrtime.bigint();
 
+    const draw_time = Number(draw_end - draw_begin) / 1e6;
     console.log(`submit ${draw_time}ms`);
 
     bgfx.frame(false);
