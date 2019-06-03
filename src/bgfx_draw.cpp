@@ -24,14 +24,6 @@ constexpr size_t uniform_size(bgfx_uniform_type_t type)
   }
 }
 
-template <typename T>
-constexpr T to_handle(uintptr_t handle)
-{
-  T result{};
-  result.idx = handle;
-  return result;
-}
-
 namespace wrap
 {
 
@@ -45,13 +37,13 @@ inline bgfx_index_buffer_args_t decode(napi_env env, napi_value value)
 
   if (type == napi_object)
   {
-    result.buffer = reinterpret_cast<uintptr_t>(decode_property<void *>(env, value, "buffer"));
+    result.buffer = decode_property<uint32_t>(env, value, "buffer");
     result.first = decode_property<uint32_t>(env, value, "first", 0);
     result.numIndices = decode_property<uint32_t>(env, value, "numIndices", UINT32_MAX);
   }
-  else if (type == napi_external)
+  else if (type == napi_number)
   {
-    result.buffer = reinterpret_cast<uintptr_t>(decode<void *>(env, value));
+    result.buffer = decode<uint32_t>(env, value);
     result.first = 0;
     result.numIndices = UINT32_MAX;
   }
@@ -74,20 +66,20 @@ inline bgfx_vertex_buffer_args_t decode(napi_env env, napi_value value)
   if (type == napi_object)
   {
     result.stream = decode_property<uint8_t>(env, value, "stream", 0);
-    result.buffer = reinterpret_cast<uintptr_t>(decode_property<void *>(env, value, "buffer"));
+    result.buffer = decode_property<uint32_t>(env, value, "buffer");
     result.first = decode_property<uint32_t>(env, value, "first", 0);
     result.numIndices = decode_property<uint32_t>(env, value, "numIndices", UINT32_MAX);
   }
-  else if (type == napi_external)
+  else if (type == napi_number)
   {
     result.stream = 0;
-    result.buffer = reinterpret_cast<uintptr_t>(decode<void *>(env, value));
+    result.buffer = decode<uint32_t>(env, value);
     result.first = 0;
     result.numIndices = UINT32_MAX;
   }
   else
   {
-    throw std::runtime_error("Invalid index buffer.");
+    throw std::runtime_error("Invalid vertex buffer.");
   }
 
   return result;
@@ -143,17 +135,17 @@ void bgfx_draw(bgfx_drawcall_t drawcall)
   if (drawcall.index)
   {
     auto index = *drawcall.index;
-    if (bgfx_get_handle_type(index.buffer) == bgfx_handle_type::dynamic_index)
+    if (bgfx_get_handle_type(index.buffer) == bgfx_handle_type::dynamic_index_buffer)
     {
       bgfx_set_dynamic_index_buffer(
-          to_handle<bgfx_dynamic_index_buffer_handle_t>(index.buffer),
+          bgfx_unpack_handle<bgfx_dynamic_index_buffer_handle_t>(index.buffer),
           index.first,
           index.numIndices);
     }
-    else if (bgfx_get_handle_type(index.buffer) == bgfx_handle_type::index)
+    else if (bgfx_get_handle_type(index.buffer) == bgfx_handle_type::index_buffer)
     {
       bgfx_set_index_buffer(
-          to_handle<bgfx_index_buffer_handle_t>(index.buffer),
+          bgfx_unpack_handle<bgfx_index_buffer_handle_t>(index.buffer),
           index.first,
           index.numIndices);
     }
@@ -166,19 +158,19 @@ void bgfx_draw(bgfx_drawcall_t drawcall)
   if (drawcall.vertex)
   {
     auto vertex = *drawcall.vertex;
-    if (bgfx_get_handle_type(vertex.buffer) == bgfx_handle_type::dynamic_vertex)
+    if (bgfx_get_handle_type(vertex.buffer) == bgfx_handle_type::dynamic_vertex_buffer)
     {
       bgfx_set_dynamic_vertex_buffer(
           vertex.stream,
-          to_handle<bgfx_dynamic_vertex_buffer_handle_t>(vertex.buffer),
+          bgfx_unpack_handle<bgfx_dynamic_vertex_buffer_handle_t>(vertex.buffer),
           vertex.first,
           vertex.numIndices);
     }
-    else if (bgfx_get_handle_type(vertex.buffer) == bgfx_handle_type::vertex)
+    else if (bgfx_get_handle_type(vertex.buffer) == bgfx_handle_type::vertex_buffer)
     {
       bgfx_set_vertex_buffer(
           vertex.stream,
-          to_handle<bgfx_vertex_buffer_handle_t>(vertex.buffer),
+          bgfx_unpack_handle<bgfx_vertex_buffer_handle_t>(vertex.buffer),
           vertex.first,
           vertex.numIndices);
     }

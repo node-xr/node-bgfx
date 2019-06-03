@@ -7,7 +7,7 @@
 
 struct bgfx_index_buffer_args_t
 {
-  uintptr_t buffer;
+  uint32_t buffer;
   uint32_t first;
   uint32_t numIndices;
 };
@@ -15,7 +15,7 @@ struct bgfx_index_buffer_args_t
 struct bgfx_vertex_buffer_args_t
 {
   uint8_t stream;
-  uintptr_t buffer;
+  uint32_t buffer;
   uint32_t first;
   uint32_t numIndices;
 };
