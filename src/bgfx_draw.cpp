@@ -1,5 +1,6 @@
 #include "bgfx_draw.hpp"
 #include "bgfx_converters.hpp"
+#include <iostream>
 
 const std::vector<bgfx_uniform_args_t> EMPTY_UNIFORMS;
 const bgfx_mat4_t IDENTITY_MATRIX = {{1, 0, 0, 0,
@@ -86,26 +87,38 @@ inline bgfx_vertex_buffer_args_t decode(napi_env env, napi_value value)
 }
 
 template <>
-inline bgfx_uniform_args_t decode(napi_env env, napi_value value)
+inline std::vector<bgfx_uniform_args_t> decode(napi_env env, napi_value value)
 {
-  bgfx_uniform_args_t result;
-
-  napi_value handle;
-  ok(napi_get_element(env, value, 0, &handle));
-  result.handle = decode<bgfx_uniform_handle_t>(env, handle);
-
-  napi_value buffer;
-  ok(napi_get_element(env, value, 1, &buffer));
-
+  napi_value handles;
+  ok(napi_get_property_names(env, value, &handles));
   // TODO: is retrieving this a performance problem?
-  bgfx_uniform_info_t info;
-  bgfx_get_uniform_info(result.handle, &info);
-  const auto element_size = uniform_size(info.type);
 
-  size_t element_len;
-  ok(napi_get_arraybuffer_info(env, buffer, &result.value, &element_len));
+  uint32_t num_uniforms;
+  ok(napi_get_array_length(env, handles, &num_uniforms));
 
-  result.num = element_len / element_size;
+  std::vector<bgfx_uniform_args_t> result(num_uniforms);
+  for (uint32_t idx = 0; idx < num_uniforms; ++idx)
+  {
+    bgfx_uniform_args_t uniform;
+
+    napi_value handle;
+    ok(napi_get_element(env, handles, idx, &handle));
+    uniform.handle = decode<bgfx_uniform_handle_t>(env, handle);
+
+    bgfx_uniform_info_t info;
+    bgfx_get_uniform_info(uniform.handle, &info);
+    const auto element_size = uniform_size(info.type);
+
+    napi_value buffer;
+    ok(napi_get_property(env, value, handle, &buffer));
+
+    size_t element_len;
+    ok(napi_get_arraybuffer_info(env, buffer, &uniform.value, &element_len));
+
+    uniform.num = element_len / element_size;
+    result[idx] = uniform;
+  }
+
   return result;
 }
 

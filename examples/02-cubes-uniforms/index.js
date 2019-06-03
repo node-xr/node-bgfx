@@ -87,7 +87,6 @@ const main = async () => {
     bgfx.UNIFORM_TYPE.VEC_4,
     1,
   );
-  const baseColor = Float32Array.from([0.5, 1.0, 0.5, 0.5]).buffer;
 
   const m_vbh = PosColorVertex.wrap({
     POSITION: s_cubePosition,
@@ -129,7 +128,7 @@ const main = async () => {
 
     // Submit cubes.
     let draw_time = 0;
-    const span = 33;
+    const span = 50;
     for (let yy = 0; yy < span; ++yy) {
       for (let xx = 0; xx < span; ++xx) {
         // Create cube-specific view transform.
@@ -141,13 +140,18 @@ const main = async () => {
         mat4.rotateX(mtx, mtx, xx + dt);
         mat4.rotateY(mtx, mtx, yy + dt);
 
+        const baseColor = Float32Array.from([xx / span, yy / span, 0.5, 0.5])
+          .buffer;
+
         // Use unified draw call.
         const draw_begin = process.hrtime.bigint();
         bgfx.draw({
           xform: mtx.buffer,
           vertex: m_vbh,
           index: m_ibh,
-          uniforms: [[u_baseColor, baseColor]],
+          uniforms: {
+            [u_baseColor]: baseColor,
+          },
           program: m_program,
           view: 0,
         });
