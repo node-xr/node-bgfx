@@ -122,6 +122,9 @@ const main = async () => {
         uniforms: {
           [u_baseColor]: baseColor,
         },
+        textures: {
+          [s_diffuse]: { slot: 0, texture: diffuseTexture, flags: 0 },
+        },
         program: m_program,
         view: 0,
       };
