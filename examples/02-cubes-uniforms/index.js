@@ -50,7 +50,7 @@ const main = async () => {
   SDL.Init(SDL.INIT_VIDEO);
   // prettier-ignore
   const window = SDL.CreateWindow(
-    'Example Cubes',
+    'Example Cubes w/ Uniforms',
     SDL.WINDOWPOS_CENTERED, SDL.WINDOWPOS_CENTERED,
     width, height, SDL.WINDOW_SHOWN,
   );
@@ -73,14 +73,20 @@ const main = async () => {
   // Create shaders.
   const cache = new bgfx.ShaderCache();
   const m_program = await cache.program(
-    path.resolve(__dirname, 'vs_cube.sc'),
-    path.resolve(__dirname, 'fs_cube.sc'),
+    path.resolve(__dirname, 'vs_flat.sc'),
+    path.resolve(__dirname, 'fs_flatsolid.sc'),
   );
 
   const PosColorVertex = new bgfx.VertexDeclaration([
     { attr: 'POSITION', count: 3, type: 'FLOAT' },
     { attr: 'COLOR_0', count: 4, type: 'UINT_8', normalize: true },
   ]);
+
+  const u_baseColor = bgfx.create_uniform(
+    'u_baseColor',
+    bgfx.UNIFORM_TYPE.VEC_4,
+    1,
+  );
 
   const m_vbh = PosColorVertex.wrap({
     POSITION: s_cubePosition,
@@ -92,51 +98,76 @@ const main = async () => {
     BUFFER_NONE,
   );
 
+  const at = vec3.fromValues(0.0, 0.0, 0.0);
+  const eye = vec3.fromValues(0.0, 0.0, -200.0);
+  const up = vec3.fromValues(0.0, 1.0, 0.0);
+
+  const mtx = mat4.create();
+  const view = mat4.create();
+  const proj = mat4.create();
+
+  const span = 33;
+  const cubes = new Array(span).fill(0).map(() => new Array(span).fill(0));
+
+  // Pre-construct the draw calls to modify and submit on the fly.
+  for (let yy = 0; yy < span; ++yy) {
+    for (let xx = 0; xx < span; ++xx) {
+      const baseColor = Float32Array.from([xx / span, yy / span, 0.5, 1.0])
+        .buffer;
+
+      cubes[xx][yy] = {
+        xform: mtx.buffer,
+        vertex: m_vbh,
+        index: m_ibh,
+        uniforms: {
+          [u_baseColor]: baseColor,
+        },
+        program: m_program,
+        view: 0,
+      };
+    }
+  }
+
   let time_start = process.hrtime.bigint();
   let time_last = process.hrtime.bigint();
+
   while (!SDL.QuitRequested()) {
     let time_curr = process.hrtime.bigint();
+    const dt = Number((time_curr - time_start) / 1000000n) / 1e3;
     const period_ms = Number(time_curr - time_last) / 1e6;
 
     // prettier-ignore
-    bgfx.dbg_text_print(1, 1, 0x8f,
-      `API ${bgfx.API_VERSION} - frame ${period_ms}ms`);
+    bgfx.dbg_text_print(1, 1, 0x8f, `API ${bgfx.API_VERSION} - frame ${period_ms}ms`);
 
-    const at = vec3.fromValues(0.0, 0.0, 0.0);
-    const eye = vec3.fromValues(0.0, 0.0, -35.0);
-    const up = vec3.fromValues(0.0, 1.0, 0.0);
-
-    const view = mat4.create();
     mat4.lookAt(view, eye, at, up);
-
-    const proj = mat4.create();
-    mat4.perspective(proj, 1.0, width / height, 0.1, 100.0);
+    mat4.perspective(proj, 1.0, width / height, 0.1, 300.0);
 
     bgfx.set_view_transform(0, view.buffer, proj.buffer);
     bgfx.set_view_rect_ratio(0, 0, 0, bgfx.BACKBUFFER_RATIO.EQUAL);
 
     bgfx.touch(0x0);
 
-    // Submit 11x11 cubes.
-    for (let yy = 0; yy < 11; ++yy) {
-      for (let xx = 0; xx < 11; ++xx) {
-        const time = Number((time_curr - time_start) / 1000000n) / 1e3;
+    // Submit cubes via draw() call.
+    const draw_begin = process.hrtime.bigint();
+    for (let yy = 0; yy < span; ++yy) {
+      for (let xx = 0; xx < span; ++xx) {
+        // The cubes share a transformation that updates between draw() calls.
+        mat4.fromTranslation(mtx, [
+          (xx - span / 2) * 3.0,
+          (yy - span / 2) * 3.0,
+          0,
+        ]);
+        mat4.rotateX(mtx, mtx, xx + dt);
+        mat4.rotateY(mtx, mtx, yy + dt);
 
-        const mtx = mat4.create();
-        mat4.translate(mtx, mtx, [(xx - 5) * 3.0, (yy - 5) * 3.0, 0]);
-        mat4.rotateX(mtx, mtx, xx + time);
-        mat4.rotateY(mtx, mtx, yy + time);
-
-        // Use unified draw call.
-        bgfx.draw({
-          xform: mtx.buffer,
-          vertex: m_vbh,
-          index: m_ibh,
-          program: m_program,
-          view: 0,
-        });
+        // Use unified draw() call.
+        bgfx.draw(cubes[xx][yy]);
       }
     }
+    const draw_end = process.hrtime.bigint();
+
+    const draw_time = Number(draw_end - draw_begin) / 1e6;
+    console.log(`submit ${draw_time}ms`);
 
     bgfx.frame(false);
     time_last = time_curr;

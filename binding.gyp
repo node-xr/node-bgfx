@@ -17,8 +17,9 @@
       'cflags!': [ '-fno-exceptions' ],
       'cflags_cc!': [ '-fno-exceptions' ],
       'sources': [
-        'src/bindings.cpp',
+        'src/bgfx_draw.cpp',
         'src/bgfx.cpp',
+        'src/bindings.cpp',
         'src/util.cpp',
       ],
       'include_dirs': [
@@ -39,6 +40,9 @@
             '-Wl,-rpath,<(module_root_dir)/deps/bgfx/bin/darwin/x64',
             '<(module_root_dir)/deps/bgfx/bin/darwin/x64/libbgfx-shared-libRelease.dylib'
           ],
+          'xcode_settings': {
+            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
+          },
         }],
         ['platform=="win32"', {
           'library_dirs': ['<(module_root_dir)/deps/bgfx/bin/win32/x64'],

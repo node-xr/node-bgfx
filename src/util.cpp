@@ -1,20 +1,24 @@
 #include "util.hpp"
 #include <string>
 
-napi_status napi_get_value_external_opt(napi_env env, napi_value value, void** result)
+napi_status napi_get_value_external_opt(napi_env env, napi_value value, void **result)
 {
   napi_status status;
   napi_valuetype type;
 
   // Check if this argument is set to null.
   status = napi_typeof(env, value, &type);
-  if (status != napi_ok) return status;
+  if (status != napi_ok)
+    return status;
 
-  if (type == napi_null) {
+  if (type == napi_null)
+  {
     // If null was provided, fill in a null-pointer.
     *result = nullptr;
     return napi_ok;
-  } else {
+  }
+  else
+  {
     // Otherwise, load the actual external pointer.
     status = napi_get_value_external(env, value, result);
     return status;

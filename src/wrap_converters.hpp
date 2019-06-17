@@ -1,7 +1,8 @@
 #pragma once
+#include <cstring>
 #include <node_api.h>
 #include <type_traits>
-#include <cstring>
+#include <vector>
 
 namespace wrap
 {
@@ -31,6 +32,18 @@ inline napi_value encode(napi_env env, const std::string &value)
 }
 
 //===========================================================================
+template <>
+inline const char *decode(napi_env env, napi_value value)
+{
+  constexpr size_t buffer_len = 2048;
+  char *leaky_buffer = new char[buffer_len];
+
+  // FIXME: this is 100% wrong behavior.
+  size_t result_len;
+  ok(napi_get_value_string_utf8(env, value, leaky_buffer, buffer_len, &result_len));
+  return leaky_buffer;
+}
+
 template <>
 inline napi_value encode(napi_env env, const char *value)
 {
@@ -240,6 +253,86 @@ struct encoder<T, typename std::enable_if_t<std::is_enum<T>::value>>
   {
     napi_value result;
     ok(napi_create_uint32(env, static_cast<uint32_t>(value), &result));
+    return result;
+  }
+};
+
+//===========================================================================
+// Default for container types.
+// Based on: https://stackoverflow.com/a/31207079
+template <typename T, typename _ = void>
+struct is_container : std::false_type
+{
+};
+
+template <typename T>
+struct is_container<
+    T,
+    std::conditional_t<
+        false,
+        std::void_t<
+            typename T::value_type,
+            typename T::size_type,
+            typename T::allocator_type,
+            typename T::iterator,
+            typename T::const_iterator,
+            decltype(std::declval<T>().size()),
+            decltype(std::declval<T>().begin()),
+            decltype(std::declval<T>().end()),
+            decltype(std::declval<T>().cbegin()),
+            decltype(std::declval<T>().cend())>,
+        void>> : public std::true_type
+{
+};
+
+template <typename T>
+struct encoder<T, typename std::enable_if_t<is_container<T>::value>>
+{
+  static napi_value eval(napi_env env, T value)
+  {
+    napi_value result;
+    constexpr size_t len = value.size();
+    ok(napi_create_array_with_length(env, len, &result));
+
+    size_t idx = 0;
+    for (const auto &element : value)
+    {
+      ok(napi_set_element(env, result, idx++, encode<T>(env, element)));
+    }
+
+    return result;
+  }
+};
+
+//===========================================================================
+// Default for std::vector.
+template <typename T>
+struct is_std_vector : std::false_type
+{
+};
+
+template <typename T>
+struct is_std_vector<std::vector<T>> : public std::true_type
+{
+};
+
+template <typename T>
+struct decoder<T, typename std::enable_if_t<is_std_vector<T>::value>>
+{
+  static T eval(napi_env env, napi_value value)
+  {
+    using element_t = typename T::value_type;
+
+    uint32_t len;
+    ok(napi_get_array_length(env, value, &len));
+
+    T result(len);
+    for (size_t idx = 0; idx < len; ++idx)
+    {
+      napi_value element;
+      ok(napi_get_element(env, value, idx, &element));
+      result[idx] = decode<element_t>(env, element);
+    }
     return result;
   }
 };

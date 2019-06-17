@@ -31,6 +31,21 @@ struct encoder;
 
 //===========================================================================
 
+// Decode a property of a javascript object.
+template <typename T>
+T decode_property(napi_env env, napi_value object, const char *prop);
+
+// Decode a property of a javascript object or return a default value.
+template <typename T>
+T decode_property(napi_env env, napi_value object, const char *prop, const T default_value);
+
+// Encode a property and store it in a javascript object.
+// Specialize this function to implement a custom encoder for a single type.
+template <typename T>
+void encode_property(napi_env env, napi_value object, const char *prop, const T value);
+
+//===========================================================================
+
 template <typename Result, typename... Args>
 napi_status set_function(napi_env env, napi_value parent, const char *name, Result (*fn)(Args...));
 
