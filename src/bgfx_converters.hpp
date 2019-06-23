@@ -81,4 +81,23 @@ inline bgfx_mat4_array_t decode(napi_env env, napi_value value)
   return result;
 }
 
+//===========================================================================
+// TODO: this is the wrong direction for the conversion.
+// This should be an output parameter.
+template <>
+inline bgfx_texture_info_t decode(napi_env env, napi_value value)
+{
+  bgfx_texture_info_t result;
+  result.format = decode_property<bgfx_texture_format_t>(env, value, "format");
+  result.storageSize = decode_property<uint32_t>(env, value, "storageSize");
+  result.width = decode_property<uint16_t>(env, value, "width");
+  result.height = decode_property<uint16_t>(env, value, "height");
+  result.depth = decode_property<uint16_t>(env, value, "depth");
+  result.numLayers = decode_property<uint16_t>(env, value, "numLayers");
+  result.numMips = decode_property<uint8_t>(env, value, "numMips");
+  result.bitsPerPixel = decode_property<uint8_t>(env, value, "bitsPerPixel");
+  result.cubeMap = decode_property<bool>(env, value, "cubeMap");
+  return result;
+}
+
 } // namespace wrap

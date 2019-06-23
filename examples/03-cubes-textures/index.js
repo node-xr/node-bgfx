@@ -1,6 +1,7 @@
 const bgfx = require('../../lib/index.js');
 const SDL = require('sdl2');
 const path = require('path');
+const fs = require('fs');
 const { mat4, vec3 } = require('gl-matrix');
 
 const s_cubePosition = [
@@ -41,6 +42,17 @@ const s_cubeTriList = [
   6, 7, 3,
 ];
 
+const s_cubeCoords = [
+  [0.0, 0.0],
+  [1.0, 0.0],
+  [0.0, 1.0],
+  [1.0, 1.0],
+  [0.0, 0.0],
+  [1.0, 0.0],
+  [0.0, 1.0],
+  [1.0, 1.0],
+];
+
 const width = 1280;
 const height = 1024;
 
@@ -74,12 +86,13 @@ const main = async () => {
   const cache = new bgfx.ShaderCache();
   const m_program = await cache.program(
     path.resolve(__dirname, 'vs_flat.sc'),
-    path.resolve(__dirname, 'fs_flatsolid.sc'),
+    path.resolve(__dirname, 'fs_flattextured.sc'),
   );
 
   const PosColorVertex = new bgfx.VertexDeclaration([
     { attr: 'POSITION', count: 3, type: 'FLOAT' },
     { attr: 'COLOR_0', count: 4, type: 'UINT_8', normalize: true },
+    { attr: 'TEX_COORD_0', count: 2, type: 'FLOAT' },
   ]);
 
   const u_baseColor = bgfx.create_uniform(
@@ -88,9 +101,24 @@ const main = async () => {
     1,
   );
 
+  const s_diffuse = bgfx.create_uniform(
+    's_diffuse',
+    bgfx.UNIFORM_TYPE.SAMPLER,
+    1,
+  );
+
+  const diffuseMem = fs.readFileSync(path.join(__dirname, 'bark1.dds'));
+  const diffuseTexture = bgfx.create_texture(
+    diffuseMem.buffer,
+    bgfx.TEXTURE_NONE,
+    0,
+    null,
+  );
+
   const m_vbh = PosColorVertex.wrap({
     POSITION: s_cubePosition,
     COLOR_0: s_cubeColors,
+    TEX_COORD_0: s_cubeCoords,
   }).upload();
 
   const m_ibh = bgfx.create_index_buffer(
@@ -99,14 +127,14 @@ const main = async () => {
   );
 
   const at = vec3.fromValues(0.0, 0.0, 0.0);
-  const eye = vec3.fromValues(0.0, 0.0, -200.0);
+  const eye = vec3.fromValues(0.0, 0.0, -35.0);
   const up = vec3.fromValues(0.0, 1.0, 0.0);
 
   const mtx = mat4.create();
   const view = mat4.create();
   const proj = mat4.create();
 
-  const span = 33;
+  const span = 11;
   const cubes = new Array(span).fill(0).map(() => new Array(span).fill(0));
 
   // Pre-construct the draw calls to modify and submit on the fly.
@@ -123,7 +151,7 @@ const main = async () => {
           [u_baseColor]: baseColor,
         },
         textures: {
-          [s_diffuse]: { slot: 0, texture: diffuseTexture, flags: 0 },
+          [s_diffuse]: { stage: 0, texture: diffuseTexture },
         },
         program: m_program,
         view: 0,

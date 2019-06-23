@@ -123,19 +123,50 @@ inline std::vector<bgfx_uniform_args_t> decode(napi_env env, napi_value value)
 }
 
 template <>
+inline std::vector<bgfx_texture_args_t> decode(napi_env env, napi_value value)
+{
+  napi_value handles;
+  ok(napi_get_property_names(env, value, &handles));
+  // TODO: is retrieving this a performance problem?
+
+  uint32_t num_textures;
+  ok(napi_get_array_length(env, handles, &num_textures));
+
+  std::vector<bgfx_texture_args_t> result(num_textures);
+  for (uint32_t idx = 0; idx < num_textures; ++idx)
+  {
+    bgfx_texture_args_t args;
+
+    napi_value handle;
+    ok(napi_get_element(env, handles, idx, &handle));
+    args.handle = decode<bgfx_uniform_handle_t>(env, handle);
+
+    napi_value props;
+    ok(napi_get_property(env, value, handle, &props));
+    args.stage = decode_property<uint8_t>(env, props, "stage");
+    args.texture = decode_property<bgfx_texture_handle_t>(env, props, "texture");
+    args.flags = decode_property<uint32_t>(env, props, "flags", 0);
+
+    result[idx] = args;
+  }
+
+  return result;
+}
+
+template <>
 bgfx_drawcall_t decode(napi_env env, napi_value value)
 {
   bgfx_drawcall_t result;
-  result.xform = wrap::decode_property<bgfx_mat4_t *>(env, value, "xform", const_cast<bgfx_mat4_t *>(&IDENTITY_MATRIX));
-  result.state = wrap::decode_property<uint64_t>(env, value, "state", BGFX_STATE_DEFAULT);
-  result.rgba = wrap::decode_property<uint32_t>(env, value, "rgba", 0);
-  result.depth = wrap::decode_property<uint32_t>(env, value, "depth", 0);
-  result.index = wrap::decode_property_opt<bgfx_index_buffer_args_t>(env, value, "index");
-  result.vertex = wrap::decode_property_opt<bgfx_vertex_buffer_args_t>(env, value, "vertex");
-  result.uniforms = wrap::decode_property<std::vector<bgfx_uniform_args_t>>(env, value, "uniforms", EMPTY_UNIFORMS);
-  result.view = wrap::decode_property<bgfx_view_id_t>(env, value, "view");
-  result.program = wrap::decode_property<bgfx_program_handle_t>(env, value, "program");
-  result.preserve_state = wrap::decode_property<bool>(env, value, "preserve_state", false);
+  result.xform = decode_property<bgfx_mat4_t *>(env, value, "xform", const_cast<bgfx_mat4_t *>(&IDENTITY_MATRIX));
+  result.state = decode_property<uint64_t>(env, value, "state", BGFX_STATE_DEFAULT);
+  result.rgba = decode_property<uint32_t>(env, value, "rgba", 0);
+  result.depth = decode_property<uint32_t>(env, value, "depth", 0);
+  result.index = decode_property_opt<bgfx_index_buffer_args_t>(env, value, "index");
+  result.vertex = decode_property_opt<bgfx_vertex_buffer_args_t>(env, value, "vertex");
+  result.uniforms = decode_property<std::vector<bgfx_uniform_args_t>>(env, value, "uniforms", EMPTY_UNIFORMS);
+  result.view = decode_property<bgfx_view_id_t>(env, value, "view");
+  result.program = decode_property<bgfx_program_handle_t>(env, value, "program");
+  result.preserve_state = decode_property<bool>(env, value, "preserve_state", false);
   return result;
 }
 
@@ -193,9 +224,14 @@ void bgfx_draw(bgfx_drawcall_t drawcall)
     }
   }
 
-  for (const auto uniform : drawcall.uniforms)
+  for (const auto args : drawcall.uniforms)
   {
-    bgfx_set_uniform(uniform.handle, uniform.value, uniform.num);
+    bgfx_set_uniform(args.handle, args.value, args.num);
+  }
+
+  for (const auto args : drawcall.textures)
+  {
+    bgfx_set_texture(args.stage, args.handle, args.texture, args.flags);
   }
 
   bgfx_set_state(drawcall.state, drawcall.rgba);

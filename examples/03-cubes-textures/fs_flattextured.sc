@@ -7,9 +7,11 @@ $input v_wpos, v_wnormal, v_uv // in...
 
 #include "common.sh"
 
+SAMPLER2D(s_diffuse, 0);
 uniform vec4 u_baseColor;
 
 void main()
 {
-	gl_FragColor = u_baseColor;
+	vec4 albedo = texture2D(s_diffuse, v_uv);
+	gl_FragColor = u_baseColor * albedo;
 }

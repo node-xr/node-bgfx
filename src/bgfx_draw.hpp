@@ -27,6 +27,14 @@ struct bgfx_uniform_args_t
   uint32_t num;
 };
 
+struct bgfx_texture_args_t
+{
+  bgfx_uniform_handle_t handle;
+  uint8_t stage;
+  bgfx_texture_handle_t texture;
+  uint32_t flags;
+};
+
 struct bgfx_drawcall_t
 {
   bgfx_mat4_t *xform;
@@ -36,6 +44,7 @@ struct bgfx_drawcall_t
   wrap::optional<bgfx_index_buffer_args_t> index;
   wrap::optional<bgfx_vertex_buffer_args_t> vertex;
   std::vector<bgfx_uniform_args_t> uniforms;
+  std::vector<bgfx_texture_args_t> textures;
   bgfx_view_id_t view;
   bgfx_program_handle_t program;
   bool preserve_state;
