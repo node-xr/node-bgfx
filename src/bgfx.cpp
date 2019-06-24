@@ -19,19 +19,33 @@ napi_value napi_bgfx_alloc_vertex_decl(napi_env env, napi_callback_info info)
   return _napi_ret;
 }
 
-uint32_t bgfx_encoder_set_transform2(bgfx_encoder_t *encoder, bgfx_mat4_array_t arr)
+uint32_t bgfx_encoder_set_transform_wrapper(bgfx_encoder_t *encoder, bgfx_mat4_array_t arr)
 {
   return bgfx_encoder_set_transform(encoder, arr.head, arr.count);
 }
 
-uint32_t bgfx_set_transform2(bgfx_mat4_array_t arr)
+uint32_t bgfx_set_transform_wrapper(bgfx_mat4_array_t arr)
 {
   return bgfx_set_transform(arr.head, arr.count);
 }
 
-void bgfx_set_view_transform2(bgfx_view_id_t view, bgfx_mat4_t *xform, bgfx_mat4_t *proj)
+void bgfx_set_view_transform_wrapper(bgfx_view_id_t view, bgfx_mat4_t *xform, bgfx_mat4_t *proj)
 {
   bgfx_set_view_transform(view, static_cast<void *>(xform), static_cast<void *>(proj));
+}
+
+bgfx_texture_info_t bgfx_calc_texture_size_wrapper(uint16_t _width, uint16_t _height, uint16_t _depth, bool _cubeMap, bool _hasMips, uint16_t _numLayers, bgfx_texture_format_t _format)
+{
+  bgfx_texture_info_t info;
+  bgfx_calc_texture_size(&info, _width, _height, _depth, _cubeMap, _hasMips, _numLayers, _format);
+  return info;
+}
+
+bgfx_texture_result_t bgfx_create_texture_wrapper(const bgfx_memory_t *_mem, uint64_t _flags, uint8_t _skip)
+{
+  bgfx_texture_result_t result;
+  result.handle = bgfx_create_texture(_mem, _flags, _skip, &result.info);
+  return result;
 }
 
 bool bgfx_init_minimal(void *ndt, void *nwh, uint32_t width, uint32_t height, uint32_t reset)
@@ -106,8 +120,8 @@ napi_value create_bgfx(napi_env env)
   wrap::set_function(env, exports, "destroy_program", bgfx_destroy_program);
   wrap::set_function(env, exports, "create_compute_program", bgfx_create_compute_program);
   wrap::set_function(env, exports, "is_texture_valid", bgfx_is_texture_valid);
-  wrap::set_function(env, exports, "calc_texture_size", bgfx_calc_texture_size);
-  wrap::set_function(env, exports, "create_texture", bgfx_create_texture);
+  wrap::set_function(env, exports, "calc_texture_size", bgfx_calc_texture_size_wrapper);
+  wrap::set_function(env, exports, "create_texture", bgfx_create_texture_wrapper);
   wrap::set_function(env, exports, "create_texture_2d", bgfx_create_texture_2d);
   wrap::set_function(env, exports, "create_texture_2d_scaled", bgfx_create_texture_2d_scaled);
   wrap::set_function(env, exports, "create_texture_3d", bgfx_create_texture_3d);
@@ -137,7 +151,7 @@ napi_value create_bgfx(napi_env env)
   wrap::set_function(env, exports, "set_view_clear_mrt", bgfx_set_view_clear_mrt);
   wrap::set_function(env, exports, "set_view_mode", bgfx_set_view_mode);
   wrap::set_function(env, exports, "set_view_frame_buffer", bgfx_set_view_frame_buffer);
-  wrap::set_function(env, exports, "set_view_transform", bgfx_set_view_transform2);
+  wrap::set_function(env, exports, "set_view_transform", bgfx_set_view_transform_wrapper);
   wrap::set_function(env, exports, "encoder_begin", bgfx_encoder_begin);
   wrap::set_function(env, exports, "encoder_end", bgfx_encoder_end);
   wrap::set_function(env, exports, "encoder_set_marker", bgfx_encoder_set_marker);
@@ -146,7 +160,7 @@ napi_value create_bgfx(napi_env env)
   wrap::set_function(env, exports, "encoder_set_stencil", bgfx_encoder_set_stencil);
   wrap::set_function(env, exports, "encoder_set_scissor", bgfx_encoder_set_scissor);
   wrap::set_function(env, exports, "encoder_set_scissor_cached", bgfx_encoder_set_scissor_cached);
-  wrap::set_function(env, exports, "encoder_set_transform", bgfx_encoder_set_transform2);
+  wrap::set_function(env, exports, "encoder_set_transform", bgfx_encoder_set_transform_wrapper);
   wrap::set_function(env, exports, "encoder_set_transform_cached", bgfx_encoder_set_transform_cached);
   wrap::set_function(env, exports, "encoder_set_uniform", bgfx_encoder_set_uniform);
   wrap::set_function(env, exports, "encoder_set_index_buffer", bgfx_encoder_set_index_buffer);
@@ -181,7 +195,7 @@ napi_value create_bgfx(napi_env env)
   wrap::set_function(env, exports, "set_stencil", bgfx_set_stencil);
   wrap::set_function(env, exports, "set_scissor", bgfx_set_scissor);
   wrap::set_function(env, exports, "set_scissor_cached", bgfx_set_scissor_cached);
-  wrap::set_function(env, exports, "set_transform", bgfx_set_transform2);
+  wrap::set_function(env, exports, "set_transform", bgfx_set_transform_wrapper);
   wrap::set_function(env, exports, "set_transform_cached", bgfx_set_transform_cached);
   wrap::set_function(env, exports, "set_uniform", bgfx_set_uniform);
   wrap::set_function(env, exports, "set_index_buffer", bgfx_set_index_buffer);

@@ -3,6 +3,7 @@
 #include <iostream>
 
 const std::vector<bgfx_uniform_args_t> EMPTY_UNIFORMS;
+const std::vector<bgfx_texture_args_t> EMPTY_TEXTURES;
 const bgfx_mat4_t IDENTITY_MATRIX = {{1, 0, 0, 0,
                                       0, 1, 0, 0,
                                       0, 0, 1, 0,
@@ -145,7 +146,7 @@ inline std::vector<bgfx_texture_args_t> decode(napi_env env, napi_value value)
     ok(napi_get_property(env, value, handle, &props));
     args.stage = decode_property<uint8_t>(env, props, "stage");
     args.texture = decode_property<bgfx_texture_handle_t>(env, props, "texture");
-    args.flags = decode_property<uint32_t>(env, props, "flags", 0);
+    args.flags = decode_property<uint32_t>(env, props, "flags", BGFX_TEXTURE_NONE);
 
     result[idx] = args;
   }
@@ -164,6 +165,7 @@ bgfx_drawcall_t decode(napi_env env, napi_value value)
   result.index = decode_property_opt<bgfx_index_buffer_args_t>(env, value, "index");
   result.vertex = decode_property_opt<bgfx_vertex_buffer_args_t>(env, value, "vertex");
   result.uniforms = decode_property<std::vector<bgfx_uniform_args_t>>(env, value, "uniforms", EMPTY_UNIFORMS);
+  result.textures = decode_property<std::vector<bgfx_texture_args_t>>(env, value, "textures", EMPTY_TEXTURES);
   result.view = decode_property<bgfx_view_id_t>(env, value, "view");
   result.program = decode_property<bgfx_program_handle_t>(env, value, "program");
   result.preserve_state = decode_property<bool>(env, value, "preserve_state", false);

@@ -62,7 +62,7 @@ const main = async () => {
   SDL.Init(SDL.INIT_VIDEO);
   // prettier-ignore
   const window = SDL.CreateWindow(
-    'Example Cubes w/ Uniforms',
+    'Example Cubes w/ Textures',
     SDL.WINDOWPOS_CENTERED, SDL.WINDOWPOS_CENTERED,
     width, height, SDL.WINDOW_SHOWN,
   );
@@ -107,13 +107,11 @@ const main = async () => {
     1,
   );
 
-  const diffuseMem = fs.readFileSync(path.join(__dirname, 'bark1.dds'));
-  const diffuseTexture = bgfx.create_texture(
-    diffuseMem.buffer,
-    bgfx.TEXTURE_NONE,
-    0,
-    null,
-  );
+  const diffuseFilename = path.join(__dirname, 'eagle2.ktx');
+  const diffuseMem = fs.readFileSync(diffuseFilename);
+  const diffuse = bgfx.create_texture(diffuseMem.buffer, bgfx.TEXTURE_NONE, 0);
+  console.log(`Loaded texture: ${diffuseFilename}`);
+  console.log(diffuse);
 
   const m_vbh = PosColorVertex.wrap({
     POSITION: s_cubePosition,
@@ -151,7 +149,7 @@ const main = async () => {
           [u_baseColor]: baseColor,
         },
         textures: {
-          [s_diffuse]: { stage: 0, texture: diffuseTexture },
+          [s_diffuse]: { stage: 0, texture: diffuse.handle },
         },
         program: m_program,
         view: 0,
