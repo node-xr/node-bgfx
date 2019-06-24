@@ -161,6 +161,10 @@ const main = async () => {
     1,
   );
 
+  // Load a KTX texture from file.
+  //
+  // This format is natively supported by BGFX, so we can directly pass
+  // it into the `create_texture()` method.
   const ktxFilename = path.join(__dirname, 'eagle2.ktx');
   const ktxMem = fs.readFileSync(ktxFilename);
   const { handle: ktxTexture, info: ktxInfo } = bgfx.create_texture(
@@ -171,6 +175,12 @@ const main = async () => {
   console.log(`Loaded KTX texture: ${ktxFilename}`);
   console.log(ktxInfo);
 
+  // Load a JPEG texture from file.
+  //
+  // This format is not natively supported, so we use the `sharp`
+  // module to first load it into a buffer, then initialize that
+  // buffer within BGFX.  Note that the `sharp` library is not a
+  // runtime dependency for this library.
   const jpgFilename = path.join(__dirname, 'eagle_inverted.jpg');
   const jpgSharp = sharp(jpgFilename).raw();
   const jpgImage = await jpgSharp.toBuffer({ resolveWithObject: true });
