@@ -3,19 +3,54 @@ const SDL = require('sdl2');
 const path = require('path');
 const fs = require('fs');
 const { mat4, vec3 } = require('gl-matrix');
+const sharp = require('sharp');
 
+// prettier-ignore
 const s_cubePosition = [
-  [-1.0, 1.0, 1.0],
-  [1.0, 1.0, 1.0],
-  [-1.0, -1.0, 1.0],
-  [1.0, -1.0, 1.0],
-  [-1.0, 1.0, -1.0],
-  [1.0, 1.0, -1.0],
+  [-1.0,  1.0,  1.0],
+  [ 1.0,  1.0,  1.0],
+  [-1.0, -1.0,  1.0],
+  [ 1.0, -1.0,  1.0],
+  [-1.0,  1.0, -1.0],
+  [ 1.0,  1.0, -1.0],
   [-1.0, -1.0, -1.0],
-  [1.0, -1.0, -1.0],
+  [ 1.0, -1.0, -1.0],
+  [-1.0,  1.0,  1.0],
+  [ 1.0,  1.0,  1.0],
+  [-1.0,  1.0, -1.0],
+  [ 1.0,  1.0, -1.0],
+  [-1.0, -1.0,  1.0],
+  [ 1.0, -1.0,  1.0],
+  [-1.0, -1.0, -1.0],
+  [ 1.0, -1.0, -1.0],
+  [ 1.0, -1.0,  1.0],
+  [ 1.0,  1.0,  1.0],
+  [ 1.0, -1.0, -1.0],
+  [ 1.0,  1.0, -1.0],
+  [-1.0, -1.0,  1.0],
+  [-1.0,  1.0,  1.0],
+  [-1.0, -1.0, -1.0],
+  [-1.0,  1.0, -1.0],
 ];
 
+// prettier-ignore
 const s_cubeColors = [
+  [0xff, 0x00, 0x00, 0x00],
+  [0xff, 0x00, 0x00, 0xff],
+  [0xff, 0x00, 0xff, 0x00],
+  [0xff, 0x00, 0xff, 0xff],
+  [0xff, 0xff, 0x00, 0x00],
+  [0xff, 0xff, 0x00, 0xff],
+  [0xff, 0xff, 0xff, 0x00],
+  [0xff, 0xff, 0xff, 0xff],
+  [0xff, 0x00, 0x00, 0x00],
+  [0xff, 0x00, 0x00, 0xff],
+  [0xff, 0x00, 0xff, 0x00],
+  [0xff, 0x00, 0xff, 0xff],
+  [0xff, 0xff, 0x00, 0x00],
+  [0xff, 0xff, 0x00, 0xff],
+  [0xff, 0xff, 0xff, 0x00],
+  [0xff, 0xff, 0xff, 0xff],
   [0xff, 0x00, 0x00, 0x00],
   [0xff, 0x00, 0x00, 0xff],
   [0xff, 0x00, 0xff, 0x00],
@@ -28,21 +63,40 @@ const s_cubeColors = [
 
 // prettier-ignore
 const s_cubeTriList = [
-  0, 2, 1, // 0
-  1, 2, 3,
-  4, 5, 6, // 2
-  5, 7, 6,
-  0, 4, 2, // 4
-  4, 6, 2,
-  1, 3, 5, // 6
-  5, 3, 7,
-  0, 1, 4, // 8
-  4, 1, 5,
-  2, 6, 3, // 10
-  6, 7, 3,
+   0,  2,  1,
+   1,  2,  3,
+   4,  5,  6,
+   5,  7,  6,
+
+   8,  9, 10,
+   9, 11, 10,
+  12, 14, 13,
+  13, 14, 15,
+
+  16, 18, 17,
+  17, 18, 19,
+  20, 21, 22,
+  21, 23, 22,
 ];
 
+// prettier-ignore
 const s_cubeCoords = [
+  [0.0, 0.0],
+  [1.0, 0.0],
+  [0.0, 1.0],
+  [1.0, 1.0],
+  [0.0, 0.0],
+  [1.0, 0.0],
+  [0.0, 1.0],
+  [1.0, 1.0],
+  [0.0, 0.0],
+  [1.0, 0.0],
+  [0.0, 1.0],
+  [1.0, 1.0],
+  [0.0, 0.0],
+  [1.0, 0.0],
+  [0.0, 1.0],
+  [1.0, 1.0],
   [0.0, 0.0],
   [1.0, 0.0],
   [0.0, 1.0],
@@ -62,7 +116,7 @@ const main = async () => {
   SDL.Init(SDL.INIT_VIDEO);
   // prettier-ignore
   const window = SDL.CreateWindow(
-    'Example Cubes w/ Uniforms',
+    'Example Cubes w/ Textures',
     SDL.WINDOWPOS_CENTERED, SDL.WINDOWPOS_CENTERED,
     width, height, SDL.WINDOW_SHOWN,
   );
@@ -107,13 +161,40 @@ const main = async () => {
     1,
   );
 
-  const diffuseMem = fs.readFileSync(path.join(__dirname, 'bark1.dds'));
-  const diffuseTexture = bgfx.create_texture(
-    diffuseMem.buffer,
+  // Load a KTX texture from file.
+  //
+  // This format is natively supported by BGFX, so we can directly pass
+  // it into the `create_texture()` method.
+  const ktxFilename = path.join(__dirname, 'eagle2.ktx');
+  const ktxMem = fs.readFileSync(ktxFilename);
+  const { handle: ktxTexture, info: ktxInfo } = bgfx.create_texture(
+    ktxMem.buffer,
     bgfx.TEXTURE_NONE,
     0,
-    null,
   );
+  console.log(`Loaded KTX texture: ${ktxFilename}`);
+  console.log(ktxInfo);
+
+  // Load a JPEG texture from file.
+  //
+  // This format is not natively supported, so we use the `sharp`
+  // module to first load it into a buffer, then initialize that
+  // buffer within BGFX.  Note that the `sharp` library is not a
+  // runtime dependency for this library.
+  const jpgFilename = path.join(__dirname, 'eagle_inverted.jpg');
+  const jpgSharp = sharp(jpgFilename).raw();
+  const jpgImage = await jpgSharp.toBuffer({ resolveWithObject: true });
+  const jpgTexture = bgfx.create_texture_2d(
+    jpgImage.info.width,
+    jpgImage.info.height,
+    false,
+    1,
+    bgfx.TEXTURE_FORMAT.RGB8,
+    bgfx.TEXTURE_NONE,
+    jpgImage.data.buffer,
+  );
+  console.log(`Loaded JPG texture: ${jpgFilename}`);
+  console.log(jpgImage.info);
 
   const m_vbh = PosColorVertex.wrap({
     POSITION: s_cubePosition,
@@ -151,7 +232,10 @@ const main = async () => {
           [u_baseColor]: baseColor,
         },
         textures: {
-          [s_diffuse]: { stage: 0, texture: diffuseTexture },
+          [s_diffuse]: {
+            stage: 0,
+            texture: xx % 2 ? ktxTexture : jpgTexture,
+          },
         },
         program: m_program,
         view: 0,

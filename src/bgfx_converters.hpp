@@ -15,6 +15,12 @@ struct bgfx_mat4_array_t
   size_t count;
 };
 
+struct bgfx_texture_result_t
+{
+  bgfx_texture_handle_t handle;
+  bgfx_texture_info_t info;
+};
+
 namespace wrap
 {
 
@@ -82,21 +88,35 @@ inline bgfx_mat4_array_t decode(napi_env env, napi_value value)
 }
 
 //===========================================================================
-// TODO: this is the wrong direction for the conversion.
-// This should be an output parameter.
 template <>
-inline bgfx_texture_info_t decode(napi_env env, napi_value value)
+inline napi_value encode(napi_env env, bgfx_texture_info_t info)
 {
-  bgfx_texture_info_t result;
-  result.format = decode_property<bgfx_texture_format_t>(env, value, "format");
-  result.storageSize = decode_property<uint32_t>(env, value, "storageSize");
-  result.width = decode_property<uint16_t>(env, value, "width");
-  result.height = decode_property<uint16_t>(env, value, "height");
-  result.depth = decode_property<uint16_t>(env, value, "depth");
-  result.numLayers = decode_property<uint16_t>(env, value, "numLayers");
-  result.numMips = decode_property<uint8_t>(env, value, "numMips");
-  result.bitsPerPixel = decode_property<uint8_t>(env, value, "bitsPerPixel");
-  result.cubeMap = decode_property<bool>(env, value, "cubeMap");
+  napi_value result;
+  ok(napi_create_object(env, &result));
+
+  encode_property<bgfx_texture_format_t>(env, result, "format", info.format);
+  encode_property<uint32_t>(env, result, "storageSize", info.storageSize);
+  encode_property<uint16_t>(env, result, "width", info.width);
+  encode_property<uint16_t>(env, result, "height", info.height);
+  encode_property<uint16_t>(env, result, "depth", info.depth);
+  encode_property<uint16_t>(env, result, "numLayers", info.numLayers);
+  encode_property<uint16_t>(env, result, "numMips", info.numMips);
+  encode_property<uint8_t>(env, result, "bitsPerPixel", info.bitsPerPixel);
+  encode_property<bool>(env, result, "cubeMap", info.cubeMap);
+
+  return result;
+}
+
+//===========================================================================
+template <>
+inline napi_value encode(napi_env env, bgfx_texture_result_t texResult)
+{
+  napi_value result;
+  ok(napi_create_object(env, &result));
+
+  encode_property<bgfx_texture_handle_t>(env, result, "handle", texResult.handle);
+  encode_property<bgfx_texture_info_t>(env, result, "info", texResult.info);
+
   return result;
 }
 
