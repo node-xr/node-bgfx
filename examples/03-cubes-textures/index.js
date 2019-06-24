@@ -163,23 +163,28 @@ const main = async () => {
 
   const ktxFilename = path.join(__dirname, 'eagle2.ktx');
   const ktxMem = fs.readFileSync(ktxFilename);
-  const ktxTexture = bgfx.create_texture(ktxMem.buffer, bgfx.TEXTURE_NONE, 0);
-  console.log(`Loaded texture: ${ktxFilename}`);
-  console.log(ktxTexture);
+  const { handle: ktxTexture, info: ktxInfo } = bgfx.create_texture(
+    ktxMem.buffer,
+    bgfx.TEXTURE_NONE,
+    0,
+  );
+  console.log(`Loaded KTX texture: ${ktxFilename}`);
+  console.log(ktxInfo);
 
   const jpgFilename = path.join(__dirname, 'eagle_inverted.jpg');
   const jpgSharp = sharp(jpgFilename).raw();
+  const jpgImage = await jpgSharp.toBuffer({ resolveWithObject: true });
   const jpgTexture = bgfx.create_texture_2d(
-    jpgSharp.width,
-    jpgSharp.height,
+    jpgImage.info.width,
+    jpgImage.info.height,
     false,
     1,
-    bgfx.TEXTURE_FORMAT.RGBA8U,
+    bgfx.TEXTURE_FORMAT.RGB8,
     bgfx.TEXTURE_NONE,
-    await jpgSharp.toBuffer(),
+    jpgImage.data.buffer,
   );
-  console.log(`Loaded texture: ${jpgFilename}`);
-  console.log(jpgTexture);
+  console.log(`Loaded JPG texture: ${jpgFilename}`);
+  console.log(jpgImage.info);
 
   const m_vbh = PosColorVertex.wrap({
     POSITION: s_cubePosition,
@@ -217,7 +222,10 @@ const main = async () => {
           [u_baseColor]: baseColor,
         },
         textures: {
-          [s_diffuse]: { stage: 0, texture: ktxTexture.handle },
+          [s_diffuse]: {
+            stage: 0,
+            texture: xx % 2 ? ktxTexture : jpgTexture,
+          },
         },
         program: m_program,
         view: 0,
