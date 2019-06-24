@@ -57,6 +57,7 @@
     "gl-matrix": "^3.0.0",
     "jest": "^24.5.0",
     "prettier": "^1.16.4",
-    "sdl2": "github:node-xr/node-sdl2"
+    "sdl2": "github:node-xr/node-sdl2",
+    "sharp": "^0.22.1"
   }
 }

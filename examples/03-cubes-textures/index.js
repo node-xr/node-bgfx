@@ -3,6 +3,7 @@ const SDL = require('sdl2');
 const path = require('path');
 const fs = require('fs');
 const { mat4, vec3 } = require('gl-matrix');
+const sharp = require('sharp');
 
 // prettier-ignore
 const s_cubePosition = [
@@ -160,11 +161,25 @@ const main = async () => {
     1,
   );
 
-  const diffuseFilename = path.join(__dirname, 'eagle2.ktx');
-  const diffuseMem = fs.readFileSync(diffuseFilename);
-  const diffuse = bgfx.create_texture(diffuseMem.buffer, bgfx.TEXTURE_NONE, 0);
-  console.log(`Loaded texture: ${diffuseFilename}`);
-  console.log(diffuse);
+  const ktxFilename = path.join(__dirname, 'eagle2.ktx');
+  const ktxMem = fs.readFileSync(ktxFilename);
+  const ktxTexture = bgfx.create_texture(ktxMem.buffer, bgfx.TEXTURE_NONE, 0);
+  console.log(`Loaded texture: ${ktxFilename}`);
+  console.log(ktxTexture);
+
+  const jpgFilename = path.join(__dirname, 'eagle_inverted.jpg');
+  const jpgSharp = sharp(jpgFilename).raw();
+  const jpgTexture = bgfx.create_texture_2d(
+    jpgSharp.width,
+    jpgSharp.height,
+    false,
+    1,
+    bgfx.TEXTURE_FORMAT.RGBA8U,
+    bgfx.TEXTURE_NONE,
+    await jpgSharp.toBuffer(),
+  );
+  console.log(`Loaded texture: ${jpgFilename}`);
+  console.log(jpgTexture);
 
   const m_vbh = PosColorVertex.wrap({
     POSITION: s_cubePosition,
@@ -202,7 +217,7 @@ const main = async () => {
           [u_baseColor]: baseColor,
         },
         textures: {
-          [s_diffuse]: { stage: 0, texture: diffuse.handle },
+          [s_diffuse]: { stage: 0, texture: ktxTexture.handle },
         },
         program: m_program,
         view: 0,
