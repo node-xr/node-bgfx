@@ -43,21 +43,21 @@
   "dependencies": {
     "bindings": "^1.5.0",
     "flat-cache": "^2.0.1",
-    "tmp-promise": "^1.0.5"
+    "tmp-promise": "^2.0.2"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/plugin-syntax-bigint": "^7.2.0",
-    "eslint": "^5.15.3",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-prettier": "^3.0.1",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-syntax-bigint": "^7.7.4",
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
     "fengari": "^0.1.4",
-    "gl-matrix": "^3.0.0",
-    "jest": "^24.5.0",
-    "prettier": "^1.16.4",
+    "gl-matrix": "^3.1.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
     "sdl2": "github:node-xr/node-sdl2",
-    "sharp": "^0.22.1"
+    "sharp": "^0.23.3"
   }
 }
