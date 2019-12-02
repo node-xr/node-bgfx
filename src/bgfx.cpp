@@ -7,6 +7,7 @@
 
 using napi_bind::ok;
 using napi_bind::set_function;
+using napi_bind::set_function_raw;
 
 void napi_bgfx_finalize_vertex_decl(napi_env env, void *finalize_data, void *finalize_hint)
 {
@@ -227,6 +228,6 @@ napi_value create_bgfx(napi_env env)
   set_function(env, exports, "init_minimal", bgfx_init_minimal);
   set_function(env, exports, "init_headless", bgfx_init_headless);
   set_function(env, exports, "draw", bgfx_draw);
-  set_function(env, exports, "alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
+  set_function_raw(env, exports, "alloc_vertex_decl", napi_bgfx_alloc_vertex_decl);
   return exports;
 }

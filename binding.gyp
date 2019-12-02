@@ -20,7 +20,6 @@
         'src/bgfx_draw.cpp',
         'src/bgfx.cpp',
         'src/bindings.cpp',
-        'src/util.cpp',
       ],
       'include_dirs': [
         '<(module_root_dir)/deps/bgfx/include',
