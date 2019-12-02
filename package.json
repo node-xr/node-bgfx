@@ -56,7 +56,7 @@
     "fengari": "^0.1.4",
     "gl-matrix": "^3.1.0",
     "jest": "^24.9.0",
-    "napi-bind": "github:node-xr/napi-bind#std_containers",
+    "napi-bind": "^0.2.0",
     "prettier": "^1.19.1",
     "sdl2": "github:node-xr/node-sdl2",
     "sharp": "^0.23.3"
