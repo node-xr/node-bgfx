@@ -13,17 +13,17 @@
         'NAPI_EXPERIMENTAL',
         'NAPI_ENABLE_CPP_EXCEPTIONS',
       ],
-      'cflags_cc': [ '-std=c++17', '-Wall', '-pedantic' ],
+      'cflags_cc': [ '-Wall', '-pedantic', '-std=c++17' ],
       'cflags!': [ '-fno-exceptions' ],
       'cflags_cc!': [ '-fno-exceptions' ],
       'sources': [
         'src/bgfx_draw.cpp',
         'src/bgfx.cpp',
         'src/bindings.cpp',
-        'src/util.cpp',
       ],
       'include_dirs': [
         '<(module_root_dir)/deps/bgfx/include',
+        '<!@(node -p "require(\'napi-bind\').include")',
       ],
       "dependencies": [],
       'conditions': [
@@ -41,7 +41,8 @@
             '<(module_root_dir)/deps/bgfx/bin/darwin/x64/libbgfx-shared-libRelease.dylib'
           ],
           'xcode_settings': {
-            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
+            'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
+            'OTHER_CFLAGS': ['-std=c++17']
           },
         }],
         ['platform=="win32"', {

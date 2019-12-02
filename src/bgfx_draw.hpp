@@ -1,7 +1,7 @@
 #pragma once
 #include "bgfx_converters.hpp"
 #include <bgfx/c99/bgfx.h>
-#include <node_api.h>
+#include <optional>
 #include <tuple>
 #include <vector>
 
@@ -41,8 +41,8 @@ struct bgfx_drawcall_t
   uint64_t state;
   uint32_t rgba;
   uint32_t depth;
-  wrap::optional<bgfx_index_buffer_args_t> index;
-  wrap::optional<bgfx_vertex_buffer_args_t> vertex;
+  std::optional<bgfx_index_buffer_args_t> index;
+  std::optional<bgfx_vertex_buffer_args_t> vertex;
   std::vector<bgfx_uniform_args_t> uniforms;
   std::vector<bgfx_texture_args_t> textures;
   bgfx_view_id_t view;
@@ -52,10 +52,8 @@ struct bgfx_drawcall_t
 
 void bgfx_draw(bgfx_drawcall_t drawcall);
 
-namespace wrap
-{
+extern const std::vector<bgfx_uniform_args_t> EMPTY_UNIFORMS;
+extern const std::vector<bgfx_texture_args_t> EMPTY_TEXTURES;
+extern const bgfx_mat4_t IDENTITY_MATRIX;
 
-template <>
-bgfx_drawcall_t decode(napi_env env, napi_value value);
-
-} // namespace wrap
+#include "bgfx_draw_impl.hpp"
