@@ -1,8 +1,8 @@
 #pragma once
-#include "wrap.hpp"
-#include <bgfx/c99/bgfx.h>
-#include <node_api.h>
 #include "bgfx_handle.hpp"
+#include <bgfx/c99/bgfx.h>
+#include <napi_bind.hpp>
+#include <node_api.h>
 
 struct bgfx_mat4_t
 {
@@ -21,7 +21,7 @@ struct bgfx_texture_result_t
   bgfx_texture_info_t info;
 };
 
-namespace wrap
+namespace napi_bind
 {
 
 //===========================================================================
@@ -30,33 +30,44 @@ inline const bgfx_memory_t *decode(napi_env env, napi_value value)
 {
   void *ptr;
   size_t len;
-  ok(napi_get_arraybuffer_info(env, value, &ptr, &len));
+  ok(env, napi_get_arraybuffer_info(env, value, &ptr, &len));
   return bgfx_copy(ptr, len);
 }
 
 //===========================================================================
 template <typename T>
-struct decoder<T, typename std::enable_if_t<bgfx_is_handle<T>()>>
+struct napi_bind::decoder<T, typename std::enable_if_t<bgfx_is_handle<T>()>>
 {
-  static T eval(napi_env env, napi_value value)
+  decoder(napi_env e, napi_value v) : env(e), value(v) {}
+
+  T operator()()
   {
     uint32_t handle;
-    ok(napi_get_value_uint32(env, value, &handle));
+    ok(env, napi_get_value_uint32(env, value, &handle));
     return bgfx_unpack_handle<T>(handle);
   }
+
+private:
+  napi_env env;
+  napi_value value;
 };
 
 template <typename T>
-struct encoder<T, typename std::enable_if_t<bgfx_is_handle<T>()>>
+struct napi_bind::encoder<T, typename std::enable_if_t<bgfx_is_handle<T>()>>
 {
-  static napi_value eval(napi_env env, T value)
+  encoder(T v) : value(v) {}
+
+  napi_value operator()(napi_env env)
   {
     uint32_t handle = bgfx_pack_handle<T>(value);
 
     napi_value result;
-    ok(napi_create_uint32(env, handle, &result));
+    ok(env, napi_create_uint32(env, handle, &result));
     return result;
   }
+
+private:
+  T value;
 };
 
 //===========================================================================
@@ -65,7 +76,7 @@ inline bgfx_mat4_t *decode(napi_env env, napi_value value)
 {
   size_t n;
   bgfx_mat4_t *result;
-  ok(napi_get_arraybuffer_info(env, value, reinterpret_cast<void **>(&result), &n));
+  ok(env, napi_get_arraybuffer_info(env, value, reinterpret_cast<void **>(&result), &n));
   if (n != sizeof(bgfx_mat4_t))
     throw std::runtime_error("Matrix 4x4 must have 16 float elements.");
   return result;
@@ -77,7 +88,7 @@ inline bgfx_mat4_array_t decode(napi_env env, napi_value value)
 {
   size_t n;
   bgfx_mat4_t *ptr;
-  ok(napi_get_arraybuffer_info(env, value, reinterpret_cast<void **>(&ptr), &n));
+  ok(env, napi_get_arraybuffer_info(env, value, reinterpret_cast<void **>(&ptr), &n));
   if (n % sizeof(bgfx_mat4_t))
     throw std::runtime_error("Matrix 4x4 array must have multiple of 16 float elements.");
 
@@ -92,7 +103,7 @@ template <>
 inline napi_value encode(napi_env env, bgfx_texture_info_t info)
 {
   napi_value result;
-  ok(napi_create_object(env, &result));
+  ok(env, napi_create_object(env, &result));
 
   encode_property<bgfx_texture_format_t>(env, result, "format", info.format);
   encode_property<uint32_t>(env, result, "storageSize", info.storageSize);
@@ -112,7 +123,7 @@ template <>
 inline napi_value encode(napi_env env, bgfx_texture_result_t texResult)
 {
   napi_value result;
-  ok(napi_create_object(env, &result));
+  ok(env, napi_create_object(env, &result));
 
   encode_property<bgfx_texture_handle_t>(env, result, "handle", texResult.handle);
   encode_property<bgfx_texture_info_t>(env, result, "info", texResult.info);
@@ -120,4 +131,4 @@ inline napi_value encode(napi_env env, bgfx_texture_result_t texResult)
   return result;
 }
 
-} // namespace wrap
+} // namespace napi_bind
